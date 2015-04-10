@@ -10,11 +10,11 @@ import org.androidannotations.annotations.RootContext;
 
 import java.util.List;
 
+import ru4pda.news.client.model.SimpleArticle;
 import ru4pda.news.dao.Article;
 import ru4pda.news.dao.ArticleDao;
 import ru4pda.news.dao.DaoMaster;
 import ru4pda.news.dao.DaoSession;
-import ru4pda.news.client.model.SimpleArticle;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -37,11 +37,15 @@ public class Dao {
 		daoSession = daoMaster.newSession();
 	}
 
-	public void setArticles(final List<SimpleArticle> simpleArticles) {
+	public void setArticles(final List<SimpleArticle> simpleArticles, final boolean needClearData) {
 		daoSession.runInTx(new Runnable() {
 			@Override
 			public void run() {
 				ArticleDao dao = daoSession.getArticleDao();
+
+				if (needClearData) {
+					dao.deleteAll();
+				}
 
 				for (SimpleArticle simpleArticle : simpleArticles) {
 					Article article = new Article();
@@ -58,6 +62,6 @@ public class Dao {
 	public Cursor getArticleCursor() {
 		ArticleDao dao = daoSession.getArticleDao();
 		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(), null, null, null, null,
-				ArticleDao.Properties.Date.columnName);
+				ArticleDao.Properties.Date.columnName + " DESC");
 	}
 }
