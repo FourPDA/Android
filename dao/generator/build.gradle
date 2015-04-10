@@ -1,0 +1,10 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'ru4pda.news.Ru4pdaGenerator'
+
+dependencies {
+
+	compile 'de.greenrobot:greendao-generator:1.3.1'
+
+}

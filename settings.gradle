@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':generator', ':dao'
+project(':generator').projectDir = new File('dao/generator')
