@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal" android:layout_width="match_parent"
+	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_marginBottom="@dimen/offset_normal">
-
-	<ImageView
-		android:id="@+id/image_view"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:scaleType="centerCrop"
-		android:layout_marginRight="@dimen/offset_normal"/>
+	android:layout_marginBottom="@dimen/offset_normal"
+	android:orientation="vertical">
 
 	<LinearLayout
-		android:orientation="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
 
-		<TextView
-			android:id="@+id/title_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="@dimen/list_item_title_size"
-			android:maxLines="2"
-			android:ellipsize="end"/>
+		<ImageView
+			android:id="@+id/image_view"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:layout_marginRight="@dimen/offset_normal"
+			android:scaleType="centerCrop" />
 
-		<TextView
-			android:id="@+id/description_view"
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:maxLines="4"
-			android:ellipsize="end"/>
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/title_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:maxLines="4"
+				android:textColor="@color/primary"
+				android:textSize="@dimen/list_item_title_size" />
+
+			<TextView
+				android:id="@+id/date_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
 
 		</LinearLayout>
+
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/description_view"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:ellipsize="end"
+		android:maxLines="4" />
+
 </LinearLayout>

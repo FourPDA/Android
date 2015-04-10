@@ -3,6 +3,9 @@
 	android:id="@+id/refresh"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:paddingTop="@dimen/offset_normal"
+	android:paddingLeft="@dimen/offset_normal"
+	android:paddingRight="@dimen/offset_normal"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<android.support.v7.widget.RecyclerView
