@@ -64,4 +64,11 @@ public class Dao {
 		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(), null, null, null, null,
 				ArticleDao.Properties.Date.columnName + " DESC");
 	}
+
+	public Article getArticle(long id) {
+		ArticleDao dao = daoSession.getArticleDao();
+		return dao.queryBuilder()
+				.where(ArticleDao.Properties.Id.eq(id))
+				.build().unique();
+	}
 }

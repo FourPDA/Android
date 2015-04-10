@@ -5,6 +5,7 @@ package ru4pda.news.client.model;
  */
 public class FullArticle {
 
+	private SimpleArticle simpleArticle;
 	private String content;
 
 	public String getContent() {
@@ -13,5 +14,13 @@ public class FullArticle {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public SimpleArticle getSimpleArticle() {
+		return simpleArticle;
+	}
+
+	public void setSimpleArticle(SimpleArticle simpleArticle) {
+		this.simpleArticle = simpleArticle;
 	}
 }
