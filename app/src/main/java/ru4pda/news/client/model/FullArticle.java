@@ -1,4 +1,4 @@
-package ru4pda.news.parser.model;
+package ru4pda.news.client.model;
 
 /**
  * Created by asavinova on 10/04/15.

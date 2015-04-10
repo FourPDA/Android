@@ -1,4 +1,4 @@
-package ru4pda.news.parser.model;
+package ru4pda.news.client.model;
 
 import java.util.Date;
 

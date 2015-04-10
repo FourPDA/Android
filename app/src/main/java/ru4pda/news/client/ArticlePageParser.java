@@ -1,9 +1,9 @@
-package ru4pda.news.parser;
+package ru4pda.news.client;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru4pda.news.parser.model.FullArticle;
+import ru4pda.news.client.model.FullArticle;
 
 /**
  * Created by asavinova on 09/04/15.
