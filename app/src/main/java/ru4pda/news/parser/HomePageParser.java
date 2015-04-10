@@ -14,7 +14,7 @@ import ru4pda.news.parser.model.SimpleArticle;
  */
 public class HomePageParser {
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy/MM/dd");
 
 	private static final Pattern ARTICLE_LIST_PATTERN = Pattern.compile("<article id=\"content\" class=\"fix-post\">(.*?)<ul class=\"page-nav\">", Pattern.DOTALL);
 	private static final Pattern ARTICLE_PATTERN = Pattern.compile("http://schema.org/Article\">.*?</article>", Pattern.DOTALL);
@@ -29,17 +29,19 @@ public class HomePageParser {
 
 		Matcher allArticlesMatcher = ARTICLE_LIST_PATTERN.matcher(pageSource);
 
-		if (!allArticlesMatcher.find()) {
+		if (allArticlesMatcher.find()) {
+
+			String allArticlesSource = allArticlesMatcher.group(1);
+
+			Matcher articleMatcher = ARTICLE_PATTERN.matcher(allArticlesSource);
+
+			while (articleMatcher.find()) {
+				String itemSource = articleMatcher.group();
+				articles.add(parseArticle(itemSource));
+			}
+
+		} else {
 			//TODO
-		}
-
-		String allArticlesSource = allArticlesMatcher.group(1);
-
-		Matcher articleMatcher = ARTICLE_PATTERN.matcher(allArticlesSource);
-
-		while (articleMatcher.find()) {
-			String itemSource = articleMatcher.group();
-			articles.add(parseArticle(itemSource));
 		}
 
 		return articles;
@@ -56,7 +58,7 @@ public class HomePageParser {
 			article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
 
 			try {
-				article.setDate(dateFormat.parse(url.substring(0, lastSlashIndex)));
+				article.setDate(DATE_FORMAT.parse(url.substring(0, lastSlashIndex)));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
