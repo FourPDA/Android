@@ -3,4 +3,11 @@
 	<string name="app_name">4PDA</string>
 	<string name="news_title">Новости</string>
 
+	<string name="category_all">Все статьи</string>
+	<string name="category_news">Новости</string>
+	<string name="category_articles">Статьи</string>
+	<string name="category_reviews">Обзоры</string>
+	<string name="category_software">Программы</string>
+	<string name="category_games">Игры</string>
+
 </resources>

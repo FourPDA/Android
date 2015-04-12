@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/primary_dark"
+	android:orientation="vertical">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/all_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_all" />
+
+			<TextView
+				android:id="@+id/news_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_news" />
+
+			<TextView
+				android:id="@+id/articles_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_articles" />
+
+			<TextView
+				android:id="@+id/reviews_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_reviews" />
+
+			<TextView
+				android:id="@+id/software_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_software" />
+
+			<TextView
+				android:id="@+id/games_category_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_games" />
+
+		</LinearLayout>
+
+	</ScrollView>
+</LinearLayout>
