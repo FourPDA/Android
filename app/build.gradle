@@ -10,7 +10,7 @@ android {
 	defaultConfig {
 		applicationId 'ru4pda.news'
 		versionCode 1
-		versionName '1.1.0'
+		versionName '1.0.0'
 		minSdkVersion 16
 		targetSdkVersion 22
 	}
