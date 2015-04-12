@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+	android:layout_height="wrap_content"
 	android:layout_margin="@dimen/offset_normal"
-	android:orientation="vertical">
+	app:cardCornerRadius="0dp"
+	app:cardElevation="4dp"
+	app:cardUseCompatPadding="true">
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:background="@android:color/white">
 
-		<ImageView
+		<ru4pda.news.ui.AspectRatioImageView
 			android:id="@+id/image_view"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
-			android:layout_marginRight="@dimen/offset_normal"
-			android:scaleType="centerCrop" />
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:scaleType="centerCrop"
+			app:aspectRatio="0.75" />
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:orientation="vertical"
+			android:padding="8dp">
 
 			<TextView
 				android:id="@+id/title_view"
@@ -29,22 +34,16 @@
 				android:ellipsize="end"
 				android:maxLines="4"
 				android:textColor="@color/primary"
-				android:textSize="@dimen/list_item_title_size" />
+				android:textSize="16sp" />
 
 			<TextView
 				android:id="@+id/date_view"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
+				android:layout_height="wrap_content"
+				android:textSize="14sp" />
 
 		</LinearLayout>
 
 	</LinearLayout>
 
-	<TextView
-		android:id="@+id/description_view"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:ellipsize="end"
-		android:maxLines="4" />
-
-</LinearLayout>
+</android.support.v7.widget.CardView>
