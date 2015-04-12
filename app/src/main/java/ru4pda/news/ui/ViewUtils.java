@@ -20,4 +20,5 @@ public class ViewUtils {
 				.load(String.format(IMAGE_BASE_URL, id))
 				.into(view);
 	}
+
 }

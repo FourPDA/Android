@@ -1,4 +1,4 @@
-package ru4pda.news.ui.list;
+package ru4pda.news.ui.article.list;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 
 import org.androidannotations.annotations.AfterViews;
@@ -27,12 +28,13 @@ import ru4pda.news.client.model.SimpleArticle;
 /**
  * Created by asavinova on 10/04/15.
  */
-@EFragment(R.layout.fragment_list_articles)
+@EFragment(R.layout.article_list)
 public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
 	private static final String FORCE = "force";
 
+	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
 
@@ -45,6 +47,8 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 	@AfterViews
 	void afterViews() {
+
+		toolbar.setTitle(R.string.news_title);
 
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);

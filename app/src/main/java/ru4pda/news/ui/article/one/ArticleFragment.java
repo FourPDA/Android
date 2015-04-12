@@ -1,4 +1,4 @@
-package ru4pda.news.ui.item;
+package ru4pda.news.ui.article.one;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -31,13 +32,15 @@ import ru4pda.news.ui.ViewUtils;
 /**
  * Created by asavinova on 11/04/15.
  */
-@EFragment(R.layout.fragment_article)
+@EFragment(R.layout.article_one)
 public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
 
 	@FragmentArg long id;
+	@FragmentArg String title;
 
+	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById ImageView imageView;
 	@ViewById TextView titleView;
@@ -49,6 +52,8 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 	@AfterViews
 	void afterViews() {
+
+		toolbar.setTitle(title);
 
 		refresh.setOnRefreshListener(this);
 		refresh.setColorSchemeResources(R.color.primary);

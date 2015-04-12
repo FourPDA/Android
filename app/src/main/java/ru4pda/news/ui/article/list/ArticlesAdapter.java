@@ -1,4 +1,4 @@
-package ru4pda.news.ui.list;
+package ru4pda.news.ui.article.list;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +16,7 @@ import ru4pda.news.R;
 import ru4pda.news.dao.ArticleDao;
 import ru4pda.news.ui.CursorRecyclerViewAdapter;
 import ru4pda.news.ui.ViewUtils;
-import ru4pda.news.ui.item.ArticleActivity_;
+import ru4pda.news.ui.article.one.ArticleActivity_;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -73,7 +73,7 @@ public class ArticlesAdapter extends CursorRecyclerViewAdapter<ArticlesAdapter.V
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.article_list_view, parent, false);
+				.inflate(R.layout.article_list_item, parent, false);
 		ViewHolder viewHolder = new ViewHolder(itemView);
 		return viewHolder;
 	}

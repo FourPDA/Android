@@ -48,4 +48,5 @@ public class Ru4pdaClient {
 		fullArticle.setSimpleArticle(article);
 		return fullArticle;
 	}
+
 }
