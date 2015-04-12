@@ -54,7 +54,7 @@ public class ArticlesAdapter extends CursorRecyclerViewAdapter<ArticlesAdapter.V
 		}
 
 		public void setCursor(Cursor cursor) {
-			id = cursor.getLong(ArticleDao.Properties.Id.ordinal);
+			id = cursor.getLong(ArticleDao.Properties.Server_id.ordinal);
 			ViewUtils.loadImage(imageView, id);
 
 			title = cursor.getString(ArticleDao.Properties.Title.ordinal);

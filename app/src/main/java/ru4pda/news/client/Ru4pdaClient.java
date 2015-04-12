@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import ru4pda.news.client.model.ListArticle;
+import ru4pda.news.ui.CategoryType;
 
 /**
  * Created by asavinova on 09/04/15.
@@ -24,9 +25,14 @@ public class Ru4pdaClient {
 	private static final String BASE_URL = "http://4pda.ru/";
 	private OkHttpClient client = new OkHttpClient();
 
-	public List<ListArticle> getArticles(int page) throws IOException {
+	public List<ListArticle> getArticles(CategoryType type, int page) throws IOException {
+		String category = "";
+		if (type != CategoryType.ALL) {
+			category = type.name().toLowerCase() + "/";
+		}
+
 		Request request = new Request.Builder()
-				.url(BASE_URL + "page/" + page)
+				.url(BASE_URL + category + "page/" + page)
 				.build();
 
 		Response response = client.newCall(request).execute();

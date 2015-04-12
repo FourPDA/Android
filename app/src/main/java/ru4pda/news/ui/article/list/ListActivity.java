@@ -1,12 +1,13 @@
 package ru4pda.news.ui.article.list;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,21 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 
 	@ViewById DrawerLayout drawerLayout;
 
-	@AfterViews
-	void afterViews() {
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.container, ListFragment_.builder().build())
-				.commit();
+	@InstanceState CategoryType category;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if (category == null) {
+			category = CategoryType.ALL;
+		}
+
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, ListFragment_.builder().category(category).build())
+					.commit();
+		}
 	}
 
 	@Override
@@ -47,8 +58,18 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	}
 
 	@Override
-	public void onChange(CategoryType type) {
-		L.trace("Category type changed on {} type", type.name());
+	public void onChange(CategoryType newCategory) {
+		L.trace("Category type changed on {} type", newCategory.name());
 		drawerLayout.closeDrawer(Gravity.START);
+
+		if (category == newCategory) {
+			return;
+		}
+
+		category = newCategory;
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.container, ListFragment_.builder().category(category).build())
+				.addToBackStack(null)
+				.commit();
 	}
 }

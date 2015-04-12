@@ -29,10 +29,10 @@
 				style="@style/CategoryItem"
 				android:text="@string/category_articles" />
 
-			<TextView
-				android:id="@+id/reviews_category_view"
-				style="@style/CategoryItem"
-				android:text="@string/category_reviews" />
+			<!--<TextView-->
+				<!--android:id="@+id/reviews_category_view"-->
+				<!--style="@style/CategoryItem"-->
+				<!--android:text="@string/category_reviews" />-->
 
 			<TextView
 				android:id="@+id/software_category_view"

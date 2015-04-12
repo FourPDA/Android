@@ -41,7 +41,7 @@ public class ArticleTaskLoader extends AsyncTaskLoader<ArticleTaskLoader.Wrapper
 		Article article = dao.getArticle(id);
 
 		try {
-			String content = client.getArticleContent(article.getDate(), article.getId());
+			String content = client.getArticleContent(article.getDate(), article.getServer_id());
 
 			WrapperInfo wrapperInfo = new WrapperInfo();
 			wrapperInfo.article = article;

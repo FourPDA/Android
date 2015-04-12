@@ -22,10 +22,12 @@ public class Ru4PdaDaoGenerator {
 	private static void addArticleEntity(Schema schema) {
 		Entity article = schema.addEntity("Article");
 		article.addIdProperty();
+		article.addLongProperty("server_id");
 		article.addDateProperty("date");
 		article.addStringProperty("title");
 		article.addStringProperty("description");
 		article.addIntProperty("position");
+		article.addStringProperty("category");
 	}
 
 }
