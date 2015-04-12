@@ -49,13 +49,14 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="bottom"
 			android:orientation="vertical"
-			android:padding="16dp">
+			android:padding="16dp"
+			android:background="@color/card_info_back">
 
 			<TextView
 				android:id="@+id/title_view"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:shadowColor="@color/shadowColor"
+				android:shadowColor="@color/card_text_shadow"
 				android:shadowDx="1"
 				android:shadowDy="1"
 				android:shadowRadius="3"
@@ -66,7 +67,7 @@
 				android:id="@+id/date_view"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:shadowColor="@color/shadowColor"
+				android:shadowColor="@color/card_text_shadow"
 				android:shadowDx="1"
 				android:shadowDy="1"
 				android:shadowRadius="3"

@@ -2,6 +2,8 @@
 <resources>
 
 	<dimen name="offset_normal">16dp</dimen>
+	<dimen name="offset_small">8dp</dimen>
+
 	<dimen name="article_one_title_text">24sp</dimen>
 
 </resources>

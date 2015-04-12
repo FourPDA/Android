@@ -3,16 +3,18 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_margin="@dimen/offset_normal"
+	android:layout_marginTop="@dimen/offset_small"
+	android:layout_marginLeft="@dimen/offset_normal"
+	android:layout_marginRight="@dimen/offset_normal"
 	app:cardCornerRadius="0dp"
 	app:cardElevation="4dp"
 	app:cardUseCompatPadding="true">
 
-	<LinearLayout
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical"
-		android:background="@android:color/white">
+		android:background="@color/card_background">
 
 		<ru4pda.news.ui.AspectRatioImageView
 			android:id="@+id/image_view"
@@ -25,25 +27,34 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:padding="8dp">
+			android:layout_gravity="bottom"
+			android:padding="8dp"
+			android:background="@color/card_info_back">
 
 			<TextView
 				android:id="@+id/title_view"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:ellipsize="end"
-				android:maxLines="4"
-				android:textColor="@color/primary"
-				android:textSize="16sp" />
+				android:textColor="@color/card_text"
+				android:textSize="16sp"
+				android:shadowColor="@color/card_text_shadow"
+				android:shadowDx="1"
+				android:shadowDy="1"
+				android:shadowRadius="3" />
 
 			<TextView
 				android:id="@+id/date_view"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textSize="14sp" />
+				android:textColor="@color/card_text"
+				android:textSize="14sp"
+				android:shadowColor="@color/card_text_shadow"
+				android:shadowDx="1"
+				android:shadowDy="1"
+				android:shadowRadius="3" />
 
 		</LinearLayout>
 
-	</LinearLayout>
+	</FrameLayout>
 
 </android.support.v7.widget.CardView>
