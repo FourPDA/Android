@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.IOException;
@@ -23,7 +24,8 @@ import java.util.List;
 import ru4pda.news.Dao;
 import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
-import ru4pda.news.client.model.SimpleArticle;
+import ru4pda.news.client.model.ListArticle;
+import ru4pda.news.ui.CategoryType;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -33,6 +35,8 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 	private static final int LOADER_ID = 0;
 	private static final String FORCE = "force";
+
+	@FragmentArg CategoryType category;
 
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
@@ -48,7 +52,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 	@AfterViews
 	void afterViews() {
 
-		toolbar.setTitle(R.string.news_title);
+		toolbar.setTitle(category.getTitle());
 
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
@@ -106,13 +110,13 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 					}
 
 					try {
-						List<SimpleArticle> articles = client.getArticles(page);
+						List<ListArticle> articles = client.getArticles(category, page);
 
 						boolean needClearData = page == 1;
 						page++;
-						dao.setArticles(articles, needClearData);
+						dao.setArticles(articles, category, needClearData);
 
-						return dao.getArticleCursor();
+						return dao.getArticleCursor(category);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

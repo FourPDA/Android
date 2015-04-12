@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<dimen name="navigation_drawer_width">240dp</dimen>
+
 	<dimen name="offset_normal">16dp</dimen>
 	<dimen name="offset_small">8dp</dimen>
 

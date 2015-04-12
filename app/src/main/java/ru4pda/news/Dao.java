@@ -13,11 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.List;
 
-import ru4pda.news.client.model.SimpleArticle;
+import ru4pda.news.client.model.ListArticle;
 import ru4pda.news.dao.Article;
 import ru4pda.news.dao.ArticleDao;
 import ru4pda.news.dao.DaoMaster;
 import ru4pda.news.dao.DaoSession;
+import ru4pda.news.ui.CategoryType;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -42,45 +43,59 @@ public class Dao {
 		daoSession = daoMaster.newSession();
 	}
 
-	public void setArticles(final List<SimpleArticle> simpleArticles, final boolean needClearData) {
+	public void setArticles(final List<ListArticle> listArticles, final CategoryType category, final boolean needClearData) {
 		daoSession.runInTx(new Runnable() {
 			@Override
 			public void run() {
 				ArticleDao dao = daoSession.getArticleDao();
 
 				if (needClearData) {
-					dao.deleteAll();
-					L.trace("Delete all articles");
+					dao.queryBuilder()
+							.where(ArticleDao.Properties.Category.eq(getCategoryValue(category)))
+							.buildDelete()
+							.executeDeleteWithoutDetachingEntities();
+					L.trace("Delete all articles from category {}", category);
+				} else {
+					L.trace("No need clear for category {}", category);
 				}
 
-				SimpleArticle firstArticle = simpleArticles.get(0);
+				ListArticle firstArticle = listArticles.get(0);
 				Date currentDate = firstArticle.getDate();
-				int position = getMaxInDayPosition(currentDate);
+				int position = getMaxInDayPosition(currentDate, category);
 
-				for (SimpleArticle simpleArticle : simpleArticles) {
+				for (ListArticle listArticle : listArticles) {
 
-					if (!currentDate.equals(simpleArticle.getDate())) {
-						currentDate = simpleArticle.getDate();
-						position = getMaxInDayPosition(currentDate);
+					if (!currentDate.equals(listArticle.getDate())) {
+						currentDate = listArticle.getDate();
+						position = getMaxInDayPosition(currentDate, category);
 					}
 
 					Article article = new Article();
-					article.setId(simpleArticle.getId());
-					article.setDate(simpleArticle.getDate());
-					article.setTitle(simpleArticle.getTitle());
-					article.setDescription(simpleArticle.getDescription());
+					article.setServer_id(listArticle.getId());
+					article.setDate(listArticle.getDate());
+					article.setTitle(listArticle.getTitle());
+					article.setDescription(listArticle.getDescription());
 					position++;
 					article.setPosition(position);
+					article.setCategory(getCategoryValue(category));
 
 					dao.insertOrReplace(article);
 				}
 			}
 		});
+
+		L.trace("All articles count = {}", daoSession.getArticleDao().count());
 	}
 
-	private int getMaxInDayPosition(Date date) {
+	private String getCategoryValue(CategoryType category) {
+		return category.name().toLowerCase();
+	}
+
+	private int getMaxInDayPosition(Date date, CategoryType category) {
 		Article article = daoSession.getArticleDao().queryBuilder()
-				.where(ArticleDao.Properties.Date.eq(date))
+				.where(
+						ArticleDao.Properties.Date.eq(date),
+						ArticleDao.Properties.Category.eq(getCategoryValue(category)))
 				.orderDesc(ArticleDao.Properties.Position)
 				.limit(1)
 				.build().unique();
@@ -90,17 +105,21 @@ public class Dao {
 		return article.getPosition();
 	}
 
-	public Cursor getArticleCursor() {
+	public Cursor getArticleCursor(CategoryType category) {
 		ArticleDao dao = daoSession.getArticleDao();
-		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(), null, null, null, null,
+		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(),
+				ArticleDao.Properties.Category.columnName + " == '" + getCategoryValue(category) + "'",
+				null,
+				null, null,
 				ArticleDao.Properties.Date.columnName + " DESC, " +
-				ArticleDao.Properties.Position.columnName + " ASC");
+						ArticleDao.Properties.Position.columnName + " ASC");
 	}
 
 	public Article getArticle(long id) {
 		ArticleDao dao = daoSession.getArticleDao();
 		return dao.queryBuilder()
-				.where(ArticleDao.Properties.Id.eq(id))
+				.where(ArticleDao.Properties.Server_id.eq(id))
+				.limit(1)
 				.build().unique();
 	}
 }

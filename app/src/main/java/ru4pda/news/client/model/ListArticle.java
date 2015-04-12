@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by asavinova on 09/04/15.
  */
-public class SimpleArticle {
+public class ListArticle {
 
 	private long id;
 	private Date date;

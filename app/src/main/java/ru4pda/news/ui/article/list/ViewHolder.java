@@ -32,7 +32,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 	public void setCursor(Cursor cursor) {
 
-		final long id = cursor.getLong(ArticleDao.Properties.Id.ordinal);
+		final long id = cursor.getLong(ArticleDao.Properties.Server_id.ordinal);
 		final String title = cursor.getString(ArticleDao.Properties.Title.ordinal);
 		Date date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
 

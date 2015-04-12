@@ -7,10 +7,12 @@ package ru4pda.news.dao;
 public class Article {
 
     private Long id;
+    private Long server_id;
     private java.util.Date date;
     private String title;
     private String description;
     private Integer position;
+    private String category;
 
     public Article() {
     }
@@ -19,12 +21,14 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, java.util.Date date, String title, String description, Integer position) {
+    public Article(Long id, Long server_id, java.util.Date date, String title, String description, Integer position, String category) {
         this.id = id;
+        this.server_id = server_id;
         this.date = date;
         this.title = title;
         this.description = description;
         this.position = position;
+        this.category = category;
     }
 
     public Long getId() {
@@ -33,6 +37,14 @@ public class Article {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getServer_id() {
+        return server_id;
+    }
+
+    public void setServer_id(Long server_id) {
+        this.server_id = server_id;
     }
 
     public java.util.Date getDate() {
@@ -65,6 +77,14 @@ public class Article {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 }

@@ -2,5 +2,6 @@
 <resources>
 
 	<dimen name="list_item_title_size">16sp</dimen>
+	<dimen name="category_item_size">16sp</dimen>
 
 </resources>
