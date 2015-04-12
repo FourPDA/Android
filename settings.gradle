@@ -1,2 +1,1 @@
-include ':app', ':generator', ':dao'
-project(':generator').projectDir = new File('dao/generator')
+include ':app', ':dao', ':dao:generator'

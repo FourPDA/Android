@@ -1,4 +1,4 @@
-package ru4pda.news;
+package ru4pda.news.dao.ganerator;
 
 import java.io.File;
 
@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Schema;
 
-public class Ru4pdaGenerator {
+public class Ru4PdaDaoGenerator {
 
 	public static void main(String[] args) throws Exception {
 
