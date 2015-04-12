@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.List;
 
-import ru4pda.news.client.model.SimpleArticle;
+import ru4pda.news.client.model.ListArticle;
 import ru4pda.news.dao.Article;
 import ru4pda.news.dao.ArticleDao;
 import ru4pda.news.dao.DaoMaster;
@@ -42,7 +42,7 @@ public class Dao {
 		daoSession = daoMaster.newSession();
 	}
 
-	public void setArticles(final List<SimpleArticle> simpleArticles, final boolean needClearData) {
+	public void setArticles(final List<ListArticle> listArticles, final boolean needClearData) {
 		daoSession.runInTx(new Runnable() {
 			@Override
 			public void run() {
@@ -53,22 +53,22 @@ public class Dao {
 					L.trace("Delete all articles");
 				}
 
-				SimpleArticle firstArticle = simpleArticles.get(0);
+				ListArticle firstArticle = listArticles.get(0);
 				Date currentDate = firstArticle.getDate();
 				int position = getMaxInDayPosition(currentDate);
 
-				for (SimpleArticle simpleArticle : simpleArticles) {
+				for (ListArticle listArticle : listArticles) {
 
-					if (!currentDate.equals(simpleArticle.getDate())) {
-						currentDate = simpleArticle.getDate();
+					if (!currentDate.equals(listArticle.getDate())) {
+						currentDate = listArticle.getDate();
 						position = getMaxInDayPosition(currentDate);
 					}
 
 					Article article = new Article();
-					article.setId(simpleArticle.getId());
-					article.setDate(simpleArticle.getDate());
-					article.setTitle(simpleArticle.getTitle());
-					article.setDescription(simpleArticle.getDescription());
+					article.setId(listArticle.getId());
+					article.setDate(listArticle.getDate());
+					article.setTitle(listArticle.getTitle());
+					article.setDescription(listArticle.getDescription());
 					position++;
 					article.setPosition(position);
 

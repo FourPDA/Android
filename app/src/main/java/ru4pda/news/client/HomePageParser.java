@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru4pda.news.client.model.SimpleArticle;
+import ru4pda.news.client.model.ListArticle;
 
 /**
  * Created by asavinova on 09/04/15.
@@ -24,8 +24,8 @@ public class HomePageParser {
 	private static final Pattern TITLE_PATTERN = Pattern.compile("itemprop=\"name\">(.*?)</a></h1>", Pattern.DOTALL);
 	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div itemprop=\"description\"><p.*?>(.*?)</p></div>", Pattern.DOTALL);
 
-	public List<SimpleArticle> parse(String pageSource) {
-		List<SimpleArticle> articles = new ArrayList<>();
+	public List<ListArticle> parse(String pageSource) {
+		List<ListArticle> articles = new ArrayList<>();
 
 		Matcher allArticlesMatcher = ARTICLE_LIST_PATTERN.matcher(pageSource);
 
@@ -47,8 +47,8 @@ public class HomePageParser {
 		return articles;
 	}
 
-	private SimpleArticle parseArticle(String itemSource) {
-		SimpleArticle article = new SimpleArticle();
+	private ListArticle parseArticle(String itemSource) {
+		ListArticle article = new ListArticle();
 
 		Matcher urlMatcher = URL_PATTERN.matcher(itemSource);
 		if (urlMatcher.find()) {

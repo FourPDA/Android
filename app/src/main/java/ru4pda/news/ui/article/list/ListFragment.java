@@ -23,7 +23,7 @@ import java.util.List;
 import ru4pda.news.Dao;
 import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
-import ru4pda.news.client.model.SimpleArticle;
+import ru4pda.news.client.model.ListArticle;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -106,7 +106,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 					}
 
 					try {
-						List<SimpleArticle> articles = client.getArticles(page);
+						List<ListArticle> articles = client.getArticles(page);
 
 						boolean needClearData = page == 1;
 						page++;
