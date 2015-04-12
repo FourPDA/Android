@@ -27,6 +27,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
         public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
         public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
+        public final static Property Position = new Property(4, Integer.class, "position", false, "POSITION");
     };
 
 
@@ -45,7 +46,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'DATE' INTEGER," + // 1: date
                 "'TITLE' TEXT," + // 2: title
-                "'DESCRIPTION' TEXT);"); // 3: description
+                "'DESCRIPTION' TEXT," + // 3: description
+                "'POSITION' INTEGER);"); // 4: position
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +80,11 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         if (description != null) {
             stmt.bindString(4, description);
         }
+ 
+        Integer position = entity.getPosition();
+        if (position != null) {
+            stmt.bindLong(5, position);
+        }
     }
 
     /** @inheritdoc */
@@ -93,7 +100,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)), // date
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // description
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // position
         );
         return entity;
     }
@@ -105,6 +113,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setDate(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
         entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDescription(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setPosition(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
      }
     
     /** @inheritdoc */

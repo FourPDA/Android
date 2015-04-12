@@ -10,6 +10,7 @@ public class Article {
     private java.util.Date date;
     private String title;
     private String description;
+    private Integer position;
 
     public Article() {
     }
@@ -18,11 +19,12 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, java.util.Date date, String title, String description) {
+    public Article(Long id, java.util.Date date, String title, String description, Integer position) {
         this.id = id;
         this.date = date;
         this.title = title;
         this.description = description;
+        this.position = position;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class Article {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
 }

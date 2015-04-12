@@ -26,7 +26,6 @@ android {
 		//TODO Заигнорить нормально okhttp
 		warning 'InvalidPackage'
 	}
-
 }
 
 configurations {
@@ -53,5 +52,7 @@ dependencies {
 
 	compile 'com.squareup.okhttp:okhttp:2.3.0'
 	compile 'com.squareup.picasso:picasso:2.5.0'
+	
+	compile 'com.noveogroup.android:android-logger:1.3.5'
 
 }

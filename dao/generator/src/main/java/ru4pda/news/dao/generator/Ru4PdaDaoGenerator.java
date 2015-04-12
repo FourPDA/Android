@@ -1,4 +1,4 @@
-package ru4pda.news.dao.ganerator;
+package ru4pda.news.dao.generator;
 
 import java.io.File;
 
@@ -25,6 +25,7 @@ public class Ru4PdaDaoGenerator {
 		article.addDateProperty("date");
 		article.addStringProperty("title");
 		article.addStringProperty("description");
+		article.addIntProperty("position");
 	}
 
 }
