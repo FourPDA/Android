@@ -6,10 +6,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -40,31 +42,34 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 	@FragmentArg long id;
 	@FragmentArg String title;
 
-	@ViewById Toolbar toolbar;
-	@ViewById SwipeRefreshLayout refresh;
+	@ViewById ScrollView scrollView;
 	@ViewById ImageView imageView;
+	@ViewById WebView webView;
+	@ViewById View headerLayout;
+
+	@ViewById View infoLayout;
 	@ViewById TextView titleView;
 	@ViewById TextView dateView;
-	@ViewById WebView webView;
 
 	@Bean Dao dao;
 	@Bean Ru4pdaClient client;
 
 	@AfterViews
 	void afterViews() {
-
-		toolbar.setTitle(title);
-
-		refresh.setOnRefreshListener(this);
-		refresh.setColorSchemeResources(R.color.primary);
-		refresh.setProgressViewOffset(false, 0,
-				(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-
 		loadData();
+
+		scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+			@Override
+			public void onScrollChanged() {
+				int scrollY = scrollView.getScrollY();
+				ViewGroup.LayoutParams params = headerLayout.getLayoutParams();
+				params.height = Math.max(infoLayout.getHeight(), imageView.getHeight() - scrollY);
+				headerLayout.setLayoutParams(params);
+			}
+		});
 	}
 
 	private void loadData() {
-		refresh.setRefreshing(true);
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks());
 	}
 
@@ -80,8 +85,6 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 		titleView.setText(simpleArticle.getTitle());
 		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(simpleArticle.getDate()));
 		webView.loadData(article.getContent(), "text/html; charset=utf-8", null);
-
-		refresh.setRefreshing(false);
 	}
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<FullArticle> {
@@ -122,5 +125,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 		@Override
 		public void onLoaderReset(Loader<FullArticle> loader) {
 		}
+
 	}
+
 }
