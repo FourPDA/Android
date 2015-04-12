@@ -25,6 +25,7 @@ public class Ru4pdaGenerator {
 		article.addDateProperty("date");
 		article.addStringProperty("title");
 		article.addStringProperty("description");
+		article.addIntProperty("position");
 	}
 
 }

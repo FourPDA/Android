@@ -26,7 +26,7 @@ public class Ru4pdaClient {
 
 	public List<SimpleArticle> getArticles(int page) throws IOException {
 		Request request = new Request.Builder()
-				.url(BASE_URL + "/page/" + page)
+				.url(BASE_URL + "page/" + page)
 				.build();
 
 		Response response = client.newCall(request).execute();
