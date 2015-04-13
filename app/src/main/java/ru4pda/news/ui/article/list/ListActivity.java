@@ -5,13 +5,16 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru4pda.news.Preferences_;
 import ru4pda.news.R;
 import ru4pda.news.ui.CategoryType;
 import ru4pda.news.ui.DrawerFragment;
@@ -30,6 +33,8 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 
 	@InstanceState CategoryType category;
 
+	@Pref Preferences_ preferences;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +47,14 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, ListFragment_.builder().category(category).build())
 					.commit();
+		}
+	}
+
+	@AfterViews
+	void afterViews() {
+		if (preferences.isFirstRun().get()) {
+			drawerLayout.openDrawer(Gravity.START);
+			preferences.isFirstRun().put(false);
 		}
 	}
 
