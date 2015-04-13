@@ -37,7 +37,12 @@ public class Ru4pdaClient {
 
 		Response response = client.newCall(request).execute();
 		String body = response.body().string();
-		return new HomePageParser().parse(body);
+
+		if (type == CategoryType.REVIEWS) {
+			return new ReviewsParser().parse(body);
+		} else {
+			return new ArticleListParser().parse(body);
+		}
 	}
 
 	public String getArticleContent(Date date, long id) throws IOException {

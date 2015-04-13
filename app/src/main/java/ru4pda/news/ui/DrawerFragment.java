@@ -32,6 +32,11 @@ public class DrawerFragment extends Fragment {
 		clickCategory(CategoryType.NEWS);
 	}
 
+	@Click(R.id.reviews_category_view)
+	void reviewsCategoryClicked() {
+		clickCategory(CategoryType.REVIEWS);
+	}
+
 	@Click(R.id.articles_category_view)
 	void articlesCategoryClicked() {
 		clickCategory(CategoryType.ARTICLES);

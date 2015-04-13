@@ -12,9 +12,9 @@ import ru4pda.news.client.model.ListArticle;
 /**
  * Created by asavinova on 09/04/15.
  */
-public class HomePageParser {
+public class ArticleListParser {
 
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy/MM/dd");
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	private static final Pattern ARTICLE_LIST_PATTERN = Pattern.compile("<article id=\"content\" class=\"fix-post\">(.*?)<ul class=\"page-nav\">", Pattern.DOTALL);
 	private static final Pattern ARTICLE_PATTERN = Pattern.compile("http://schema.org/Article\">.*?</article>", Pattern.DOTALL);
