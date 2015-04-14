@@ -5,27 +5,30 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<FrameLayout
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
 		<FrameLayout
 			android:id="@+id/list_container"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"/>
 
 		<FrameLayout
 			android:id="@+id/item_container"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="match_parent"></FrameLayout>
 
-	</FrameLayout>
+	</LinearLayout>
 
 	<fragment
 		android:id="@+id/drawer"
 		android:name="ru4pda.news.ui.DrawerFragment_"
 		android:layout_width="@dimen/navigation_drawer_width"
 		android:layout_height="match_parent"
-		android:layout_gravity="start" />
+		android:layout_gravity="start"/>
 
 </android.support.v4.widget.DrawerLayout>

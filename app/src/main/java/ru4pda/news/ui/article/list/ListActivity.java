@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.InstanceState;
@@ -14,10 +15,13 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru4pda.news.EventBus;
 import ru4pda.news.Preferences_;
 import ru4pda.news.R;
 import ru4pda.news.ui.CategoryType;
 import ru4pda.news.ui.DrawerFragment;
+import ru4pda.news.ui.article.ShowArticleEvent;
+import ru4pda.news.ui.article.one.ArticleFragment_;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -32,8 +36,8 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	@ViewById DrawerLayout drawerLayout;
 
 	@InstanceState CategoryType category;
-
 	@Pref Preferences_ preferences;
+	@Bean EventBus eventBus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, ListFragment_.builder().category(category).build())
+					.add(R.id.list_container, ListFragment_.builder().category(category).build())
 					.commit();
 		}
 	}
@@ -62,12 +66,14 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	protected void onResume() {
 		super.onResume();
 		drawer.addListener(this);
+		eventBus.register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		drawer.removeListener(this);
+		eventBus.unregister(this);
 	}
 
 	@Override
@@ -81,8 +87,21 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 
 		category = newCategory;
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.container, ListFragment_.builder().category(category).build())
+				.replace(R.id.list_container,
+						ListFragment_.builder()
+								.category(category)
+								.build())
 				.addToBackStack(null)
 				.commit();
 	}
+
+	public void onEvent(ShowArticleEvent event) {
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.item_container,
+						ArticleFragment_.builder()
+								.id(event.getId())
+								.build())
+				.addToBackStack(null)
+				.commit();
+	};
 }

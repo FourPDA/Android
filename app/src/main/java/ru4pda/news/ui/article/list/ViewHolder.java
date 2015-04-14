@@ -2,7 +2,6 @@ package ru4pda.news.ui.article.list;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,10 +10,11 @@ import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ru4pda.news.EventBus_;
 import ru4pda.news.R;
 import ru4pda.news.dao.ArticleDao;
 import ru4pda.news.ui.ViewUtils;
-import ru4pda.news.ui.article.one.ArticleActivity_;
+import ru4pda.news.ui.article.ShowArticleEvent;
 
 /**
  * Created by pavel on 12/04/15.
@@ -39,10 +39,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ArticleActivity_.intent(v.getContext())
-						.id(id)
-						.title(title)
-						.start();
+				EventBus_.getInstance_(v.getContext())
+						.post(new ShowArticleEvent(id));
 			}
 		});
 
