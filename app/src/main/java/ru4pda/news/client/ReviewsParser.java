@@ -22,6 +22,7 @@ public class ReviewsParser {
 	private static final Pattern URL_PATTERN = Pattern.compile("<a itemprop=\"url\" href=\"/(.*?)/\">", Pattern.DOTALL);
 	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div class=\"content\">(.*?)<span class=\"bg-shadow\">", Pattern.DOTALL);
 	private static final Pattern TITLE_PATTERN = Pattern.compile("<div class=\"btn-review-all\">.*title=\"(.*?)\">полный обзор</a>", Pattern.DOTALL);
+	private static final Pattern IMAGE_PATTERN = Pattern.compile("<img itemprop=\"image\" src=\"(.*?)\"", Pattern.DOTALL);
 
 	public List<ListArticle> parse(String pageSource) {
 		List<ListArticle> articles = new ArrayList<>();
@@ -78,6 +79,14 @@ public class ReviewsParser {
 		if (descriptionMatcher.find()) {
 			String description = descriptionMatcher.group(1);
 			article.setDescription(description);
+		} else {
+			//TODO
+		}
+
+		Matcher imageMatcher = IMAGE_PATTERN.matcher(itemSource);
+		if (imageMatcher.find()) {
+			String image = imageMatcher.group(1);
+			article.setImage(image);
 		} else {
 			//TODO
 		}

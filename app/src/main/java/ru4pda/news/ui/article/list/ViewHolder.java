@@ -32,9 +32,10 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 	public void setCursor(Cursor cursor) {
 
-		final long id = cursor.getLong(ArticleDao.Properties.Server_id.ordinal);
+		final long id = cursor.getLong(ArticleDao.Properties.ServerId.ordinal);
 		final String title = cursor.getString(ArticleDao.Properties.Title.ordinal);
 		Date date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
+		String image = cursor.getString(ArticleDao.Properties.Image.ordinal);
 
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -46,7 +47,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 
-		ViewUtils.loadImage(imageView, id);
+		ViewUtils.loadImage(imageView, image);
 		titleView.setText(title);
 		dateView.setText(verboseDate);
 

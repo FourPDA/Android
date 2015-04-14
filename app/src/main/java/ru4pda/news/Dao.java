@@ -71,10 +71,11 @@ public class Dao {
 					}
 
 					Article article = new Article();
-					article.setServer_id(listArticle.getId());
+					article.setServerId(listArticle.getId());
 					article.setDate(listArticle.getDate());
 					article.setTitle(listArticle.getTitle());
 					article.setDescription(listArticle.getDescription());
+					article.setImage(listArticle.getImage());
 					position++;
 					article.setPosition(position);
 					article.setCategory(getCategoryValue(category));
@@ -118,7 +119,7 @@ public class Dao {
 	public Article getArticle(long id) {
 		ArticleDao dao = daoSession.getArticleDao();
 		return dao.queryBuilder()
-				.where(ArticleDao.Properties.Server_id.eq(id))
+				.where(ArticleDao.Properties.ServerId.eq(id))
 				.limit(1)
 				.build().unique();
 	}

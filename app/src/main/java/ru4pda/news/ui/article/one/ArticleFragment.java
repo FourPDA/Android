@@ -20,8 +20,6 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
-
 import ru4pda.news.Dao;
 import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
@@ -77,7 +75,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 	@UiThread
 	void updateData(ArticleTaskLoader.WrapperInfo info) {
-		ViewUtils.loadImage(imageView, id);
+		ViewUtils.loadImage(imageView, info.article.getImage());
 		titleView.setText(info.article.getTitle());
 		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(info.article.getDate()));
 		webView.loadData(info.content, "text/html; charset=utf-8", null);

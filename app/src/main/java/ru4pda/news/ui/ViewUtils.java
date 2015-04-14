@@ -13,11 +13,9 @@ public class ViewUtils {
 
 	public static final SimpleDateFormat VERBOSE_DATE_FORMAT = new SimpleDateFormat("dd MMMM yyyy");
 
-	private static final String IMAGE_BASE_URL = "http://s.4pda.to/wp-content/uploads/headbands/213/phband-%s.jpg";
-
-	public static void loadImage(ImageView view, long id) {
+	public static void loadImage(ImageView view, String url) {
 		Picasso.with(view.getContext())
-				.load(String.format(IMAGE_BASE_URL, id))
+				.load(url)
 				.into(view);
 	}
 

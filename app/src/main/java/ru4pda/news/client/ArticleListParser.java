@@ -23,6 +23,7 @@ public class ArticleListParser {
 	private static final Pattern DESCRIPTION_BLOCK_PATTERN = Pattern.compile("<div class=\"description\">(.*?)<span class=\"bg-shadow\">", Pattern.DOTALL);
 	private static final Pattern TITLE_PATTERN = Pattern.compile("itemprop=\"name\">(.*?)</a></h1>", Pattern.DOTALL);
 	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div itemprop=\"description\"><p.*?>(.*?)</p></div>", Pattern.DOTALL);
+	private static final Pattern IMAGE_PATTERN = Pattern.compile("<img itemprop=\"image\" src=\"(.*?)\"", Pattern.DOTALL);
 
 	public List<ListArticle> parse(String pageSource) {
 		List<ListArticle> articles = new ArrayList<>();
@@ -92,6 +93,14 @@ public class ArticleListParser {
 				}
 			}
 
+		} else {
+			//TODO
+		}
+
+		Matcher imageMatcher = IMAGE_PATTERN.matcher(itemSource);
+		if (imageMatcher.find()) {
+			String image = imageMatcher.group(1);
+			article.setImage(image);
 		} else {
 			//TODO
 		}
