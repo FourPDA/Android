@@ -57,7 +57,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	@AfterViews
 	void afterViews() {
 		if (preferences.isFirstRun().get()) {
-			drawerLayout.openDrawer(Gravity.START);
+			if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
 			preferences.isFirstRun().put(false);
 		}
 	}
@@ -79,7 +79,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	@Override
 	public void onChange(CategoryType newCategory) {
 		L.trace("Category type changed on {} type", newCategory.name());
-		drawerLayout.closeDrawer(Gravity.START);
+		if (drawerLayout != null) drawerLayout.closeDrawer(Gravity.START);
 
 		if (category == newCategory) {
 			return;

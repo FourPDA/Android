@@ -24,4 +24,10 @@
 		<item name="android:background">@drawable/category_item_bg</item>
 	</style>
 
+	<style name="VerticalShadow">
+		<item name="android:layout_width">@dimen/vertical_shadow_width</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:background">@drawable/vertical_shadow</item>
+	</style>
+
 </resources>
