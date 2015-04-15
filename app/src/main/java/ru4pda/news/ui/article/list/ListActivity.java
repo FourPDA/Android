@@ -60,7 +60,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 			if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
 			preferences.isFirstRun().put(false);
 		}
-		
+
 		drawer.setSelected(category);
 	}
 
@@ -105,5 +105,5 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 								.build())
 				.addToBackStack(null)
 				.commit();
-	};
+	}
 }

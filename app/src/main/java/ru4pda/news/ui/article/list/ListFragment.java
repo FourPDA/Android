@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -53,6 +56,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 	void afterViews() {
 
 		toolbar.setTitle(category.getTitle());
+		showMenuIcon();
 
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
@@ -94,6 +98,21 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 	@Override
 	public void onRefresh() {
 		loadData(true);
+	}
+
+	public void showMenuIcon() {
+		final View view = getActivity().findViewById(R.id.drawer_layout);
+		if (view == null) return;
+
+		if (view instanceof DrawerLayout) {
+			toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
+			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((DrawerLayout) view).openDrawer(Gravity.START);
+				}
+			});
+		}
 	}
 
 
