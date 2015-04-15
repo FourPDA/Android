@@ -4,6 +4,7 @@
 	<dimen name="navigation_drawer_width">240dp</dimen>
 	<dimen name="vertical_shadow_width">16dp</dimen>
 	<dimen name="list_panel_width">320dp</dimen>
+	<dimen name="list_item_width">240dp</dimen>
 
 	<dimen name="offset_normal">16dp</dimen>
 	<dimen name="offset_small">8dp</dimen>

@@ -8,12 +8,15 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -42,6 +45,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 	@FragmentArg CategoryType category;
 
+	@ViewById LinearLayout layout;
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
@@ -52,6 +56,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 	private int page = 1;
 
 	private ArticlesAdapter adapter;
+	private GridLayoutManager layoutManager;
 
 	@AfterViews
 	void afterViews() {
@@ -60,7 +65,17 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		showMenuIcon();
 		selectedCategoryInDrawer();
 
-		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				int spanCount = (int) (layout.getWidth() / getResources().getDimension(R.dimen.list_item_width));
+				if (spanCount > 1) {
+					layoutManager.setSpanCount(spanCount);
+				}
+			}
+		});
+
+		layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(layoutManager);
 		adapter = new ArticlesAdapter(getActivity(), null);
 		recyclerView.setAdapter(adapter);
