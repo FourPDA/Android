@@ -67,7 +67,6 @@ public class DrawerFragment extends Fragment {
 	}
 
 	private void clickCategory(CategoryType category) {
-		clearSelected();
 		setSelected(category);
 		for (ChangeCategoryListener listener : listeners) {
 			listener.onChange(category);
@@ -84,6 +83,8 @@ public class DrawerFragment extends Fragment {
 	}
 
 	public void setSelected(CategoryType category) {
+		clearSelected();
+
 		switch (category) {
 			case ALL:
 				allCategoryView.setSelected(true);

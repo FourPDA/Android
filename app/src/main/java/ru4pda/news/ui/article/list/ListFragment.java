@@ -29,6 +29,7 @@ import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
 import ru4pda.news.client.model.ListArticle;
 import ru4pda.news.ui.CategoryType;
+import ru4pda.news.ui.DrawerFragment;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -57,6 +58,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 		toolbar.setTitle(category.getTitle());
 		showMenuIcon();
+		selectedCategoryInDrawer();
 
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(layoutManager);
@@ -87,6 +89,15 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		loadData(false);
 	}
 
+	private void selectedCategoryInDrawer() {
+		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.drawer);
+		if (fragment == null) return;
+
+		if (fragment instanceof DrawerFragment) {
+			((DrawerFragment) fragment).setSelected(category);
+		}
+	}
+
 	private void loadData(boolean force) {
 		refresh.setRefreshing(true);
 
@@ -100,7 +111,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		loadData(true);
 	}
 
-	public void showMenuIcon() {
+	private void showMenuIcon() {
 		final View view = getActivity().findViewById(R.id.drawer_layout);
 		if (view == null) return;
 

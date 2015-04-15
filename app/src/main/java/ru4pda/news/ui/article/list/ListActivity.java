@@ -1,6 +1,7 @@
 package ru4pda.news.ui.article.list;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -60,8 +61,6 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 			if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
 			preferences.isFirstRun().put(false);
 		}
-
-		drawer.setSelected(category);
 	}
 
 	@Override
@@ -83,18 +82,36 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		L.trace("Category type changed on {} type", newCategory.name());
 		if (drawerLayout != null) drawerLayout.closeDrawer(Gravity.START);
 
+		Fragment itemFragment = getSupportFragmentManager().findFragmentById(R.id.item_container);
 		if (category == newCategory) {
+			if (itemFragment != null) {
+				getSupportFragmentManager().beginTransaction()
+						.remove(itemFragment)
+						.addToBackStack(null)
+						.commit();
+			}
 			return;
 		}
 
 		category = newCategory;
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.list_container,
-						ListFragment_.builder()
-								.category(category)
-								.build())
-				.addToBackStack(null)
-				.commit();
+		if (itemFragment == null) {
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.list_container,
+							ListFragment_.builder()
+									.category(category)
+									.build())
+					.addToBackStack(null)
+					.commit();
+		} else {
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.list_container,
+							ListFragment_.builder()
+									.category(category)
+									.build())
+					.remove(itemFragment)
+					.addToBackStack(null)
+					.commit();
+		}
 	}
 
 	public void onEvent(ShowArticleEvent event) {
