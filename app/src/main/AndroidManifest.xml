@@ -16,6 +16,9 @@
 			</intent-filter>
 		</activity>
 
+		<activity android:name=".ui.AboutActivity_"
+			android:parentActivityName=".ui.article.list.ListActivity_"/>
+
 	</application>
 
 </manifest>

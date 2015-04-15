@@ -61,6 +61,11 @@ public class DrawerFragment extends Fragment {
 		clickCategory(CategoryType.GAMES);
 	}
 
+	@Click(R.id.about_view)
+	void aboutClicked() {
+		AboutActivity_.intent(getActivity()).start();
+	}
+
 	private void clickCategory(CategoryType category) {
 		clearSelected();
 		setSelected(category);

@@ -5,10 +5,15 @@
 	android:background="@color/primary_dark"
 	android:orientation="vertical">
 
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="100dp" />
+
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1">
+		android:layout_weight="1"
+		android:background="@color/primary">
 
 		<LinearLayout
 			android:layout_width="wrap_content"
@@ -48,5 +53,10 @@
 		</LinearLayout>
 
 	</ScrollView>
+
+	<TextView
+		android:id="@+id/about_view"
+		style="@style/CategoryItem"
+		android:text="@string/about" />
 
 </LinearLayout>

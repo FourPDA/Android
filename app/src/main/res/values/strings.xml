@@ -10,4 +10,9 @@
 	<string name="category_software">Программы</string>
 	<string name="category_games">Игры</string>
 
+	<string name="about">О программе</string>
+	<string name="chooser_title">Что использовать?</string>
+	<string name="no_email_applications_installed">Нет установленных приложений для отправки писем</string>
+	<string name="no_browsers_installed">Нет установленных приложений для просмотра веб-страниц</string>
+
 </resources>
