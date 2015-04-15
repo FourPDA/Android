@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -15,6 +16,9 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru4pda.news.EventBus;
 import ru4pda.news.Preferences_;
@@ -40,6 +44,9 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	@Pref Preferences_ preferences;
 	@Bean EventBus eventBus;
 
+	private Timer timer;
+	private Toast toast;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +58,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.list_container, ListFragment_.builder().category(category).build())
+					.addToBackStack(null)
 					.commit();
 		}
 	}
@@ -75,6 +83,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		super.onPause();
 		drawer.removeListener(this);
 		eventBus.unregister(this);
+		if (timer != null) timer.cancel();
 	}
 
 	@Override
@@ -122,5 +131,30 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 								.build())
 				.addToBackStack(null)
 				.commit();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+			if (timer != null) {
+				if (toast != null) toast.cancel();
+				finish();
+			} else {
+
+				toast = Toast.makeText(this, R.string.exit_message, Toast.LENGTH_SHORT);
+				toast.show();
+
+				timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						timer = null;
+					}
+				}, 2000);
+
+			}
+		} else {
+			super.onBackPressed();
+		}
 	}
 }

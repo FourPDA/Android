@@ -15,4 +15,6 @@
 	<string name="no_email_applications_installed">Нет установленных приложений для отправки писем</string>
 	<string name="no_browsers_installed">Нет установленных приложений для просмотра веб-страниц</string>
 
+	<string name="exit_message">Еще раз нажмите Назад для выхода из приложения</string>
+
 </resources>

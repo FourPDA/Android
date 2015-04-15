@@ -68,7 +68,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
 			public void onGlobalLayout() {
-				int spanCount = (int) (layout.getWidth() / getResources().getDimension(R.dimen.list_item_width));
+				int spanCount = (int) (layout.getWidth() / layout.getResources().getDimension(R.dimen.list_item_width));
 				if (spanCount > 1) {
 					layoutManager.setSpanCount(spanCount);
 				}
