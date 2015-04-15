@@ -1,9 +1,11 @@
 package ru4pda.news.ui;
 
 import android.support.v4.app.Fragment;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,13 @@ public class DrawerFragment extends Fragment {
 	public interface ChangeCategoryListener {
 		void onChange(CategoryType type);
 	}
+
+	@ViewById TextView allCategoryView;
+	@ViewById TextView newsCategoryView;
+	@ViewById TextView reviewsCategoryView;
+	@ViewById TextView articlesCategoryView;
+	@ViewById TextView softwareCategoryView;
+	@ViewById TextView gamesCategoryView;
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
 
@@ -52,9 +61,43 @@ public class DrawerFragment extends Fragment {
 		clickCategory(CategoryType.GAMES);
 	}
 
-	private void clickCategory(CategoryType type) {
+	private void clickCategory(CategoryType category) {
+		clearSelected();
+		setSelected(category);
 		for (ChangeCategoryListener listener : listeners) {
-			listener.onChange(type);
+			listener.onChange(category);
+		}
+	}
+
+	private void clearSelected() {
+		allCategoryView.setSelected(false);
+		newsCategoryView.setSelected(false);
+		reviewsCategoryView.setSelected(false);
+		articlesCategoryView.setSelected(false);
+		softwareCategoryView.setSelected(false);
+		gamesCategoryView.setSelected(false);
+	}
+
+	public void setSelected(CategoryType category) {
+		switch (category) {
+			case ALL:
+				allCategoryView.setSelected(true);
+				break;
+			case NEWS:
+				newsCategoryView.setSelected(true);
+				break;
+			case ARTICLES:
+				articlesCategoryView.setSelected(true);
+				break;
+			case REVIEWS:
+				reviewsCategoryView.setSelected(true);
+				break;
+			case SOFTWARE:
+				softwareCategoryView.setSelected(true);
+				break;
+			case GAMES:
+				gamesCategoryView.setSelected(true);
+				break;
 		}
 	}
 
