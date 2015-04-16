@@ -5,6 +5,7 @@
 	<color name="primary_dark">#00568c</color>
 	<color name="accent">#4ebaf6</color>
 	<color name="background">@android:color/white</color>
+	<color name="delimeter">#999</color>
 
 	<color name="white">@android:color/white</color>
 

@@ -17,4 +17,26 @@
 
 	<string name="exit_message">Еще раз нажмите Назад для выхода из приложения</string>
 
+	<string name="about_info">
+		<![CDATA[
+			<p>Клиент для сайта <a href="http://4pda.ru">http://4pda.ru</a></p>
+			<p>Исходники на GitHub: <a href="https://github.com/4pdaru/news">https://github.com/4pdaru/news</a></p>
+		]]>
+	</string>
+	<string name="about_developers">Разработчики</string>
+	<string name="about_swapi_name">Павел Савинов</string>
+	<string name="about_varann_name">Анна Савинова</string>
+	<string name="about_user_swapi">
+		<![CDATA[
+			<span>Пользователь swap_i на 4PDA:<br />
+			<a href="http://4pda.ru/forum/index.php?showuser=2266224">http://4pda.ru/forum/index.php?showuser=2266224</a></span>
+		]]>
+	</string>
+	<string name="about_user_varann">
+		<![CDATA[
+			<span>Пользователь var.ann на 4PDA:<br />
+			<a href="http://4pda.ru/forum/index.php?showuser=4975039">http://4pda.ru/forum/index.php?showuser=4975039</a></span>
+		]]>
+	</string>
+
 </resources>
