@@ -54,7 +54,7 @@ public class Ru4pdaClient {
 		Response response = client.newCall(request).execute();
 		String body = response.body().string();
 
-		return new ArticlePageParser().parse(body);
+		return new ArticlePageParser().parse(id, body);
 	}
 
 }

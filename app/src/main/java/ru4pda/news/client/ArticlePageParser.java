@@ -8,11 +8,13 @@ import java.util.regex.Pattern;
  */
 public class ArticlePageParser {
 
-	private static final Pattern CONTENT_PATTERN = Pattern.compile("width=\"1\" height=\"1\" /><p.*?style=\"text-align: justify.*?>(.*?)<br /></div>", Pattern.DOTALL);
+	private static final String CONTENT_PATTERN_STRING = "<img src=\"/pages/imp/%s.gif\" width=\"1\" height=\"1\" />(.*?)<br /></div>";
 
-	public String parse(String pageSource) {
+	public String parse(long id, String pageSource) {
 
-		Matcher matcher = CONTENT_PATTERN.matcher(pageSource);
+		String format = String.format(CONTENT_PATTERN_STRING, id);
+		Pattern pattern = Pattern.compile(format, Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(pageSource);
 
 		if (!matcher.find()) {
 			throw new IllegalStateException("Can't parse page");

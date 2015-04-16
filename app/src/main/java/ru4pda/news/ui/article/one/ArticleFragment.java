@@ -51,6 +51,9 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 	@AfterViews
 	void afterViews() {
+
+		webView.getSettings().setJavaScriptEnabled(true);
+
 		loadData();
 
 		scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -78,7 +81,21 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 		ViewUtils.loadImage(imageView, info.article.getImage());
 		titleView.setText(info.article.getTitle());
 		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(info.article.getDate()));
-		webView.loadData(info.content, "text/html; charset=utf-8", null);
+		webView.loadData(getFormattedText(info.content), "text/html; charset=utf-8", null);
+	}
+
+	private String getFormattedText(String content) {
+		return "<!DOCTYPE html>\n"
+				+ "<html lang=\"ru-RU\">\n"
+				+ "<head>"
+				+ "<link rel=\"stylesheet\" href=\"http://s.4pda.to/css/site.min.css?_=1429170453\"/>"
+				+ "</head>\n"
+				+ "\t<body itemscope itemtype=\"http://schema.org/WebPage\">"
+				+ "<div class=\"container\" itemscope=\"\" itemtype=\"http://schema.org/Article\">"
+				+ "<div class=\"content\"><div class=\"content-box\" itemprop=\"description\">"
+				+ content
+				+ "</div></div></div>"
+				+ "</body></html>";
 	}
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<ArticleTaskLoader.WrapperInfo> {
