@@ -39,7 +39,7 @@ public class Ru4pdaClient {
 		String body = response.body().string();
 
 		if (type == CategoryType.REVIEWS) {
-			return new ReviewsParser().parse(body);
+			return new ReviewListParser().parse(body);
 		} else {
 			return new ArticleListParser().parse(body);
 		}

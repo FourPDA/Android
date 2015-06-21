@@ -1,5 +1,7 @@
 package ru4pda.news.ui.article.one;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -8,10 +10,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -19,6 +24,8 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru4pda.news.Dao;
 import ru4pda.news.R;
@@ -31,6 +38,7 @@ import ru4pda.news.ui.ViewUtils;
 @EFragment(R.layout.article_one)
 public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+	private static final Logger L = LoggerFactory.getLogger(ArticleFragment.class);
 
 	private static final int LOADER_ID = 0;
 
@@ -81,7 +89,24 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 		ViewUtils.loadImage(imageView, info.article.getImage());
 		titleView.setText(info.article.getTitle());
 		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(info.article.getDate()));
+		webView.setWebChromeClient(new WebChromeClient());
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				openActionViewIntent(url);
+				return true;
+			}
+		});
 		webView.loadData(getFormattedText(info.content), "text/html; charset=utf-8", null);
+	}
+
+	private void openActionViewIntent(String url) {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		try {
+			startActivity(intent);
+		} catch (android.content.ActivityNotFoundException ex) {
+			Toast.makeText(getActivity(), R.string.no_content_applications_installed, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private String getFormattedText(String content) {

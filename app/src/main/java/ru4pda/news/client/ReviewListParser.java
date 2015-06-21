@@ -12,7 +12,7 @@ import ru4pda.news.client.model.ListArticle;
 /**
  * Created by asavinova on 13/04/15.
  */
-public class ReviewsParser {
+public class ReviewListParser {
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
