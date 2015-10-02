@@ -29,20 +29,17 @@ public class ReviewListParser {
 
 		Matcher allArticlesMatcher = REVIEWS_LIST_PATTERN.matcher(pageSource);
 
-		if (allArticlesMatcher.find()) {
-
-			String allArticlesSource = allArticlesMatcher.group(1);
-
-			Matcher articleMatcher = REVIEW_PATTERN.matcher(allArticlesSource);
-
-			while (articleMatcher.find()) {
-				String itemSource = articleMatcher.group();
-				articles.add(parseArticle(itemSource));
-			}
-
-		} else {
-			//TODO
+		if (!allArticlesMatcher.find()) {
+			throw new IllegalStateException("Can't find reviews list block");
 		}
+		String allArticlesSource = allArticlesMatcher.group(1);
+
+		Matcher articleMatcher = REVIEW_PATTERN.matcher(allArticlesSource);
+
+		while (articleMatcher.find()) {
+            String itemSource = articleMatcher.group();
+            articles.add(parseArticle(itemSource));
+        }
 
 		return articles;
 	}
@@ -51,45 +48,41 @@ public class ReviewListParser {
 		ListArticle article = new ListArticle();
 
 		Matcher urlMatcher = URL_PATTERN.matcher(itemSource);
-		if (urlMatcher.find()) {
-			String url = urlMatcher.group(1);
-			int lastSlashIndex = url.lastIndexOf("/");
-
-			article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
-
-			try {
-				article.setDate(DATE_FORMAT.parse(url.substring(0, lastSlashIndex)));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			//TODO
+		if (!urlMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item url");
 		}
+		String url = urlMatcher.group(1);
+		int lastSlashIndex = url.lastIndexOf("/");
+
+		article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
+
+		String dateString = url.substring(0, lastSlashIndex);
+		try {
+			article.setDate(DATE_FORMAT.parse(dateString));
+        } catch (ParseException e) {
+			throw new IllegalStateException("Can't parse date " + dateString);
+        }
 
 		Matcher titleMatcher = TITLE_PATTERN.matcher(itemSource);
-		if (titleMatcher.find()) {
-			String title = titleMatcher.group(1);
-			article.setTitle(title);
-		} else {
-			//TODO
+		if (!titleMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item title");
 		}
+		String title = titleMatcher.group(1);
+		article.setTitle(title);
 
 		Matcher descriptionMatcher = DESCRIPTION_PATTERN.matcher(itemSource);
-		if (descriptionMatcher.find()) {
-			String description = descriptionMatcher.group(1);
-			article.setDescription(description);
-		} else {
-			//TODO
+		if (!descriptionMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item description");
 		}
+		String description = descriptionMatcher.group(1);
+		article.setDescription(description);
 
 		Matcher imageMatcher = IMAGE_PATTERN.matcher(itemSource);
-		if (imageMatcher.find()) {
-			String image = imageMatcher.group(1);
-			article.setImage(image);
-		} else {
-			//TODO
+		if (!imageMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item image");
 		}
+		String image = imageMatcher.group(1);
+		article.setImage(image);
 
 		return article;
 	}

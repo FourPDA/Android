@@ -22,7 +22,7 @@ public class ArticlePageParser {
 		Matcher matcher = pattern.matcher(pageSource);
 
 		if (!matcher.find()) {
-			throw new IllegalStateException("Can't parse page");
+			throw new IllegalStateException("Can't find article content");
 		}
 
 		String content = matcher.group(1);

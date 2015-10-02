@@ -30,80 +30,72 @@ public class ArticleListParser {
 
 		Matcher allArticlesMatcher = ARTICLE_LIST_PATTERN.matcher(pageSource);
 
-		if (allArticlesMatcher.find()) {
-
-			String allArticlesSource = allArticlesMatcher.group(1);
-
-			Matcher articleMatcher = ARTICLE_PATTERN.matcher(allArticlesSource);
-
-			while (articleMatcher.find()) {
-				String itemSource = articleMatcher.group();
-				articles.add(parseArticle(itemSource));
-			}
-
-		} else {
-			//TODO
+		if (!allArticlesMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list block");
 		}
+		String allArticlesSource = allArticlesMatcher.group(1);
+
+		Matcher articleMatcher = ARTICLE_PATTERN.matcher(allArticlesSource);
+
+		while (articleMatcher.find()) {
+            String itemSource = articleMatcher.group();
+            articles.add(parseListItem(itemSource));
+        }
 
 		return articles;
 	}
 
-	private ListArticle parseArticle(String itemSource) {
+	private ListArticle parseListItem(String itemSource) {
 		ListArticle article = new ListArticle();
 
 		Matcher urlMatcher = URL_PATTERN.matcher(itemSource);
-		if (urlMatcher.find()) {
-			String url = urlMatcher.group(1);
-			int lastSlashIndex = url.lastIndexOf("/");
-
-			article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
-
-			try {
-				article.setDate(DATE_FORMAT.parse(url.substring(0, lastSlashIndex)));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			//TODO
+		if (!urlMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item url");
 		}
+
+		String url = urlMatcher.group(1);
+		int lastSlashIndex = url.lastIndexOf("/");
+
+		article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
+
+		String dateString = url.substring(0, lastSlashIndex);
+		try {
+			article.setDate(DATE_FORMAT.parse(dateString));
+        } catch (ParseException e) {
+			throw new IllegalStateException("Can't parse date " + dateString);
+        }
 
 		Matcher descBlockMatcher = DESCRIPTION_BLOCK_PATTERN.matcher(itemSource);
-		if (descBlockMatcher.find()) {
-
-			String descriptionBlock = descBlockMatcher.group(1);
-
-			{
-				Matcher matcher = TITLE_PATTERN.matcher(descriptionBlock);
-				if (matcher.find()) {
-					String title = matcher.group(1);
-					article.setTitle(title);
-				} else {
-					//TODO
-				}
-			}
-
-			{
-				Matcher matcher = DESCRIPTION_PATTERN.matcher(descriptionBlock);
-				if (matcher.find()) {
-					String description = matcher.group(1);
-					article.setDescription(description);
-				} else {
-					//TODO
-				}
-			}
-
-		} else {
-			//TODO
+		if (!descBlockMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item desctiption block");
 		}
+		String descriptionBlock = descBlockMatcher.group(1);
+
+		{
+            Matcher matcher = TITLE_PATTERN.matcher(descriptionBlock);
+            if (!matcher.find()) {
+                throw new IllegalStateException("Can't find articles list item title");
+            }
+            String title = matcher.group(1);
+            article.setTitle(title);
+        }
+
+		{
+            Matcher matcher = DESCRIPTION_PATTERN.matcher(descriptionBlock);
+            if (!matcher.find()) {
+                throw new IllegalStateException("Can't find articles list item description");
+            }
+            String description = matcher.group(1);
+            article.setDescription(description);
+        }
 
 		Matcher imageMatcher = IMAGE_PATTERN.matcher(itemSource);
-		if (imageMatcher.find()) {
-			String image = imageMatcher.group(1);
-			article.setImage(image);
-		} else {
-			//TODO
+		if (!imageMatcher.find()) {
+			throw new IllegalStateException("Can't find articles list item image");
 		}
+
+		String image = imageMatcher.group(1);
+		article.setImage(image);
 
 		return article;
 	}
