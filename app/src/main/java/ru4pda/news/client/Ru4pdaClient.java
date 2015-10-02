@@ -67,7 +67,7 @@ public class Ru4pdaClient {
 		String body = response.body().string();
 
 		try {
-			return new ArticlePageParser().parse(id, body);
+			return new ArticlePageParser().parse(body);
 		} catch (RuntimeException e) {
 			L.error("Can't parse page at " + url);
 			throw e;

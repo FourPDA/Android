@@ -22,7 +22,7 @@ public class ArticleListParser {
 	private static final Pattern URL_PATTERN = Pattern.compile("<div class=\"visual\">.*?<a href=\"/(.*?)/\"", Pattern.DOTALL);
 	private static final Pattern DESCRIPTION_BLOCK_PATTERN = Pattern.compile("<div class=\"description\">(.*?)<span class=\"bg-shadow\">", Pattern.DOTALL);
 	private static final Pattern TITLE_PATTERN = Pattern.compile("itemprop=\"name\">(.*?)</a></h1>", Pattern.DOTALL);
-	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div itemprop=\"description\"><p.*?>(.*?)</p></div>", Pattern.DOTALL);
+	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div itemprop=\"description\">(.*?)</div>", Pattern.DOTALL);
 	private static final Pattern IMAGE_PATTERN = Pattern.compile("<img itemprop=\"image\" src=\"(.*?)\"", Pattern.DOTALL);
 
 	public List<ListArticle> parse(String pageSource) {

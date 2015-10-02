@@ -8,17 +8,16 @@ import java.util.regex.Pattern;
  */
 public class ArticlePageParser {
 
-	private static final String CONTENT_PATTERN_STRING = "<img src=\"/pages/imp/%s.gif\" width=\"1\" height=\"1\" />(.*?)<br /></div>";
+	private static final String CONTENT_PATTERN_STRING = "(<div class=\"content\">.*?</p>)<br /></div></div></div>";
 
 	private static final Pattern VIDEO_PATTERN = Pattern.compile("<iframe (.*?)</iframe>", Pattern.DOTALL);
 	private static final Pattern VIDEO_URL_PATTERN = Pattern.compile("src=\"(.*?)\"", Pattern.DOTALL);
 	private static final String PREVIEW_URL_STRING = "http://i.ytimg.com/vi/%s/hqdefault.jpg";
 
 
-	public String parse(long id, String pageSource) {
+	public String parse(String pageSource) {
 
-		String format = String.format(CONTENT_PATTERN_STRING, id);
-		Pattern pattern = Pattern.compile(format, Pattern.DOTALL);
+		Pattern pattern = Pattern.compile(CONTENT_PATTERN_STRING, Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(pageSource);
 
 		if (!matcher.find()) {
