@@ -9,6 +9,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import ru4pda.news.BuildConfig;
 import ru4pda.news.R;
 
 /**
@@ -18,7 +19,11 @@ import ru4pda.news.R;
 public class AboutActivity extends ActionBarActivity {
 
 	@ViewById Toolbar toolbar;
-	@ViewById TextView infoView;
+
+	@ViewById TextView descriptionTextView;
+	@ViewById TextView sourcesTextView;
+	@ViewById TextView versionTextView;
+
 	@ViewById TextView userSwapi;
 	@ViewById TextView userVarann;
 
@@ -28,7 +33,12 @@ public class AboutActivity extends ActionBarActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		infoView.setText(Html.fromHtml(getString(R.string.about_info)));
+		descriptionTextView.setText(R.string.about_description);
+		sourcesTextView.setText(R.string.about_sources);
+
+		String version = BuildConfig.VERSION_NAME + (BuildConfig.DEBUG ? " (debug)" : "");
+		versionTextView.setText(getString(R.string.about_version, version));
+
 		userSwapi.setText(Html.fromHtml(getString(R.string.about_user_swapi)));
 		userVarann.setText(Html.fromHtml(getString(R.string.about_user_varann)));
 	}

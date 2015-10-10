@@ -31,4 +31,13 @@
 		<item name="android:background">@drawable/vertical_shadow</item>
 	</style>
 
+	<style name="About_TextLabel">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">@dimen/offset_normal</item>
+		<item name="android:linksClickable">true</item>
+		<item name="android:autoLink">all</item>
+		<item name="android:gravity">start</item>
+	</style>
+
 </resources>
