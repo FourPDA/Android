@@ -36,8 +36,10 @@ public class AboutActivity extends ActionBarActivity {
 		descriptionTextView.setText(R.string.about_description);
 		sourcesTextView.setText(R.string.about_sources);
 
-		String version = BuildConfig.VERSION_NAME + (BuildConfig.DEBUG ? " (debug)" : "");
-		versionTextView.setText(getString(R.string.about_version, version));
+		String versionName = BuildConfig.VERSION_NAME;
+		int versionCode = BuildConfig.VERSION_CODE;
+		String type = BuildConfig.DEBUG ? "debug" : "";
+		versionTextView.setText(getString(R.string.about_version, versionName, versionCode, type));
 
 		userSwapi.setText(Html.fromHtml(getString(R.string.about_user_swapi)));
 		userVarann.setText(Html.fromHtml(getString(R.string.about_user_varann)));
