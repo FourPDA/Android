@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 	<!-- Base application theme. -->
 	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -13,6 +13,7 @@
 		<item name="android:background">?attr/colorPrimary</item>
 		<item name="android:textColor">@android:color/white</item>
 		<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+		<item name="android:elevation" tools:targetApi="21">4dp</item>
 	</style>
 
 	<style name="CategoryItem">
