@@ -20,7 +20,7 @@
 
 	<string name="about_description">Клиент для сайта http://4pda.ru</string>
 	<string name="about_sources">Исходники на GitHub: https://github.com/4pdaru/news</string>
-	<string name="about_version">Версия: %s</string>
+	<string name="about_version">Версия: %1$s b%2$d %3$s</string>
 
 	<string name="about_developers">Разработчики</string>
 	<string name="about_swapi_name">Павел Савинов</string>
