@@ -15,7 +15,7 @@ import ru4pda.news.R;
 /**
  * Created by asavinova on 15/04/15.
  */
-@EActivity(R.layout.activity_about)
+@EActivity(R.layout.about)
 public class AboutActivity extends ActionBarActivity {
 
 	@ViewById Toolbar toolbar;
