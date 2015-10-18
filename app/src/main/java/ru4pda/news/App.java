@@ -2,6 +2,8 @@ package ru4pda.news;
 
 import android.app.Application;
 
+import ru4pda.news.analytics.Analytics;
+
 /**
  * Application.
  *

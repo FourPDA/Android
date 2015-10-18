@@ -1,14 +1,14 @@
-package ru4pda.news;
+package ru4pda.news.analytics;
 
 import android.app.Application;
 import android.content.Context;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.Map;
 
+import ru4pda.news.BuildConfig;
 import ru4pda.news.ui.CategoryType;
 
 /**
@@ -20,12 +20,19 @@ public class Analytics {
 
     private Drawer drawer = new Drawer();
 
-    private final Tracker tracker;
+    private final AnalyticsTracker tracker;
 
     public Analytics(Context context) {
+
+        if (BuildConfig.VERSION_CODE == 1) {
+            // Не отправляем аналитику, если сборка девелоперская
+            tracker = new AnalyticsTracker();
+            return;
+        }
+
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
         analytics.enableAutoActivityReports((Application) context.getApplicationContext());
-        tracker = analytics.newTracker("UA-68992461-1");
+        tracker = new ProxyTracker(analytics.newTracker("UA-68992461-1"));
     }
 
     public Drawer drawer() {

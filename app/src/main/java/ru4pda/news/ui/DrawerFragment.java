@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru4pda.news.Analytics;
+import ru4pda.news.analytics.Analytics;
 import ru4pda.news.App;
 import ru4pda.news.R;
 
