@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru4pda.news.Analytics;
+import ru4pda.news.App;
 import ru4pda.news.R;
 
 /**
@@ -31,6 +33,7 @@ public class DrawerFragment extends Fragment {
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
     private Map<View, CategoryType> map = new HashMap<>();
+    private Analytics analytics;
 
     public void addListener(ChangeCategoryListener listener) {
         listeners.add(listener);
@@ -43,6 +46,8 @@ public class DrawerFragment extends Fragment {
     @AfterViews
     void afterViews() {
 
+        analytics = ((App) getContext().getApplicationContext()).getAnalytics();
+
         map.put(allCategoryView, CategoryType.ALL);
         map.put(newsCategoryView, CategoryType.NEWS);
         map.put(gamesCategoryView, CategoryType.GAMES);
@@ -54,6 +59,7 @@ public class DrawerFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    analytics.drawer().categoryClicked(map.get(view));
                     setViewSelected(view);
                 }
             });
@@ -63,6 +69,7 @@ public class DrawerFragment extends Fragment {
 
     @Click(R.id.about_view)
     void aboutClicked() {
+        analytics.drawer().aboutClicked();
         AboutActivity_.intent(getActivity()).start();
     }
 
