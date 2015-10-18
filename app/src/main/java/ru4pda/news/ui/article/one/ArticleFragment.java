@@ -45,7 +45,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 	@FragmentArg long id;
 	@FragmentArg String title;
 
-	@ViewById ScrollView scrollView;
+	@ViewById(R.id.scroll_view) ScrollView scrollView;
 	@ViewById ImageView imageView;
 	@ViewById WebView webView;
 	@ViewById View headerLayout;
