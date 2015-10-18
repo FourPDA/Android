@@ -15,174 +15,184 @@
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:orientation="vertical"
-			android:padding="@dimen/offset_big">
+			android:orientation="vertical">
 
 			<ImageView
-				android:layout_width="300dp"
-				android:layout_height="200dp"
-				android:layout_gravity="center_horizontal"
-				android:background="@color/accent" />
-
-			<TextView
-				android:id="@+id/description_text_view"
-				style="@style/About_TextLabel" />
-
-			<TextView
-				android:id="@+id/sources_text_view"
-				style="@style/About_TextLabel" />
-
-			<TextView
-				android:id="@+id/version_text_view"
-				style="@style/About_TextLabel" />
+				android:layout_width="match_parent"
+				android:layout_height="170dp"
+				android:background="@color/accent"
+				android:scaleType="centerCrop"
+				android:src="@drawable/logo" />
 
 			<LinearLayout
-				android:layout_width="wrap_content"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical">
+				android:orientation="vertical"
+				android:padding="@dimen/offset_big">
 
 				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginBottom="@dimen/offset_normal"
-					android:layout_marginTop="@dimen/offset_big"
-					android:text="@string/about_developers"
-					android:textColor="@color/primary_dark"
-					android:textSize="24sp" />
+					android:id="@+id/description_text_view"
+					style="@style/About_TextLabel" />
+
+				<TextView
+					android:id="@+id/sources_text_view"
+					style="@style/About_TextLabel" />
+
+				<TextView
+					android:id="@+id/version_text_view"
+					style="@style/About_TextLabel" />
 
 				<LinearLayout
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal">
-
-					<ImageView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_person_grey600_24dp" />
+					android:orientation="vertical">
 
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:text="@string/about_swapi_name" />
+						android:layout_marginBottom="@dimen/offset_normal"
+						android:layout_marginTop="@dimen/offset_big"
+						android:text="@string/about_developers"
+						android:textColor="@color/primary_dark"
+						android:textSize="24sp" />
 
-				</LinearLayout>
-
-				<LinearLayout
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
-
-					<ImageView
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_email_grey600_24dp" />
+						android:orientation="horizontal">
 
-					<TextView
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_person_grey600_24dp" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:text="@string/about_swapi_name" />
+
+					</LinearLayout>
+
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:autoLink="email"
-						android:linksClickable="true"
-						android:text="swapii@gmail.com" />
+						android:orientation="horizontal">
 
-				</LinearLayout>
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_email_grey600_24dp" />
 
-				<LinearLayout
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:autoLink="email"
+							android:linksClickable="true"
+							android:text="swapii@gmail.com" />
 
-					<ImageView
+					</LinearLayout>
+
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_forum_grey600_24dp" />
+						android:orientation="horizontal">
 
-					<TextView
-						android:id="@+id/user_swapi"
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_forum_grey600_24dp" />
+
+						<TextView
+							android:id="@+id/user_swapi"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:autoLink="web"
+							android:linksClickable="true" />
+
+					</LinearLayout>
+
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="1dp"
+						android:layout_marginBottom="@dimen/offset_big"
+						android:layout_marginTop="@dimen/offset_normal"
+						android:background="@color/delimeter" />
+
+
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:autoLink="web"
-						android:linksClickable="true" />
+						android:orientation="horizontal">
 
-				</LinearLayout>
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_person_grey600_24dp" />
 
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:text="@string/about_varann_name" />
 
-				<View
-					android:layout_width="match_parent"
-					android:layout_height="1dp"
-					android:layout_marginBottom="@dimen/offset_big"
-					android:layout_marginTop="@dimen/offset_normal"
-					android:background="@color/delimeter" />
+					</LinearLayout>
 
-
-				<LinearLayout
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
-
-					<ImageView
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_person_grey600_24dp" />
+						android:orientation="horizontal">
 
-					<TextView
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_email_grey600_24dp" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:autoLink="email"
+							android:linksClickable="true"
+							android:text="varannn@gmail.com" />
+
+					</LinearLayout>
+
+					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:text="@string/about_varann_name" />
+						android:orientation="horizontal">
 
-				</LinearLayout>
+						<ImageView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginRight="@dimen/offset_normal"
+							android:src="@mipmap/ic_forum_grey600_24dp" />
 
-				<LinearLayout
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
+						<TextView
+							android:id="@+id/user_varann"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/offset_normal"
+							android:autoLink="web"
+							android:linksClickable="true" />
 
-					<ImageView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_email_grey600_24dp" />
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:autoLink="email"
-						android:linksClickable="true"
-						android:text="varannn@gmail.com" />
-
-				</LinearLayout>
-
-				<LinearLayout
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
-
-					<ImageView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginRight="@dimen/offset_normal"
-						android:src="@mipmap/ic_forum_grey600_24dp" />
-
-					<TextView
-						android:id="@+id/user_varann"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/offset_normal"
-						android:autoLink="web"
-						android:linksClickable="true" />
+					</LinearLayout>
 
 				</LinearLayout>
 
 			</LinearLayout>
 
 		</LinearLayout>
+
 	</ScrollView>
+
 </LinearLayout>
