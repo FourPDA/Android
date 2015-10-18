@@ -109,7 +109,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		if (fragment == null) return;
 
 		if (fragment instanceof DrawerFragment) {
-			((DrawerFragment) fragment).setSelected(category);
+			((DrawerFragment) fragment).setCategorySelected(category);
 		}
 	}
 

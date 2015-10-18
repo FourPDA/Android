@@ -1,118 +1,93 @@
 package ru4pda.news.ui;
 
 import android.support.v4.app.Fragment;
-import android.widget.TextView;
+import android.view.View;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru4pda.news.R;
 
 /**
- * Created by asavinova on 12/04/15.
+ * @author Anna Savinova
+ * @author Pavel Savinov
  */
 @EFragment(R.layout.drawer)
 public class DrawerFragment extends Fragment {
 
-	public interface ChangeCategoryListener {
-		void onChange(CategoryType type);
-	}
-
-	@ViewById TextView allCategoryView;
-	@ViewById TextView newsCategoryView;
-	@ViewById TextView reviewsCategoryView;
-	@ViewById TextView articlesCategoryView;
-	@ViewById TextView softwareCategoryView;
-	@ViewById TextView gamesCategoryView;
+	@ViewById View allCategoryView;
+	@ViewById View newsCategoryView;
+	@ViewById View reviewsCategoryView;
+	@ViewById View articlesCategoryView;
+	@ViewById View softwareCategoryView;
+	@ViewById View gamesCategoryView;
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
+    private Map<View, CategoryType> map = new HashMap<>();
 
-	@Click(R.id.all_category_view)
-	void allCategoryClicked() {
-		clickCategory(CategoryType.ALL);
-	}
+    public void addListener(ChangeCategoryListener listener) {
+        listeners.add(listener);
+    }
 
-	@Click(R.id.news_category_view)
-	void newsCategoryClicked() {
-		clickCategory(CategoryType.NEWS);
-	}
+    public void removeListener(ChangeCategoryListener listener) {
+        listeners.remove(listener);
+    }
 
-	@Click(R.id.reviews_category_view)
-	void reviewsCategoryClicked() {
-		clickCategory(CategoryType.REVIEWS);
-	}
+    @AfterViews
+    void afterViews() {
 
-	@Click(R.id.articles_category_view)
-	void articlesCategoryClicked() {
-		clickCategory(CategoryType.ARTICLES);
-	}
+        map.put(allCategoryView, CategoryType.ALL);
+        map.put(newsCategoryView, CategoryType.NEWS);
+        map.put(gamesCategoryView, CategoryType.GAMES);
+        map.put(reviewsCategoryView, CategoryType.REVIEWS);
+        map.put(articlesCategoryView, CategoryType.ARTICLES);
+        map.put(softwareCategoryView, CategoryType.SOFTWARE);
 
-	@Click(R.id.software_category_view)
-	void softwareCategoryClicked() {
-		clickCategory(CategoryType.SOFTWARE);
-	}
+        for (View view : map.keySet()) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setViewSelected(view);
+                }
+            });
+        }
 
-	@Click(R.id.games_category_view)
-	void gamesCategoryClicked() {
-		clickCategory(CategoryType.GAMES);
-	}
+    }
 
-	@Click(R.id.about_view)
-	void aboutClicked() {
-		AboutActivity_.intent(getActivity()).start();
-	}
+    @Click(R.id.about_view)
+    void aboutClicked() {
+        AboutActivity_.intent(getActivity()).start();
+    }
 
-	private void clickCategory(CategoryType category) {
-		setSelected(category);
-		for (ChangeCategoryListener listener : listeners) {
-			listener.onChange(category);
-		}
-	}
+    public void setCategorySelected(CategoryType categoryType) {
+        for (Map.Entry<View, CategoryType> entry : map.entrySet()) {
+            if (entry.getValue() == categoryType) {
+                setViewSelected(entry.getKey());
+                return;
+            }
+        }
+        throw new IllegalStateException("No view for category " + categoryType.name());
+    }
 
-	private void clearSelected() {
-		allCategoryView.setSelected(false);
-		newsCategoryView.setSelected(false);
-		reviewsCategoryView.setSelected(false);
-		articlesCategoryView.setSelected(false);
-		softwareCategoryView.setSelected(false);
-		gamesCategoryView.setSelected(false);
-	}
+    private void setViewSelected(View view) {
+        for (View iterView : map.keySet()) {
+            iterView.setSelected(false);
+        }
+        view.setSelected(true);
+        for (ChangeCategoryListener listener : listeners) {
+            listener.onChange(map.get(view));
+        }
+    }
 
-	public void setSelected(CategoryType category) {
-		clearSelected();
-
-		switch (category) {
-			case ALL:
-				allCategoryView.setSelected(true);
-				break;
-			case NEWS:
-				newsCategoryView.setSelected(true);
-				break;
-			case ARTICLES:
-				articlesCategoryView.setSelected(true);
-				break;
-			case REVIEWS:
-				reviewsCategoryView.setSelected(true);
-				break;
-			case SOFTWARE:
-				softwareCategoryView.setSelected(true);
-				break;
-			case GAMES:
-				gamesCategoryView.setSelected(true);
-				break;
-		}
-	}
-
-	public void addListener(ChangeCategoryListener listener) {
-		listeners.add(listener);
-	}
-
-	public void removeListener(ChangeCategoryListener listener) {
-		listeners.remove(listener);
-	}
+    public interface ChangeCategoryListener {
+        void onChange(CategoryType type);
+    }
 
 }
