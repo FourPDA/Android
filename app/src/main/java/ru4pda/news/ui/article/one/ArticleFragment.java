@@ -3,7 +3,6 @@ package ru4pda.news.ui.article.one;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,21 +23,18 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ru4pda.news.Dao;
 import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
+import ru4pda.news.ui.BaseFragment;
 import ru4pda.news.ui.ViewUtils;
 
 /**
  * Created by asavinova on 11/04/15.
  */
 @EFragment(R.layout.article_one)
-public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
-	private static final Logger L = LoggerFactory.getLogger(ArticleFragment.class);
+public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
 
