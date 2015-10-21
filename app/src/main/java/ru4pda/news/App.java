@@ -21,15 +21,16 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		L.debug("Start application");
 		tuneLogs();
+		L.debug("Start application");
 	}
 
 	private void tuneLogs() {
-		boolean isEnabled = !BuildConfig.DEBUG;
+		// Не отправляем аналитику, если сборка девелоперская
+		boolean isCrashlyticsDisabled = BuildConfig.VERSION_CODE == 1;
 
 		CrashlyticsCore crashlyticsCore = new CrashlyticsCore.Builder()
-				.disabled(!isEnabled)
+				.disabled(isCrashlyticsDisabled)
 				.build();
 
 		Crashlytics crashlytics = new Crashlytics.Builder()

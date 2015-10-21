@@ -63,6 +63,6 @@ dependencies {
         transitive = true;
     }
 
-	compile 'com.github.tony19:logback-android-classic:1.1.1-4'
 	compile 'org.slf4j:slf4j-api:1.7.12'
+
 }
