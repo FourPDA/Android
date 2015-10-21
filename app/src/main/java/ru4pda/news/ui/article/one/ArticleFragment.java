@@ -41,7 +41,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg long id;
 	@FragmentArg String title;
 
-	@ViewById ScrollView scrollView;
+	@ViewById(R.id.scroll_view) ScrollView scrollView;
 	@ViewById ImageView imageView;
 	@ViewById WebView webView;
 	@ViewById View headerLayout;

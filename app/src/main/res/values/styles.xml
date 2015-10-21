@@ -14,6 +14,11 @@
 		<item name="android:textColor">@android:color/white</item>
 		<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 		<item name="android:elevation" tools:targetApi="21">4dp</item>
+		<item name="titleTextAppearance">@style/Toolbar_Title</item>
+	</style>
+
+	<style name="Toolbar_Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+		<item name="android:textColor">@android:color/white</item>
 	</style>
 
 	<style name="CategoryItem">

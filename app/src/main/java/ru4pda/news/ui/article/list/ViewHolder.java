@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import java.util.Date;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import ru4pda.news.EventBus_;
 import ru4pda.news.R;
 import ru4pda.news.dao.ArticleDao;
@@ -21,13 +21,13 @@ import ru4pda.news.ui.article.ShowArticleEvent;
  */
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-	@InjectView(R.id.image_view) ImageView imageView;
-	@InjectView(R.id.title_view) TextView titleView;
-	@InjectView(R.id.date_view) TextView dateView;
+	@Bind(R.id.image_view) ImageView imageView;
+	@Bind(R.id.title_view) TextView titleView;
+	@Bind(R.id.date_view) TextView dateView;
 
 	public ViewHolder(View view) {
 		super(view);
-		ButterKnife.inject(this, view);
+		ButterKnife.bind(this, view);
 	}
 
 	public void setCursor(Cursor cursor) {

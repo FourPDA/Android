@@ -6,24 +6,28 @@
 	android:orientation="vertical"
 	android:elevation="16dp">
 
-	<ImageView
-		android:layout_width="match_parent"
-		android:layout_height="100dp" />
-
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
 		android:background="@color/primary">
 
-		<LinearLayout
-			android:layout_width="wrap_content"
+        <LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 
-			<TextView
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:src="@drawable/logo"
+                android:scaleType="centerCrop"
+                android:elevation="6dp" />
+
+            <TextView
 				android:id="@+id/all_category_view"
 				style="@style/CategoryItem"
+                android:layout_marginTop="@dimen/offset_big"
 				android:text="@string/category_all" />
 
 			<TextView
@@ -58,6 +62,7 @@
 	<TextView
 		android:id="@+id/about_view"
 		style="@style/CategoryItem"
-		android:text="@string/about" />
+		android:text="@string/about"
+        android:elevation="6dp" />
 
 </LinearLayout>
