@@ -5,6 +5,9 @@ import android.app.Application;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.SilentLogger;
 
@@ -13,10 +16,12 @@ import io.fabric.sdk.android.SilentLogger;
  */
 public class App extends Application {
 
+	private static final Logger L = LoggerFactory.getLogger(App.class);
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		L.debug("Start application");
 		tuneLogs();
 	}
 
@@ -37,4 +42,5 @@ public class App extends Application {
 				.build();
 		Fabric.with(fabric);
 	}
+
 }
