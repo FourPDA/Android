@@ -1,0 +1,45 @@
+{
+    "ARTIFACT_VERSION": "1",
+    "client": [
+        {
+            "api_key": [],
+            "client_info": {
+                "android_client_info": {
+                    "package_name": "ru4pda.client"
+                },
+                "client_id": "android:ru4pda.client",
+                "client_type": 1,
+                "mobilesdk_app_id": "1:122062294538:android:389a3d563cbb88bc"
+            },
+            "oauth_client": [],
+            "services": {
+                "ads_service": {
+                    "status": 1
+                },
+                "analytics_service": {
+                    "analytics_property": {
+                        "tracking_id": "UA-68992461-1"
+                    },
+                    "status": 2
+                },
+                "appinvite_service": {
+                    "other_platform_oauth_client": [],
+                    "status": 1
+                },
+                "cloud_messaging_service": {
+                    "apns_config": [],
+                    "status": 2
+                },
+                "google_signin_service": {
+                    "status": 1
+                }
+            }
+        }
+    ],
+    "client_info": [],
+    "project_info": {
+        "name": "4PDA",
+        "project_id": "sage-wave-110213",
+        "project_number": "122062294538"
+    }
+}

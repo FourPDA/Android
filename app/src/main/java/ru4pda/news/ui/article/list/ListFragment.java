@@ -31,6 +31,7 @@ import ru4pda.news.Dao;
 import ru4pda.news.R;
 import ru4pda.news.client.Ru4pdaClient;
 import ru4pda.news.client.model.ListArticle;
+import ru4pda.news.ui.BaseFragment;
 import ru4pda.news.ui.CategoryType;
 import ru4pda.news.ui.DrawerFragment;
 
@@ -38,7 +39,7 @@ import ru4pda.news.ui.DrawerFragment;
  * Created by asavinova on 10/04/15.
  */
 @EFragment(R.layout.article_list)
-public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
 	private static final String FORCE = "force";
@@ -109,7 +110,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 		if (fragment == null) return;
 
 		if (fragment instanceof DrawerFragment) {
-			((DrawerFragment) fragment).setSelected(category);
+			((DrawerFragment) fragment).setCategorySelected(category);
 		}
 	}
 
