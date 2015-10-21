@@ -56,6 +56,8 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		}
 
 		if (savedInstanceState == null) {
+			L.debug("Start list activity with category {}", getString(category.getTitle()));
+
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.list_container, ListFragment_.builder().category(category).build())
 					.addToBackStack(null)
@@ -88,7 +90,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 
 	@Override
 	public void onChange(CategoryType newCategory) {
-		L.trace("Category type changed on {} type", newCategory.name());
+		L.debug("Category type changed on {} type", newCategory.name());
 		if (drawerLayout != null) drawerLayout.closeDrawer(Gravity.START);
 
 		Fragment itemFragment = getSupportFragmentManager().findFragmentById(R.id.item_container);
@@ -124,6 +126,7 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 	}
 
 	public void onEvent(ShowArticleEvent event) {
+		L.debug("Show article id {}", event.getId());
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.item_container,
 						ArticleFragment_.builder()

@@ -8,6 +8,8 @@ import android.widget.TextView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru4pda.news.BuildConfig;
 import ru4pda.news.R;
@@ -17,6 +19,8 @@ import ru4pda.news.R;
  */
 @EActivity(R.layout.activity_about)
 public class AboutActivity extends ActionBarActivity {
+
+	private static final Logger L = LoggerFactory.getLogger(AboutActivity.class);
 
 	@ViewById Toolbar toolbar;
 
@@ -29,6 +33,8 @@ public class AboutActivity extends ActionBarActivity {
 
 	@AfterViews
 	void afterViews() {
+		L.debug("Start about activity");
+
 		toolbar.setTitle(R.string.about);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
