@@ -7,7 +7,8 @@
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme"
+		android:name=".App">
 
 		<activity android:name=".ui.article.list.ListActivity_">
 			<intent-filter>
@@ -19,6 +20,9 @@
 		<activity android:name=".ui.AboutActivity_"
 			android:parentActivityName=".ui.article.list.ListActivity_"/>
 
-	</application>
+	    <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d724677e763ff1af8652a27b2a20f363c5193560" />
+    </application>
 
 </manifest>
