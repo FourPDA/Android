@@ -5,9 +5,9 @@
             "api_key": [],
             "client_info": {
                 "android_client_info": {
-                    "package_name": "ru4pda.client"
+                    "package_name": "four.pda"
                 },
-                "client_id": "android:ru4pda.client",
+                "client_id": "android:four.pda",
                 "client_type": 1,
                 "mobilesdk_app_id": "1:122062294538:android:389a3d563cbb88bc"
             },

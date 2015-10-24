@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'ru4pda.news.dao.ganerator.Ru4PdaDaoGenerator'
+mainClassName = 'four.pda.dao.generator.FourPdaDaoGenerator'
 
 dependencies {
 

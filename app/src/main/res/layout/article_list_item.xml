@@ -16,7 +16,7 @@
 		android:orientation="vertical"
 		android:background="@color/card_background">
 
-		<ru4pda.news.ui.AspectRatioImageView
+		<four.pda.ui.AspectRatioImageView
 			android:id="@+id/image_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
