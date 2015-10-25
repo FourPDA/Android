@@ -1,4 +1,4 @@
-package four.pda.client;
+package four.pda;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import four.pda.client.ArticleListParser;
+import four.pda.client.ArticlePageParser;
+import four.pda.client.ReviewListParser;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.CategoryType;
 

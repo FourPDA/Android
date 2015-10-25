@@ -6,7 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import java.io.IOException;
 
 import four.pda.Dao;
-import four.pda.client.FourPdaClient;
+import four.pda.FourPdaClient;
 import four.pda.dao.Article;
 
 /**

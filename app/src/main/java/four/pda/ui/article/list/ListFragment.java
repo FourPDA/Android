@@ -29,7 +29,7 @@ import java.util.List;
 
 import four.pda.Dao;
 import four.pda.R;
-import four.pda.client.FourPdaClient;
+import four.pda.FourPdaClient;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryType;
