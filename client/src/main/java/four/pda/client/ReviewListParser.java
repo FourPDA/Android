@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import four.pda.client.model.ListArticle;
@@ -14,7 +15,7 @@ import four.pda.client.model.ListArticle;
 /**
  * Created by asavinova on 13/04/15.
  */
-public class ReviewListParser {
+public class ReviewListParser extends AbstractParser {
 
 	public List<ListArticle> parse(String pageSource) {
 
@@ -33,17 +34,9 @@ public class ReviewListParser {
 		ListArticle article = new ListArticle();
 
 		String url = element.select("a[itemprop=url]").attr("href");
-		String[] urlParts = url.split("/");
-
-		long id = Long.parseLong(urlParts[4]);
-		article.setId(id);
-
-		Calendar calendar = Calendar.getInstance();
-		int year = Integer.parseInt(urlParts[1]);
-		int month = Integer.parseInt(urlParts[2]);
-		int date = Integer.parseInt(urlParts[3]);
-		calendar.set(year, month, date, 0, 0, 0);
-		article.setDate(calendar.getTime());
+		IdAndDate idAndDate = getIdAndDateFromUrl(url);
+		article.setId(idAndDate.id);
+		article.setDate(idAndDate.date);
 
 		String title = element.select("a[itemprop=name]").get(0).text();
 		article.setTitle(title);

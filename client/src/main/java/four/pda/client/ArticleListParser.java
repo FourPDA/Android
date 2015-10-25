@@ -1,10 +1,13 @@
 package four.pda.client;
 
-import java.text.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import four.pda.client.model.ListArticle;
@@ -12,91 +15,41 @@ import four.pda.client.model.ListArticle;
 /**
  * Created by asavinova on 09/04/15.
  */
-public class ArticleListParser {
-
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
-
-	private static final Pattern ARTICLE_LIST_PATTERN = Pattern.compile("<article id=\"content\" class=\"fix-post\">(.*?)<ul class=\"page-nav\">", Pattern.DOTALL);
-	private static final Pattern ARTICLE_PATTERN = Pattern.compile("http://schema.org/Article\">.*?</article>", Pattern.DOTALL);
-
-	private static final Pattern URL_PATTERN = Pattern.compile("<div class=\"visual\">.*?<a href=\"/(.*?)/\"", Pattern.DOTALL);
-	private static final Pattern DESCRIPTION_BLOCK_PATTERN = Pattern.compile("<div class=\"description\">(.*?)<span class=\"bg-shadow\">", Pattern.DOTALL);
-	private static final Pattern TITLE_PATTERN = Pattern.compile("itemprop=\"name\">(.*?)</a></h1>", Pattern.DOTALL);
-	private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<div itemprop=\"description\">(.*?)</div>", Pattern.DOTALL);
-	private static final Pattern IMAGE_PATTERN = Pattern.compile("<img itemprop=\"image\" src=\"(.*?)\"", Pattern.DOTALL);
+public class ArticleListParser extends AbstractParser {
 
 	public List<ListArticle> parse(String pageSource) {
+
+		Document document = Jsoup.parse(pageSource);
+		Elements elements = document.select("article#content > article.post");
+
 		List<ListArticle> articles = new ArrayList<>();
-
-		Matcher allArticlesMatcher = ARTICLE_LIST_PATTERN.matcher(pageSource);
-
-		if (!allArticlesMatcher.find()) {
-			throw new IllegalStateException("Can't find articles list block");
+		for (Element element : elements) {
+			articles.add(parseListItem(element));
 		}
-		String allArticlesSource = allArticlesMatcher.group(1);
-
-		Matcher articleMatcher = ARTICLE_PATTERN.matcher(allArticlesSource);
-
-		while (articleMatcher.find()) {
-            String itemSource = articleMatcher.group();
-            articles.add(parseListItem(itemSource));
-        }
 
 		return articles;
 	}
 
-	private ListArticle parseListItem(String itemSource) {
+	private ListArticle parseListItem(Element element) {
+
 		ListArticle article = new ListArticle();
 
-		Matcher urlMatcher = URL_PATTERN.matcher(itemSource);
-		if (!urlMatcher.find()) {
-			throw new IllegalStateException("Can't find articles list item url");
-		}
+		IdAndDate idAndDate = getIdAndDateFromUrl(element.select("a[itemprop=url]").first().attr("href"));
+		article.setId(idAndDate.id);
+		article.setDate(idAndDate.date);
 
-		String url = urlMatcher.group(1);
-		int lastSlashIndex = url.lastIndexOf("/");
+		Elements descrEl = element.select("div.description");
 
-		article.setId(Long.parseLong(url.substring(lastSlashIndex + 1)));
+		article.setTitle(descrEl.select("h1 > a").text());
 
-		String dateString = url.substring(0, lastSlashIndex);
-		try {
-			article.setDate(DATE_FORMAT.parse(dateString));
-        } catch (ParseException e) {
-			throw new IllegalStateException("Can't parse date " + dateString);
-        }
+		descrEl.select("h1").remove();
 
-		Matcher descBlockMatcher = DESCRIPTION_BLOCK_PATTERN.matcher(itemSource);
-		if (!descBlockMatcher.find()) {
-			throw new IllegalStateException("Can't find articles list item desctiption block");
-		}
-		String descriptionBlock = descBlockMatcher.group(1);
+		article.setDescription(descrEl.html());
 
-		{
-            Matcher matcher = TITLE_PATTERN.matcher(descriptionBlock);
-            if (!matcher.find()) {
-                throw new IllegalStateException("Can't find articles list item title");
-            }
-            String title = matcher.group(1);
-            article.setTitle(title);
-        }
-
-		{
-            Matcher matcher = DESCRIPTION_PATTERN.matcher(descriptionBlock);
-            if (!matcher.find()) {
-                throw new IllegalStateException("Can't find articles list item description");
-            }
-            String description = matcher.group(1);
-            article.setDescription(description);
-        }
-
-		Matcher imageMatcher = IMAGE_PATTERN.matcher(itemSource);
-		if (!imageMatcher.find()) {
-			throw new IllegalStateException("Can't find articles list item image");
-		}
-
-		String image = imageMatcher.group(1);
-		article.setImage(image);
+		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
+		article.setImage(imageSrc);
 
 		return article;
 	}
+
 }

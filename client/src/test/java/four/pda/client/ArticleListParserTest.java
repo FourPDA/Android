@@ -18,7 +18,7 @@ public class ArticleListParserTest extends AbstractTest {
 		String htmlFile = "/html/news/root.html";
 		String pageSource = getTestFile(htmlFile);
 		List<ListArticle> articles = new ArticleListParser().parse(pageSource);
-		Assert.assertNotEquals("Articles list empty", 0, articles.size());
+		Assert.assertEquals("Wrong articles list size", 30, articles.size());
 	}
 
 }
