@@ -34,7 +34,7 @@
 
 	<fragment
 		android:id="@+id/drawer"
-		android:name="ru4pda.news.ui.DrawerFragment_"
+		android:name="four.pda.ui.DrawerFragment_"
 		android:layout_width="@dimen/navigation_drawer_width"
 		android:layout_height="match_parent"
 		android:layout_gravity="start" />

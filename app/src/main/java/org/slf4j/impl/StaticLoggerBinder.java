@@ -3,7 +3,7 @@ package org.slf4j.impl;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
-import ru4pda.news.logs.LoggerFactory;
+import four.pda.logs.LoggerFactory;
 
 /**
  * Created by asavinova on 21/10/15.

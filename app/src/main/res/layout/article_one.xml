@@ -15,7 +15,7 @@
 			android:layout_height="match_parent"
 			android:orientation="vertical">
 
-			<ru4pda.news.ui.AspectRatioImageView
+			<four.pda.ui.AspectRatioImageView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				app:aspectRatio="0.75" />
@@ -34,7 +34,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<ru4pda.news.ui.AspectRatioImageView
+		<four.pda.ui.AspectRatioImageView
 			android:id="@+id/image_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
