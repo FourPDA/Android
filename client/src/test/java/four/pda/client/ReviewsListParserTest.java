@@ -18,7 +18,7 @@ public class ReviewsListParserTest extends AbstractTest {
 		String htmlFile = "/html/news/reviews.html";
 		String pageSource = getTestFile(htmlFile);
 		List<ListArticle> articles = new ReviewListParser().parse(pageSource);
-		Assert.assertNotEquals("Reviews list empty", 0, articles.size());
+		Assert.assertEquals("Reviews items on page not 30", 30, articles.size());
 	}
 
 }
