@@ -19,7 +19,7 @@
 	<string name="exit_message">Еще раз нажмите Назад для выхода из приложения</string>
 
 	<string name="about_description">Клиент для сайта http://4pda.ru</string>
-	<string name="about_sources">Исходники на GitHub: https://github.com/4pdaru/news</string>
+	<string name="about_sources">Исходники на GitHub: https://github.com/FourPDA/FourPDA</string>
 	<string name="about_version">Версия: %1$s b%2$d %3$s</string>
 
 	<string name="about_developers">Разработчики</string>
