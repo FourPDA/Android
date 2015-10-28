@@ -16,11 +16,27 @@ android {
 		targetSdkVersion 23
 	}
 
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+	signingConfigs {
+
+		develop {
+			storeFile file('develop.keystore')
+			storePassword 'develop'
+			keyAlias 'fourpda_develop'
+			keyPassword 'develop'
 		}
+
+	}
+
+	buildTypes {
+
+		debug {
+			signingConfig signingConfigs.develop
+		}
+
+		release {
+			signingConfig signingConfigs.develop
+		}
+
 	}
 
 	lintOptions {
