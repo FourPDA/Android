@@ -24,7 +24,11 @@ public class ArticleListParser extends AbstractParser {
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
-			articles.add(parseListItem(element));
+			ListArticle article = parseListItem(element);
+			if (article == null) {
+				continue;
+			}
+			articles.add(article);
 		}
 
 		return articles;
@@ -34,7 +38,15 @@ public class ArticleListParser extends AbstractParser {
 
 		ListArticle article = new ListArticle();
 
-		IdAndDate idAndDate = getIdAndDateFromUrl(element.select("a[itemprop=url]").first().attr("href"));
+		String url = element.select("a[itemprop=url]").first().attr("href");
+
+		if (url.contains("/special/")) {
+			// Не парсим специальные ссылки
+			// TODO Парсить спец. ссылки в отдельную модель
+			return null;
+		}
+
+		IdAndDate idAndDate = getIdAndDateFromUrl(url);
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
 
