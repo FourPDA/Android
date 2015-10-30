@@ -39,6 +39,15 @@ android {
 
 	}
 
+	productFlavors {
+		prod {
+		}
+		dev {
+			applicationId defaultConfig.applicationId + '.dev'
+			versionName defaultConfig.versionName + '-DEV'
+		}
+	}
+
 	lintOptions {
 		//TODO Заигнорить нормально okhttp
 		warning 'InvalidPackage'
