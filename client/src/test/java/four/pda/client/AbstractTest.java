@@ -1,38 +1,38 @@
 package four.pda.client;
 
-import java.io.BufferedReader;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import four.pda.client.model.ListArticle;
 
 /**
  * Created by swap_i on 25/10/15.
  */
 public abstract class AbstractTest {
 
-	private static final String BASE_URL = "http://4pda.ru/";
-	public static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+	protected static final String BASE_URL = "http://4pda.ru/";
+	private static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	protected String getHtmlSource(String urlPath) throws IOException {
-		URL url = new URL(urlPath);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		InputStream inputStream = connection.getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-		StringBuilder builder = new StringBuilder();
-		String nextLine = "";
-		while ((nextLine = reader.readLine()) != null) {
-			builder.append(nextLine);
-		}
-		return builder.toString();
+		return IOUtils.toString(new URL(urlPath));
 	}
 
 	protected String getArticleUrl(Date date, long id) {
 		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
 		return BASE_URL + fullId;
+	}
+
+	protected void checkArticles(String pageSource) throws IOException {
+		List<ListArticle> articles = new ArticleListParser().parse(pageSource);
+		for (ListArticle article : articles) {
+			String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
+			new ArticlePageParser().parse(source);
+		}
 	}
 
 }
