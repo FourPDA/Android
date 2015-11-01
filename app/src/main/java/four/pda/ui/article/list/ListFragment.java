@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
@@ -50,6 +51,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
+	@ViewById View upButton;
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
@@ -105,6 +107,11 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		loadData(false);
 	}
 
+	@Click
+	void upButton() {
+		layoutManager.scrollToPosition(0);
+	}
+
 	private void selectedCategoryInDrawer() {
 		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.drawer);
 		if (fragment == null) return;
@@ -141,7 +148,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			});
 		}
 	}
-
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 
