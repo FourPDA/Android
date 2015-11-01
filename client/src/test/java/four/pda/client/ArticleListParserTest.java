@@ -14,16 +14,16 @@ import four.pda.client.model.ListArticle;
 public class ArticleListParserTest extends AbstractTest {
 
 	@Test
-	public void parseMainPage() throws IOException {
-		String pageSource = getHtmlSource(BASE_URL);
+	public void mainPage() throws IOException {
+		String pageSource = getHtmlSource("/");
 		List<ListArticle> articles = new ArticleListParser().parse(pageSource);
 		Assert.assertEquals("Wrong articles list size", 30, articles.size());
 	}
 
 	@Test
 	public void checkContentArticles() throws IOException {
-		checkArticles(getHtmlSource(BASE_URL));
-		checkArticles(getHtmlSource(BASE_URL + "page/2/"));
+		checkArticles(getHtmlSource("/"));
+		checkArticles(getHtmlSource("/page/2/"));
 	}
 
 }

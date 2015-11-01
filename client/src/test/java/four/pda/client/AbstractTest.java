@@ -15,16 +15,11 @@ import four.pda.client.model.ListArticle;
  */
 public abstract class AbstractTest {
 
-	protected static final String BASE_URL = "http://4pda.ru/";
+	protected static final String BASE_URL = "http://4pda.ru";
 	private static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	protected String getHtmlSource(String urlPath) throws IOException {
-		return IOUtils.toString(new URL(urlPath));
-	}
-
-	protected String getArticleUrl(Date date, long id) {
-		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
-		return BASE_URL + fullId;
+		return IOUtils.toString(new URL(BASE_URL + urlPath));
 	}
 
 	protected void checkArticles(String pageSource) throws IOException {
@@ -33,6 +28,10 @@ public abstract class AbstractTest {
 			String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
 			new ArticlePageParser().parse(source);
 		}
+	}
+
+	private String getArticleUrl(Date date, long id) {
+		return "/" + ARTICLE_DATE_FORMAT.format(date) + "/" + id;
 	}
 
 }

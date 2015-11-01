@@ -13,19 +13,19 @@ import four.pda.client.model.ListArticle;
  */
 public class ReviewsListParserTest extends AbstractTest {
 
-	private static final String REVIEW_BASE_URL = BASE_URL + "reviews/";
+	private static final String REVIEW_PATH = "/reviews";
 
 	@Test
-	public void parseMainPage() throws IOException {
-		String pageSource = getHtmlSource(REVIEW_BASE_URL);
+	public void mainPage() throws IOException {
+		String pageSource = getHtmlSource(REVIEW_PATH);
 		List<ListArticle> articles = new ReviewListParser().parse(pageSource);
 		Assert.assertEquals("Wrong reviews list size", 30, articles.size());
 	}
 
 	@Test
 	public void checkContentArticles() throws IOException {
-		checkArticles(getHtmlSource(REVIEW_BASE_URL));
-		checkArticles(getHtmlSource(REVIEW_BASE_URL + "page/2/"));
+		checkArticles(getHtmlSource(REVIEW_PATH));
+		checkArticles(getHtmlSource(REVIEW_PATH + "/page/2/"));
 	}
 
 }
