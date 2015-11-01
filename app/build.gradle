@@ -59,6 +59,7 @@ android {
 					.replace('app-', 'FourPDA-')
 					.replace('.apk', "-${variant.versionName}-b${variant.versionCode}.apk")
 					.replace('-release', '')
+					.replace('-prod', '')
 			output.outputFile = new File(output.outputFile.parent, name)
 		}
 	}
