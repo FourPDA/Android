@@ -14,9 +14,9 @@ import four.pda.client.model.ListArticle;
 public class ReviewsListParserTest extends AbstractTest {
 
 	@Test
-	public void parse() throws IOException {
-		String htmlFile = "/html/news/reviews.html";
-		String pageSource = getTestFile(htmlFile);
+	public void parseMainPage() throws IOException {
+		String mainPage = "http://4pda.ru/reviews/";
+		String pageSource = getHtmlSource(mainPage);
 		List<ListArticle> articles = new ReviewListParser().parse(pageSource);
 		Assert.assertEquals("Wrong reviews list size", 30, articles.size());
 	}
