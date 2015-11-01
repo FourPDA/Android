@@ -21,4 +21,27 @@ public class ReviewsListParserTest extends AbstractTest {
 		Assert.assertEquals("Wrong reviews list size", 30, articles.size());
 	}
 
+	@Test
+	public void checkContentArticles() throws IOException {
+
+		{
+			String pageSource = getHtmlSource("http://4pda.ru/reviews/");
+			List<ListArticle> articles = new ArticleListParser().parse(pageSource);
+			for (ListArticle article : articles) {
+				String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
+				new ArticlePageParser().parse(source);
+			}
+		}
+
+		{
+			String pageSource = getHtmlSource("http://4pda.ru/reviews/page/2/");
+			List<ListArticle> articles = new ArticleListParser().parse(pageSource);
+			for (ListArticle article : articles) {
+				String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
+				new ArticlePageParser().parse(source);
+			}
+		}
+
+	}
+
 }
