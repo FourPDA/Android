@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
@@ -27,9 +28,11 @@ import org.androidannotations.annotations.ViewById;
 import java.io.IOException;
 import java.util.List;
 
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.R;
 import four.pda.FourPdaClient;
+import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryType;
@@ -50,9 +53,12 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
+	@ViewById View upButton;
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
+
+	private Analytics analytics;
 
 	private int page = 1;
 
@@ -61,6 +67,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@AfterViews
 	void afterViews() {
+
+		analytics = ((App) getContext().getApplicationContext()).getAnalytics();
 
 		toolbar.setTitle(category.getTitle());
 		showMenuIcon();
@@ -105,6 +113,12 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		loadData(false);
 	}
 
+	@Click
+	void upButton() {
+		analytics.articlesList().scrollUp(layoutManager.findFirstVisibleItemPosition());
+		layoutManager.scrollToPosition(0);
+	}
+
 	private void selectedCategoryInDrawer() {
 		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.drawer);
 		if (fragment == null) return;
@@ -141,7 +155,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			});
 		}
 	}
-
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 

@@ -80,6 +80,7 @@ dependencies {
 
 	compile "com.android.support:appcompat-v7:$supportVersion"
 	compile "com.android.support:recyclerview-v7:$supportVersion"
+	compile "com.android.support:design:$supportVersion"
 
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
 
