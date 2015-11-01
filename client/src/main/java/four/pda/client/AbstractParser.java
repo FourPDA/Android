@@ -18,7 +18,7 @@ public class AbstractParser {
 
 		Calendar calendar = Calendar.getInstance();
 		int year = Integer.parseInt(urlParts[1]);
-		int month = Integer.parseInt(urlParts[2]);
+		int month = Integer.parseInt(urlParts[2]) - 1;
 		int date = Integer.parseInt(urlParts[3]);
 		calendar.set(year, month, date, 0, 0, 0);
 		idAndDate.date = calendar.getTime();
