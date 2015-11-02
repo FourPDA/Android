@@ -27,7 +27,12 @@ public class AboutActivity extends ActionBarActivity {
 
 	@ViewById TextView descriptionTextView;
 	@ViewById TextView sourcesTextView;
+
 	@ViewById TextView versionTextView;
+	@ViewById TextView buildNumberTextView;
+	@ViewById TextView buildTypeTextView;
+	@ViewById TextView vcsBranchTextView;
+	@ViewById TextView vcsCommitTextView;
 
 	@ViewById TextView userSwapi;
 	@ViewById TextView userVarann;
@@ -43,10 +48,11 @@ public class AboutActivity extends ActionBarActivity {
 		descriptionTextView.setText(R.string.about_description);
 		sourcesTextView.setText(R.string.about_sources);
 
-		String versionName = BuildConfig.VERSION_NAME;
-		int versionCode = BuildConfig.VERSION_CODE;
-		String type = BuildConfig.DEBUG ? "debug" : "";
-		versionTextView.setText(getString(R.string.about_version, versionName, versionCode, type));
+		versionTextView.setText(getString(R.string.about_version, BuildConfig.VERSION_NAME));
+		buildNumberTextView.setText(getString(R.string.about_buildNumber, BuildConfig.VERSION_CODE));
+		buildTypeTextView.setText(getString(R.string.about_buildType, BuildConfig.BUILD_TYPE.toLowerCase()));
+		vcsBranchTextView.setText(getString(R.string.about_vcsBranch, BuildConfig.VCS_BRANCH));
+		vcsCommitTextView.setText(getString(R.string.about_vcsCommit, BuildConfig.VCS_COMMIT));
 
 		userSwapi.setText(Html.fromHtml(getString(R.string.about_user_swapi)));
 		userVarann.setText(Html.fromHtml(getString(R.string.about_user_varann)));
