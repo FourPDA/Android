@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.google.android.gms.analytics.HitBuilders;
 
+import org.androidannotations.annotations.EBean;
+
 import java.util.Map;
 
 import four.pda.BuildConfig;
@@ -14,6 +16,7 @@ import four.pda.ui.CategoryType;
  *
  * @author Pavel Savinov.
  */
+@EBean(scope = EBean.Scope.Singleton)
 public class Analytics {
 
 	private Drawer drawer = new Drawer();

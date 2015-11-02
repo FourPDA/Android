@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -28,7 +28,6 @@ import org.androidannotations.annotations.ViewById;
 import java.io.IOException;
 import java.util.List;
 
-import four.pda.App;
 import four.pda.Dao;
 import four.pda.FourPdaClient;
 import four.pda.R;
@@ -56,9 +55,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@ViewById View upButton;
 
 	@Bean Dao dao;
+	@Bean Analytics analytics;
 	@Bean FourPdaClient client;
-
-	private Analytics analytics;
 
 	private int page = 1;
 
@@ -67,8 +65,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@AfterViews
 	void afterViews() {
-
-		analytics = ((App) getContext().getApplicationContext()).getAnalytics();
 
 		toolbar.setTitle(category.getTitle());
 		showMenuIcon();
@@ -150,7 +146,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					((DrawerLayout) view).openDrawer(Gravity.START);
+					((DrawerLayout) view).openDrawer(GravityCompat.START);
 				}
 			});
 		}
