@@ -10,7 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
+import four.pda.client.model.DeletedComment;
 
 /**
  * Created by asavinova on 02/11/15.
@@ -19,18 +21,27 @@ public class CommentTreeParser extends AbstractParser {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
 
-	public List<Comment> parse(String pageSource) {
+	public List<AbstractComment> parse(String pageSource) {
 
 		Document document = Jsoup.parse(pageSource);
 		Element element = document.select("div#comments").first();
-		return parseList(element, 0);
+		return findCommentList(element, 0);
 	}
 
-	private List<Comment> parseList(Element rootElement, int level) {
-		Elements elements = rootElement.select(".comment-list > li");
-		List<Comment> comments = new ArrayList<>();
+	private List<AbstractComment> findCommentList(Element rootElement, int level) {
+		Elements children = rootElement.children();
+		for (Element element : children) {
+			if (element.hasClass("comment-list")) {
+				return parseCommentList(element.children(), level);
+			}
+		}
+		return null;
+	}
+
+	private List<AbstractComment> parseCommentList(Elements elements, int level) {
+		List<AbstractComment> comments = new ArrayList<>();
 		for (Element element : elements) {
-			Comment comment = parseComment(element, level);
+			AbstractComment comment = parseComment(element, level);
 			if (comment == null) {
 				continue;
 			}
@@ -40,8 +51,15 @@ public class CommentTreeParser extends AbstractParser {
 		return comments;
 	}
 
-	private Comment parseComment(Element element, int level) {
+	private AbstractComment parseComment(Element element, int level) {
+		if (element.child(0).hasClass("deleted")) {
+			return parseDeletedComment(element, level);
+		} else {
+			return parseNormalComment(element, level);
+		}
+	}
 
+	private Comment parseNormalComment(Element element, int level) {
 		Comment comment = new Comment();
 
 		Element karmaElement = element.select(".karma").first();
@@ -67,13 +85,41 @@ public class CommentTreeParser extends AbstractParser {
 			return null;
 		}
 
-		String content = element.select(".content").first().text();
+		String content = element.select(".content").first().html();
 		comment.setContent(content);
 
 		comment.setLevel(level);
 
 		level++;
-		comment.setCommentList(parseList(element, level));
+		comment.setCommentList(findCommentList(element, level));
+
+		return comment;
+	}
+
+	private DeletedComment parseDeletedComment(Element element, int level) {
+		DeletedComment comment = new DeletedComment();
+
+		Element divElement = element.select(".deleted").first();
+		String idString = divElement.attr("id");
+		String[] split = idString.split("-");
+		if (split.length > 1) {
+			if (split == null) {
+				return null;
+			}
+			idString = split[1];
+			comment.setId(Long.parseLong(idString));
+		} else {
+			//TODO
+			return null;
+		}
+
+		String content = element.select(".content").first().html();
+		comment.setContent(content);
+
+		comment.setLevel(level);
+
+		level++;
+		comment.setCommentList(findCommentList(element, level));
 
 		return comment;
 	}
