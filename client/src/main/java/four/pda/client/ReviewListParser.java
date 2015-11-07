@@ -6,8 +6,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import four.pda.client.model.ListArticle;
@@ -20,7 +18,7 @@ public class ReviewListParser extends AbstractParser {
 	public List<ListArticle> parse(String pageSource) {
 
 		Document document = Jsoup.parse(pageSource);
-		Elements elements = document.select("ul.product-list > li[itemscope]");
+		Elements elements = document.select("li[itemtype=http://schema.org/Product][itemscope]");
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
