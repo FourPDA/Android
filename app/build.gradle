@@ -14,6 +14,8 @@ android {
 		versionName '1.1.0'
 		minSdkVersion 16
 		targetSdkVersion 23
+		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
+		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
 	}
 
 	signingConfigs {
