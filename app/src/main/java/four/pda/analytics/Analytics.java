@@ -1,10 +1,10 @@
 package four.pda.analytics;
 
-import android.app.Application;
 import android.content.Context;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+
+import org.androidannotations.annotations.EBean;
 
 import java.util.Map;
 
@@ -16,6 +16,7 @@ import four.pda.ui.CategoryType;
  *
  * @author Pavel Savinov.
  */
+@EBean(scope = EBean.Scope.Singleton)
 public class Analytics {
 
 	private Drawer drawer = new Drawer();
@@ -31,9 +32,7 @@ public class Analytics {
 			return;
 		}
 
-		GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
-		analytics.enableAutoActivityReports((Application) context.getApplicationContext());
-		tracker = new ProxyTracker(analytics.newTracker("UA-68992461-1"));
+		this.tracker = new ProxyTracker(context);
 	}
 
 	public Drawer drawer() {

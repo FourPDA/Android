@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -15,7 +16,6 @@ import java.util.Map;
 
 import four.pda.R;
 import four.pda.analytics.Analytics;
-import four.pda.App;
 
 /**
  * @author Anna Savinova
@@ -31,9 +31,10 @@ public class DrawerFragment extends Fragment {
 	@ViewById View softwareCategoryView;
 	@ViewById View gamesCategoryView;
 
+	@Bean Analytics analytics;
+
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
     private Map<View, CategoryType> map = new HashMap<>();
-    private Analytics analytics;
 
     public void addListener(ChangeCategoryListener listener) {
         listeners.add(listener);
@@ -45,8 +46,6 @@ public class DrawerFragment extends Fragment {
 
     @AfterViews
     void afterViews() {
-
-        analytics = ((App) getContext().getApplicationContext()).getAnalytics();
 
         map.put(allCategoryView, CategoryType.ALL);
         map.put(newsCategoryView, CategoryType.NEWS);
