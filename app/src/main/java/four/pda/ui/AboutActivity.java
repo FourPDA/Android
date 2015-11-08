@@ -3,6 +3,7 @@ package four.pda.ui;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,7 +27,6 @@ public class AboutActivity extends ActionBarActivity {
 	@ViewById Toolbar toolbar;
 
 	@ViewById TextView descriptionTextView;
-	@ViewById TextView sourcesTextView;
 
 	@ViewById TextView versionTextView;
 	@ViewById TextView buildNumberTextView;
@@ -34,8 +34,8 @@ public class AboutActivity extends ActionBarActivity {
 	@ViewById TextView vcsBranchTextView;
 	@ViewById TextView vcsCommitTextView;
 
-	@ViewById TextView userSwapi;
-	@ViewById TextView userVarann;
+	@ViewById(R.id.swapi_4pda) TextView userSwapi;
+	@ViewById(R.id.varann_4pda) TextView userVarann;
 
 	@AfterViews
 	void afterViews() {
@@ -45,8 +45,6 @@ public class AboutActivity extends ActionBarActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		descriptionTextView.setText(R.string.about_description);
-		sourcesTextView.setText(R.string.about_sources);
 
 		versionTextView.setText(getString(R.string.about_version, BuildConfig.VERSION_NAME));
 		buildNumberTextView.setText(getString(R.string.about_buildNumber, BuildConfig.VERSION_CODE));
@@ -54,8 +52,14 @@ public class AboutActivity extends ActionBarActivity {
 		vcsBranchTextView.setText(getString(R.string.about_vcsBranch, BuildConfig.VCS_BRANCH));
 		vcsCommitTextView.setText(getString(R.string.about_vcsCommit, BuildConfig.VCS_COMMIT));
 
-		userSwapi.setText(Html.fromHtml(getString(R.string.about_user_swapi)));
-		userVarann.setText(Html.fromHtml(getString(R.string.about_user_varann)));
+		html(descriptionTextView, R.string.about_description);
+		html(userSwapi, R.string.about_swapi_4pda);
+		html(userVarann, R.string.about_varann_4pda);
+	}
+
+	private void html(TextView view, int resId) {
+		view.setText(Html.fromHtml(getString(resId)));
+		view.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 }
