@@ -10,6 +10,8 @@ public class AbstractParser {
 
 	protected IdAndDate getIdAndDateFromUrl(String url) {
 
+		url = url.replace("http://4pda.ru", "");
+
 		String[] urlParts = url.split("/");
 
 		IdAndDate idAndDate = new IdAndDate();

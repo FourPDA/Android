@@ -5,10 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import four.pda.client.model.ListArticle;
 
@@ -20,7 +18,7 @@ public class ArticleListParser extends AbstractParser {
 	public List<ListArticle> parse(String pageSource) {
 
 		Document document = Jsoup.parse(pageSource);
-		Elements elements = document.select("article#content > article.post");
+		Elements elements = document.select("article [itemtype=http://schema.org/Article]");
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
@@ -35,6 +33,11 @@ public class ArticleListParser extends AbstractParser {
 	}
 
 	private ListArticle parseListItem(Element element) {
+
+		if (element.attr("data-ztm").isEmpty()) {
+			// Не парсим рекламу
+			return null;
+		}
 
 		ListArticle article = new ListArticle();
 
