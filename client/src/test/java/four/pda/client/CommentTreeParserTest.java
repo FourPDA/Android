@@ -42,7 +42,7 @@ public class CommentTreeParserTest extends AbstractTest {
 		Assert.assertTrue(comments.size() > 0);
 
 		Comment secondComment = (Comment) comments.get(1);
-		List<AbstractComment> childComments = secondComment.getCommentList();
+		List<AbstractComment> childComments = secondComment.getChildren();
 
 		Comment child1 = (Comment) childComments.get(0);
 		Assert.assertEquals("Wrong comment id", 1945383, child1.getId());
@@ -61,7 +61,7 @@ public class CommentTreeParserTest extends AbstractTest {
 		Assert.assertTrue(comments.size() > 0);
 
 		Comment firstComment = (Comment) comments.get(0);
-		List<AbstractComment> childComments = firstComment.getCommentList();
+		List<AbstractComment> childComments = firstComment.getChildren();
 
 		Comment child1 = (Comment) childComments.get(0);
 		Assert.assertEquals("Wrong comment id", 1932557, child1.getId());

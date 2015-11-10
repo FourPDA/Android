@@ -5,12 +5,12 @@ import java.util.List;
 /**
  * Created by asavinova on 07/11/15.
  */
-public class AbstractComment {
+public abstract class AbstractComment {
 
 	private long id;
 	private String content;
 	private int level;
-	private List<AbstractComment> commentList;
+	private List<AbstractComment> children;
 
 	public long getId() {
 		return id;
@@ -36,12 +36,12 @@ public class AbstractComment {
 		this.level = level;
 	}
 
-	public List<AbstractComment> getCommentList() {
-		return commentList;
+	public List<AbstractComment> getChildren() {
+		return children;
 	}
 
-	public void setCommentList(List<AbstractComment> commentList) {
-		this.commentList = commentList;
+	public void setChildren(List<AbstractComment> children) {
+		this.children = children;
 	}
 
 }

@@ -42,9 +42,6 @@ public class CommentTreeParser extends AbstractParser {
 		List<AbstractComment> comments = new ArrayList<>();
 		for (Element element : elements) {
 			AbstractComment comment = parseComment(element, level);
-			if (comment == null) {
-				continue;
-			}
 			comments.add(comment);
 		}
 
@@ -69,20 +66,18 @@ public class CommentTreeParser extends AbstractParser {
 			idString = split[1];
 			comment.setId(Long.parseLong(idString));
 		} else {
-			//TODO
-			return null;
+			throw new RuntimeException();
 		}
 
 		String nickname = element.select(".nickname").first().text();
 		comment.setNickname(nickname);
 
-		String metaString = element.select(".h-meta").first().text();
-		metaString = metaString.trim();
+		String metaString = element.select(".h-meta").first().text().trim();
 		try {
 			comment.setDate(DATE_FORMAT.parse(metaString));
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return null;
+			throw new RuntimeException(e);
 		}
 
 		String content = element.select(".content").first().html();
@@ -91,7 +86,7 @@ public class CommentTreeParser extends AbstractParser {
 		comment.setLevel(level);
 
 		level++;
-		comment.setCommentList(findCommentList(element, level));
+		comment.setChildren(findCommentList(element, level));
 
 		return comment;
 	}
@@ -103,14 +98,10 @@ public class CommentTreeParser extends AbstractParser {
 		String idString = divElement.attr("id");
 		String[] split = idString.split("-");
 		if (split.length > 1) {
-			if (split == null) {
-				return null;
-			}
 			idString = split[1];
 			comment.setId(Long.parseLong(idString));
 		} else {
-			//TODO
-			return null;
+			throw new RuntimeException();
 		}
 
 		String content = element.select(".content").first().html();
@@ -119,7 +110,7 @@ public class CommentTreeParser extends AbstractParser {
 		comment.setLevel(level);
 
 		level++;
-		comment.setCommentList(findCommentList(element, level));
+		comment.setChildren(findCommentList(element, level));
 
 		return comment;
 	}
