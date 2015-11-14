@@ -3,7 +3,8 @@ package four.pda.client;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,32 +20,23 @@ import four.pda.client.model.DeletedComment;
  */
 public class CommentTreeParser extends AbstractParser {
 
+	private static final Logger L = LoggerFactory.getLogger(CommentTreeParser.class);
+
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
 
 	public List<AbstractComment> parse(String pageSource) {
-
 		Document document = Jsoup.parse(pageSource);
 		Element element = document.select("div#comments").first();
-		return findCommentList(element, 0);
+		return parseList(element, 0);
 	}
 
-	private List<AbstractComment> findCommentList(Element rootElement, int level) {
-		Elements children = rootElement.children();
-		for (Element element : children) {
-			if (element.hasClass("comment-list")) {
-				return parseCommentList(element.children(), level);
-			}
-		}
-		return null;
-	}
-
-	private List<AbstractComment> parseCommentList(Elements elements, int level) {
+	private List<AbstractComment> parseList(Element rootElement, int level) {
+		Element commentListEl = rootElement.select(".comment-list").first();
 		List<AbstractComment> comments = new ArrayList<>();
-		for (Element element : elements) {
-			AbstractComment comment = parseComment(element, level);
+		for (Element commentEl : commentListEl.children()) {
+			AbstractComment comment = parseComment(commentEl, level);
 			comments.add(comment);
 		}
-
 		return comments;
 	}
 
@@ -57,17 +49,14 @@ public class CommentTreeParser extends AbstractParser {
 	}
 
 	private Comment parseNormalComment(Element element, int level) {
+
 		Comment comment = new Comment();
 
 		Element karmaElement = element.select(".karma").first();
 		String idString = karmaElement.attr("data-karma");
 		String[] split = idString.split("-");
-		if (split.length > 1) {
-			idString = split[1];
-			comment.setId(Long.parseLong(idString));
-		} else {
-			throw new RuntimeException();
-		}
+		idString = split[1];
+		comment.setId(Long.parseLong(idString));
 
 		String nickname = element.select(".nickname").first().text();
 		comment.setNickname(nickname);
@@ -76,8 +65,9 @@ public class CommentTreeParser extends AbstractParser {
 		try {
 			comment.setDate(DATE_FORMAT.parse(metaString));
 		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			String message = "Can't parse h-meta tag content as date";
+			L.error(message, e);
+			throw new RuntimeException(message, e);
 		}
 
 		String content = element.select(".content").first().html();
@@ -86,23 +76,20 @@ public class CommentTreeParser extends AbstractParser {
 		comment.setLevel(level);
 
 		level++;
-		comment.setChildren(findCommentList(element, level));
+		comment.setChildren(parseList(element, level));
 
 		return comment;
 	}
 
 	private DeletedComment parseDeletedComment(Element element, int level) {
+
 		DeletedComment comment = new DeletedComment();
 
 		Element divElement = element.select(".deleted").first();
 		String idString = divElement.attr("id");
 		String[] split = idString.split("-");
-		if (split.length > 1) {
-			idString = split[1];
-			comment.setId(Long.parseLong(idString));
-		} else {
-			throw new RuntimeException();
-		}
+		idString = split[1];
+		comment.setId(Long.parseLong(idString));
 
 		String content = element.select(".content").first().html();
 		comment.setContent(content);
@@ -110,7 +97,7 @@ public class CommentTreeParser extends AbstractParser {
 		comment.setLevel(level);
 
 		level++;
-		comment.setChildren(findCommentList(element, level));
+		comment.setChildren(parseList(element, level));
 
 		return comment;
 	}
