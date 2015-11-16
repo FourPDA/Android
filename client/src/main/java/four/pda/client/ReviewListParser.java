@@ -18,7 +18,7 @@ public class ReviewListParser extends AbstractParser {
 	public List<ListArticle> parse(String pageSource) {
 
 		Document document = Jsoup.parse(pageSource);
-		Elements elements = document.select("li[itemtype=http://schema.org/Product][itemscope]");
+		Elements elements = document.select("li[itemtype=http://schema.org/CreativeWork][itemscope]");
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
@@ -36,7 +36,7 @@ public class ReviewListParser extends AbstractParser {
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
 
-		String title = element.select("a[itemprop=name]").get(0).text();
+		String title = element.select("span[itemprop=name]").get(0).text();
 		article.setTitle(title);
 
 		Element content = element.select("div.content").first();
