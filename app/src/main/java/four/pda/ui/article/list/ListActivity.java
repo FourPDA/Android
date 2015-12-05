@@ -26,6 +26,8 @@ import four.pda.R;
 import four.pda.ui.CategoryType;
 import four.pda.ui.DrawerFragment;
 import four.pda.ui.article.ShowArticleEvent;
+import four.pda.ui.article.ShowCommentsEvent;
+import four.pda.ui.article.comments.CommentsFragment_;
 import four.pda.ui.article.one.ArticleFragment_;
 
 /**
@@ -130,6 +132,17 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.item_container,
 						ArticleFragment_.builder()
+								.id(event.getId())
+								.build())
+				.addToBackStack(null)
+				.commit();
+	}
+
+	public void onEvent(ShowCommentsEvent event) {
+		L.debug("Show comments for article id {}", event.getId());
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.item_container,
+						CommentsFragment_.builder()
 								.id(event.getId())
 								.build())
 				.addToBackStack(null)
