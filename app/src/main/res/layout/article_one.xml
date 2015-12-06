@@ -77,5 +77,13 @@
 
 	</FrameLayout>
 
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/comments_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="end|bottom"
+		android:layout_margin="16dp"
+		android:src="@drawable/ic_comment_white_24dp" />
+
 </FrameLayout>
 
