@@ -42,4 +42,6 @@
 	<string name="about_varann_email">varann@gmail.com</string>
 	<string name="about_varann_4pda"><![CDATA[ <a href="http://4pda.ru/forum/index.php?showuser=4975039">Профиль на 4PDA</a> ]]></string>
 
+	<string name="comments_title">Комментарии</string>
+
 </resources>

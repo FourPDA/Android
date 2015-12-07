@@ -19,16 +19,19 @@ import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import four.pda.Dao;
-import four.pda.R;
+import four.pda.EventBus;
 import four.pda.FourPdaClient;
+import four.pda.R;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.ViewUtils;
+import four.pda.ui.article.ShowCommentsEvent;
 
 /**
  * Created by asavinova on 11/04/15.
@@ -52,6 +55,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
+	@Bean EventBus eventBus;
 
 	@AfterViews
 	void afterViews() {
@@ -69,6 +73,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				headerLayout.setLayoutParams(params);
 			}
 		});
+	}
+
+	@Click
+	void commentsButton() {
+		eventBus.post(new ShowCommentsEvent(id));
 	}
 
 	private void loadData() {
