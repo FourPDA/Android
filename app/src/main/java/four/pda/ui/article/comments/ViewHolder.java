@@ -5,17 +5,20 @@ import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
-import four.pda.ui.ViewUtils;
 
 /**
  * Created by asavinova on 05/12/15.
  */
 public class ViewHolder extends RecyclerView.ViewHolder {
+
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
 
 	@Bind(R.id.author_info_view) View authorInfoView;
 	@Bind(R.id.nick_view) TextView nickView;
@@ -27,23 +30,25 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 		ButterKnife.bind(this, view);
 	}
 
-	public void setComment(AbstractComment comment) {
+	public void setComment(AbstractComment abstractComment) {
 
-		if (comment instanceof Comment) {
+		if (abstractComment instanceof Comment) {
+			Comment comment = (Comment) abstractComment;
+
 			authorInfoView.setVisibility(View.VISIBLE);
 
-			nickView.setText(((Comment) comment).getNickname());
+			nickView.setText(comment.getNickname());
 
-			String verboseDate = ViewUtils.VERBOSE_COMMENT_DATE_FORMAT.format(((Comment) comment).getDate());
+			String verboseDate = DATE_FORMAT.format(comment.getDate());
 			dateView.setText(verboseDate);
 		} else {
 			authorInfoView.setVisibility(View.GONE);
 		}
 
-		contentView.setText(Html.fromHtml(comment.getContent()));
+		contentView.setText(Html.fromHtml(abstractComment.getContent()));
 
 		int padding = itemView.getResources().getDimensionPixelSize(R.dimen.offset_normal);
-		itemView.setPadding(padding * (comment.getLevel() + 1), padding, padding, padding);
+		itemView.setPadding(padding * (abstractComment.getLevel() + 1), padding, padding, padding);
 
 	}
 

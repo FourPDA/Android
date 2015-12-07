@@ -92,7 +92,7 @@ public class FourPdaClient {
 		try {
 			return new CommentTreeParser().parse(body);
 		} catch (RuntimeException e) {
-			L.error("Can't parse comments at " + url);
+			L.error(String.format("Can't parse comments at %s",  url), e);
 			throw e;
 		}
 	}

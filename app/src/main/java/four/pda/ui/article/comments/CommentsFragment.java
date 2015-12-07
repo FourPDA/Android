@@ -31,7 +31,7 @@ import four.pda.ui.BaseFragment;
  * Created by asavinova on 05/12/15.
  */
 @EFragment(R.layout.comments_list)
-public class CommentsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CommentsFragment extends BaseFragment {
 
 	private static final int LOADER_ID = 0;
 
@@ -61,7 +61,12 @@ public class CommentsFragment extends BaseFragment implements SwipeRefreshLayout
 		adapter = new CommentsAdapter(getActivity());
 		recyclerView.setAdapter(adapter);
 
-		refresh.setOnRefreshListener(this);
+		refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				loadData();
+			}
+		});
 		refresh.setColorSchemeResources(R.color.primary);
 		refresh.setProgressViewOffset(false, 0,
 				(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
@@ -73,11 +78,6 @@ public class CommentsFragment extends BaseFragment implements SwipeRefreshLayout
 		refresh.setRefreshing(true);
 
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
-	}
-
-	@Override
-	public void onRefresh() {
-		loadData();
 	}
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<List<AbstractComment>> {
