@@ -30,6 +30,7 @@ import four.pda.EventBus;
 import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowCommentsEvent;
 
@@ -52,6 +53,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById View infoLayout;
 	@ViewById TextView titleView;
 	@ViewById TextView dateView;
+	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
@@ -81,6 +83,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	private void loadData() {
+		supportView.showProgress();
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks());
 	}
 
@@ -137,7 +140,17 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		@Override
 		public void onLoadFinished(Loader loader, ArticleTaskLoader.WrapperInfo wrapperInfo) {
-			updateData(wrapperInfo);
+			if (wrapperInfo == null) {
+				supportView.showError(getString(R.string.network_error), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadData();
+					}
+				});
+			} else {
+				updateData(wrapperInfo);
+				supportView.hide();
+			}
 		}
 
 		@Override

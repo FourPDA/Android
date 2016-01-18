@@ -43,5 +43,8 @@
 	<string name="about_varann_4pda"><![CDATA[ <a href="http://4pda.ru/forum/index.php?showuser=4975039">Профиль на 4PDA</a> ]]></string>
 
 	<string name="comments_title">Комментарии</string>
+	<string name="retry_button">Повторить</string>
+
+	<string name="network_error">Ошибка соединения</string>
 
 </resources>

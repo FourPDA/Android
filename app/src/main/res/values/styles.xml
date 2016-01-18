@@ -78,4 +78,21 @@
 		<item name="android:layout_marginStart" tools:targetApi="17">36dp</item>
 	</style>
 
+	<style name="MaterialFlatButton">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">@dimen/button_min_height</item>
+		<item name="android:gravity">center</item>
+		<item name="android:paddingLeft">@dimen/button_internal_offset</item>
+		<item name="android:paddingRight">@dimen/button_internal_offset</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:textColor">@color/primary</item>
+	</style>
+
+	<style name="SupportView">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:visibility">gone</item>
+	</style>
+
 </resources>
