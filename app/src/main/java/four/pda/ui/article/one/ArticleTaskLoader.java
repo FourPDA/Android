@@ -4,30 +4,24 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.IOException;
+import java.util.Date;
 
-import four.pda.Dao;
 import four.pda.FourPdaClient;
-import four.pda.dao.Article;
 
 /**
  * Created by asavinova on 12/04/15.
  */
-public class ArticleTaskLoader extends AsyncTaskLoader<ArticleTaskLoader.WrapperInfo> {
+public class ArticleTaskLoader extends AsyncTaskLoader<String> {
 
-	public class WrapperInfo {
-		Article article;
-		String content;
-	}
-
-	private Dao dao;
 	private FourPdaClient client;
 	private long id;
+	private Date date;
 
-	public ArticleTaskLoader(Context context, Dao dao, FourPdaClient client, long id) {
+	public ArticleTaskLoader(Context context, FourPdaClient client, long id, Date date) {
 		super(context);
-		this.dao = dao;
 		this.client = client;
 		this.id = id;
+		this.date = date;
 	}
 
 	@Override
@@ -37,17 +31,9 @@ public class ArticleTaskLoader extends AsyncTaskLoader<ArticleTaskLoader.Wrapper
 	}
 
 	@Override
-	public WrapperInfo loadInBackground() {
-		Article article = dao.getArticle(id);
-
+	public String loadInBackground() {
 		try {
-			String content = client.getArticleContent(article.getDate(), article.getServerId());
-
-			WrapperInfo wrapperInfo = new WrapperInfo();
-			wrapperInfo.article = article;
-			wrapperInfo.content = content;
-
-			return wrapperInfo;
+			return client.getArticleContent(date, id);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
