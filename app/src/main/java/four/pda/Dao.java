@@ -10,7 +10,6 @@ import org.androidannotations.annotations.RootContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
 import java.util.List;
 
 import four.pda.client.model.ListArticle;
@@ -59,16 +58,7 @@ public class Dao {
 					L.trace("No need clear for category {}", category);
 				}
 
-				ListArticle firstArticle = listArticles.get(0);
-				Date currentDate = firstArticle.getDate();
-				int position = getMaxInDayPosition(currentDate, category);
-
 				for (ListArticle listArticle : listArticles) {
-
-					if (!currentDate.equals(listArticle.getDate())) {
-						currentDate = listArticle.getDate();
-						position = getMaxInDayPosition(currentDate, category);
-					}
 
 					Article article = new Article();
 					article.setServerId(listArticle.getId());
@@ -76,9 +66,8 @@ public class Dao {
 					article.setTitle(listArticle.getTitle());
 					article.setDescription(listArticle.getDescription());
 					article.setImage(listArticle.getImage());
-					position++;
-					article.setPosition(position);
 					article.setCategory(getCategoryValue(category));
+					article.setPublishedDate(listArticle.getPublishedDate());
 
 					dao.insertOrReplace(article);
 				}
@@ -92,28 +81,14 @@ public class Dao {
 		return category.name().toLowerCase();
 	}
 
-	private int getMaxInDayPosition(Date date, CategoryType category) {
-		Article article = daoSession.getArticleDao().queryBuilder()
-				.where(
-						ArticleDao.Properties.Date.eq(date),
-						ArticleDao.Properties.Category.eq(getCategoryValue(category)))
-				.orderDesc(ArticleDao.Properties.Position)
-				.limit(1)
-				.build().unique();
-		if (article == null) {
-			return -1;
-		}
-		return article.getPosition();
-	}
-
 	public Cursor getArticleCursor(CategoryType category) {
 		ArticleDao dao = daoSession.getArticleDao();
 		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(),
 				ArticleDao.Properties.Category.columnName + " == '" + getCategoryValue(category) + "'",
 				null,
-				null, null,
-				ArticleDao.Properties.Date.columnName + " DESC, " +
-						ArticleDao.Properties.Position.columnName + " ASC");
+				null,
+				null,
+				ArticleDao.Properties.PublishedDate.columnName + " DESC");
 	}
 
 	public Article getArticle(long id) {

@@ -4,7 +4,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +18,10 @@ import four.pda.client.model.ListArticle;
  * Created by asavinova on 09/04/15.
  */
 public class ArticleListParser extends AbstractParser {
+
+	private static final Logger L = LoggerFactory.getLogger(ArticleListParser.class);
+
+	private static final SimpleDateFormat PUBLISHED_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	public List<ListArticle> parse(String pageSource) {
 
@@ -63,6 +71,15 @@ public class ArticleListParser extends AbstractParser {
 
 		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
 		article.setImage(imageSrc);
+
+		String publishedDate = element.select("meta[itemprop=datePublished]").first().attr("content");
+		try {
+			article.setPublishedDate(PUBLISHED_DATE_FORMAT.parse(publishedDate));
+		} catch (ParseException e) {
+			String message = "Can't parse datePublished tag content as date";
+			L.error(message, e);
+			throw new RuntimeException(message, e);
+		}
 
 		return article;
 	}

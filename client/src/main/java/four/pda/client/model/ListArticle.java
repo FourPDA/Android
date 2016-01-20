@@ -12,6 +12,7 @@ public class ListArticle {
 	private String title;
 	private String description;
 	private String image;
+	private Date publishedDate;
 
 	public long getId() {
 		return id;
@@ -52,4 +53,13 @@ public class ListArticle {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
+	}
+
 }
