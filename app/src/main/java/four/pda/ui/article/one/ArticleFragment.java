@@ -25,6 +25,8 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Date;
+
 import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.FourPdaClient;
@@ -42,7 +44,9 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	private static final int LOADER_ID = 0;
 
 	@FragmentArg long id;
+	@FragmentArg Date date;
 	@FragmentArg String title;
+	@FragmentArg String image;
 
 	@ViewById(R.id.scroll_view) ScrollView scrollView;
 	@ViewById ImageView imageView;
@@ -90,10 +94,10 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	@UiThread
-	void updateData(ArticleTaskLoader.WrapperInfo info) {
-		ViewUtils.loadImage(imageView, info.article.getImage());
-		titleView.setText(info.article.getTitle());
-		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(info.article.getDate()));
+	void updateData(String content) {
+		ViewUtils.loadImage(imageView, image);
+		titleView.setText(title);
+		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -102,7 +106,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				return true;
 			}
 		});
-		webView.loadData(getFormattedText(info.content), "text/html; charset=utf-8", null);
+		webView.loadData(getFormattedText(content), "text/html; charset=utf-8", null);
 	}
 
 	private void openActionViewIntent(String url) {
@@ -128,20 +132,20 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ "</body></html>";
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<ArticleTaskLoader.WrapperInfo> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<String> {
 
 		@Override
 		public Loader onCreateLoader(int loaderId, final Bundle args) {
-			return new ArticleTaskLoader(getActivity(), dao, client, id);
+			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 
 		@Override
-		public void onLoadFinished(Loader loader, ArticleTaskLoader.WrapperInfo wrapperInfo) {
-			updateData(wrapperInfo);
+		public void onLoadFinished(Loader loader, String content) {
+			updateData(content);
 		}
 
 		@Override
-		public void onLoaderReset(Loader<ArticleTaskLoader.WrapperInfo> loader) {
+		public void onLoaderReset(Loader<String> loader) {
 		}
 
 	}
