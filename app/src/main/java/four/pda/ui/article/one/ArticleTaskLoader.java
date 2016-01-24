@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.util.Date;
 
 import four.pda.FourPdaClient;
+import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 12/04/15.
  */
-public class ArticleTaskLoader extends AsyncTaskLoader<String> {
+public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
 
 	private FourPdaClient client;
 	private long id;
@@ -31,12 +32,13 @@ public class ArticleTaskLoader extends AsyncTaskLoader<String> {
 	}
 
 	@Override
-	public String loadInBackground() {
+	public LoadResult<String> loadInBackground() {
 		try {
-			return client.getArticleContent(date, id);
+			return new LoadResult<>(client.getArticleContent(date, id));
 		} catch (IOException e) {
 			e.printStackTrace();
+			return new LoadResult<>(e);
 		}
-		return null;
 	}
+
 }

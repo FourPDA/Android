@@ -32,6 +32,7 @@ import four.pda.EventBus;
 import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowCommentsEvent;
@@ -135,7 +136,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ "</body></html>";
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<String> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
 
 		@Override
 		public Loader onCreateLoader(int loaderId, final Bundle args) {
@@ -143,22 +144,22 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		}
 
 		@Override
-		public void onLoadFinished(Loader loader, String content) {
-			if (content == null) {
+		public void onLoadFinished(Loader<LoadResult<String>> loader, LoadResult<String> result) {
+			if (result.getException() == null) {
+				updateData(result.getData());
+				supportView.hide();
+			} else {
 				supportView.showError(getString(R.string.network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loadData();
 					}
 				});
-			} else {
-				updateData(content);
-				supportView.hide();
 			}
 		}
 
 		@Override
-		public void onLoaderReset(Loader<String> loader) {
+		public void onLoaderReset(Loader<LoadResult<String>> loader) {
 		}
 
 	}
