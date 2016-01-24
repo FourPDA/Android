@@ -133,6 +133,9 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 				.replace(R.id.item_container,
 						ArticleFragment_.builder()
 								.id(event.getId())
+								.date(event.getDate())
+								.title(event.getTitle())
+								.image(event.getImage())
 								.build())
 				.addToBackStack(null)
 				.commit();
