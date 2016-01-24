@@ -45,6 +45,7 @@
 	<string name="comments_title">Комментарии</string>
 	<string name="retry_button">Повторить</string>
 
-	<string name="network_error">Ошибка соединения</string>
+	<string name="article_network_error">Не удалось загрузить статью</string>
+	<string name="article_list_network_error">Не удалось загрузить список статей</string>
 
 </resources>

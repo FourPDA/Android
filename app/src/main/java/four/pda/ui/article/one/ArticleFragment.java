@@ -149,7 +149,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				updateData(result.getData());
 				supportView.hide();
 			} else {
-				supportView.showError(getString(R.string.network_error), new View.OnClickListener() {
+				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loadData();
