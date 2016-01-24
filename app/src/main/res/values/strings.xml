@@ -47,5 +47,6 @@
 
 	<string name="article_network_error">Не удалось загрузить статью</string>
 	<string name="article_list_network_error">Не удалось загрузить список статей</string>
+	<string name="comments_network_error">Не удалось загрузить комментарии</string>
 
 </resources>

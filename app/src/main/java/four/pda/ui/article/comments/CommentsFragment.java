@@ -26,6 +26,8 @@ import four.pda.R;
 import four.pda.client.model.AbstractComment;
 import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.LoadResult;
+import four.pda.ui.SupportView;
 
 /**
  * Created by asavinova on 05/12/15.
@@ -40,6 +42,7 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
+	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
@@ -76,41 +79,49 @@ public class CommentsFragment extends BaseFragment {
 
 	private void loadData() {
 		refresh.setRefreshing(true);
+		supportView.showProgress();
 
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<List<AbstractComment>> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
 
 		@Override
-		public Loader<List<AbstractComment>> onCreateLoader(final int id, Bundle args) {
-			return new AsyncTaskLoader<List<AbstractComment>>(getActivity()) {
+		public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
+			return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(getActivity()) {
 				@Override
-				public List<AbstractComment> loadInBackground() {
+				public LoadResult<List<AbstractComment>> loadInBackground() {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
-						return client.getArticleComments(article.getDate(), article.getServerId());
+						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
 					} catch (IOException e) {
 						e.printStackTrace();
+						return new LoadResult<>(e);
 					}
-					return null;
 				}
 			};
 		}
 
 		@Override
-		public void onLoadFinished(Loader<List<AbstractComment>> loader, List<AbstractComment> data) {
-			if (data == null) {
-				//TODO Show error
-				return;
-			}
-			adapter.setComments(data);
-			adapter.notifyDataSetChanged();
+		public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
 			refresh.setRefreshing(false);
+
+			if (result.getException() == null) {
+				adapter.setComments(result.getData());
+				adapter.notifyDataSetChanged();
+				supportView.hide();
+			} else {
+				supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadData();
+					}
+				});
+			}
 		}
 
 		@Override
-		public void onLoaderReset(Loader<List<AbstractComment>> loader) {
+		public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
 		}
 
 	}
