@@ -95,7 +95,7 @@ public class CommentsFragment extends BaseFragment {
 					try {
 						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
 					} catch (IOException e) {
-						e.printStackTrace();
+						L.error("Article comments request error", e);
 						return new LoadResult<>(e);
 					}
 				}

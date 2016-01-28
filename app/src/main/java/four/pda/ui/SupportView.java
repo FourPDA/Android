@@ -46,7 +46,6 @@ public class SupportView extends FrameLayout {
 
 	@UiThread
 	public void hide() {
-		progressView.setVisibility(GONE);
 		setVisibility(GONE);
 	}
 

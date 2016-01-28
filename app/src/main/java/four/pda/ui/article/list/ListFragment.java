@@ -183,7 +183,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 						return new LoadResult<>(dao.getArticleCursor(category));
 					} catch (IOException e) {
-						e.printStackTrace();
+						L.error("Articles page request error", e);
 						return new LoadResult<>(e);
 					}
 				}
