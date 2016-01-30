@@ -10,4 +10,7 @@
 	<dimen name="offset_normal">16dp</dimen>
 	<dimen name="offset_small">8dp</dimen>
 
+	<dimen name="button_min_height">48dp</dimen>
+	<dimen name="button_internal_offset">8dp</dimen>
+
 </resources>

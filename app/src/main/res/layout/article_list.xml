@@ -39,6 +39,10 @@
 			android:layout_margin="16dp"
 			android:src="@drawable/ic_arrow_drop_up_white_24dp" />
 
+		<four.pda.ui.SupportView_
+			android:id="@+id/support_view"
+			style="@style/SupportView"/>
+
 	</FrameLayout>
 
 </LinearLayout>

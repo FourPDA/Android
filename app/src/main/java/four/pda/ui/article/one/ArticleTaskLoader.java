@@ -3,15 +3,21 @@ package four.pda.ui.article.one;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Date;
 
 import four.pda.FourPdaClient;
+import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 12/04/15.
  */
-public class ArticleTaskLoader extends AsyncTaskLoader<String> {
+public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
+
+	private static final Logger L = LoggerFactory.getLogger(ArticleTaskLoader.class);
 
 	private FourPdaClient client;
 	private long id;
@@ -31,12 +37,13 @@ public class ArticleTaskLoader extends AsyncTaskLoader<String> {
 	}
 
 	@Override
-	public String loadInBackground() {
+	public LoadResult<String> loadInBackground() {
 		try {
-			return client.getArticleContent(date, id);
+			return new LoadResult<>(client.getArticleContent(date, id));
 		} catch (IOException e) {
-			e.printStackTrace();
+			L.error("Article request error", e);
+			return new LoadResult<>(e);
 		}
-		return null;
 	}
+
 }
