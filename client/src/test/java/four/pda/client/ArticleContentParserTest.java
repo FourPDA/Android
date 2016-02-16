@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import four.pda.client.parsers.ArticlePageParser;
+
 /**
  * Created by asavinova on 01/11/15.
  */

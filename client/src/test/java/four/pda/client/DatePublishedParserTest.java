@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import four.pda.client.model.ListArticle;
+import four.pda.client.parsers.ArticleListParser;
 
 /**
  * Created by asavinova on 19/01/16.

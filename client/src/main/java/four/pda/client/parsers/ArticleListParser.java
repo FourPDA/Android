@@ -1,4 +1,4 @@
-package four.pda.client;
+package four.pda.client.parsers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import four.pda.client.model.Captcha;
+import four.pda.client.parsers.CaptchaParser;
 
 /**
  * Created by asavinova on 08/02/16.

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import four.pda.client.model.ListArticle;
+import four.pda.client.parsers.ReviewListParser;
 
 /**
  * Created by swap_i on 25/10/15.

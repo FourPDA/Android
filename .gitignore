@@ -8,3 +8,4 @@
 *.iml
 dao/generator/build
 fabric.properties
+client/testapp/build
