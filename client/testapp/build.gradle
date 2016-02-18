@@ -7,5 +7,7 @@ dependencies {
 
 	compile project(':client')
 	compile 'org.slf4j:slf4j-simple:1.7.16'
+	compile "com.squareup.okhttp3:okhttp-urlconnection:3.0.0"
+	compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
 
 }

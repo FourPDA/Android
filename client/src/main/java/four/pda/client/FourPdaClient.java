@@ -5,23 +5,20 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.ListArticle;
+import four.pda.client.model.LoginResult;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
 import four.pda.client.parsers.CaptchaParser;
 import four.pda.client.parsers.CommentTreeParser;
+import four.pda.client.parsers.LoginParser;
 import four.pda.client.parsers.ReviewListParser;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -38,24 +35,11 @@ public class FourPdaClient {
 
 	private static final String BASE_URL = "http://4pda.ru/";
 
-	private OkHttpClient client = new OkHttpClient.Builder()
-			.cookieJar(new CookieJar() {
-				private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
+	private OkHttpClient client;
 
-				@Override
-				public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-					L.debug("Save cookie for " + url);
-					cookieStore.put(url, cookies);
-				}
-
-				@Override
-				public List<Cookie> loadForRequest(HttpUrl url) {
-					L.debug("Load cookie for " + url);
-					List<Cookie> cookies = cookieStore.get(url);
-					return cookies != null ? cookies : new ArrayList<Cookie>();
-				}
-			})
-			.build();
+	public FourPdaClient(OkHttpClient client) {
+		this.client = client;
+	}
 
 	public List<ListArticle> getArticles(CategoryType type, int page) throws IOException {
 		String category = "";
@@ -137,7 +121,7 @@ public class FourPdaClient {
 		}
 	}
 
-	public void login(LoginParams params) throws IOException {
+	public LoginResult login(LoginParams params) throws IOException {
 		String url = BASE_URL + "forum/index.php?act=auth";
 
 		RequestBody requestBody = new FormBody.Builder()
@@ -154,6 +138,13 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
+
+		try {
+			return new LoginParser().parse(response.body().string());
+		} catch (RuntimeException e) {
+			L.error("Can't parse login result page", e);
+			throw e;
+		}
 	}
 
 	public class LoginParams {

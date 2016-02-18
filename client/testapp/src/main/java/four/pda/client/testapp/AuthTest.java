@@ -4,10 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.Scanner;
 
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Captcha;
+import four.pda.client.model.LoginResult;
+import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by asavinova on 09/02/16.
@@ -18,7 +24,19 @@ public class AuthTest {
 
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		FourPdaClient client = new FourPdaClient();
+
+		CookieManager cookieManager = new CookieManager();
+		cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+
+		HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+		logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
+		OkHttpClient httpClient = new OkHttpClient.Builder()
+				.cookieJar(new JavaNetCookieJar(cookieManager))
+				.addInterceptor(logging)
+				.build();
+
+		FourPdaClient client = new FourPdaClient(httpClient);
 		FourPdaClient.LoginParams params = client.new LoginParams();
 
 		Captcha captcha = client.getCaptcha();
@@ -30,15 +48,19 @@ public class AuthTest {
 		String captchaValue = scanner.nextLine();
 		params.setCaptcha(captchaValue);
 
-		System.out.print("Login: ");
-		String login = scanner.nextLine();
-		params.setLogin(login);
+		params.setLogin(args[0]);
+		params.setPassword(args[1]);
 
-		System.out.print("Password: ");
-		String password = scanner.nextLine();
-		params.setPassword(password);
+		LoginResult result = client.login(params);
 
-		client.login(params);
+		if (LoginResult.Result.OK.equals(result.getResult())) {
+			L.debug("Login result OK");
+		} else {
+			L.debug("Login result ERROR");
+			for (String error : result.getErrors()) {
+				L.debug("Error: " + error);
+			}
+		}
 	}
 
 }
