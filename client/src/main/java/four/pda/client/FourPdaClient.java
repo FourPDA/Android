@@ -196,4 +196,14 @@ public class FourPdaClient {
 		}
 	}
 
+	public boolean logout() throws IOException {
+		String url = BASE_URL + "forum/index.php?act=login&CODE=03";
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		return response.isSuccessful();
+	}
+
 }

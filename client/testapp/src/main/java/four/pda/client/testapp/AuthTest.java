@@ -61,6 +61,13 @@ public class AuthTest {
 				L.debug("Error: " + error);
 			}
 		}
+
+		boolean isSuccess = client.logout();
+		if (isSuccess) {
+			L.debug("Logout success");
+		} else {
+			L.debug("Logout not success");
+		}
 	}
 
 }
