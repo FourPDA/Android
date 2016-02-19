@@ -12,4 +12,8 @@ public interface Preferences {
 	@DefaultBoolean(true)
 	boolean isFirstRun();
 
+	long profileId();
+	String profileLogin();
+	String profilePhoto();
+
 }
