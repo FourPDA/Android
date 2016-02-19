@@ -11,6 +11,7 @@ import java.util.Scanner;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.LoginResult;
+import four.pda.client.model.Profile;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -60,7 +61,12 @@ public class AuthTest {
 			for (String error : result.getErrors()) {
 				L.debug("Error: " + error);
 			}
+			return;
 		}
+
+		Profile profile = client.getProfile(result.getMemberId());
+		L.debug("Profile login: " + profile.getLogin());
+		L.debug("Profile photo: " + profile.getPhoto());
 
 		boolean isSuccess = client.logout();
 		if (isSuccess) {

@@ -12,11 +12,13 @@ import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.LoginResult;
+import four.pda.client.model.Profile;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
 import four.pda.client.parsers.CaptchaParser;
 import four.pda.client.parsers.CommentTreeParser;
 import four.pda.client.parsers.LoginParser;
+import four.pda.client.parsers.ProfileParser;
 import four.pda.client.parsers.ReviewListParser;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -204,6 +206,23 @@ public class FourPdaClient {
 
 		Response response = client.newCall(request).execute();
 		return response.isSuccessful();
+	}
+
+	public Profile getProfile(long id) throws IOException {
+		String url = BASE_URL + "forum/index.php?showuser=" + id;
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String body = response.body().string();
+
+		try {
+			return new ProfileParser().parse(body);
+		} catch (RuntimeException e) {
+			L.error("Can't parse profile page", e);
+			throw e;
+		}
 	}
 
 }

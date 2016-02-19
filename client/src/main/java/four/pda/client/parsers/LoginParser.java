@@ -23,7 +23,19 @@ public class LoginParser {
 		Elements elements = document.select("ul.errors-list > li");
 
 		if (elements == null || elements.size() == 0) {
-			result.setResult(LoginResult.Result.OK);
+
+			Element linkProfileElement = document.select("div.i-code > a").first();
+
+			if (linkProfileElement != null) {
+				String href = linkProfileElement.attr("href");
+				String memberId = href.substring(href.lastIndexOf("=") + 1);
+				result.setMemberId(Long.parseLong(memberId));
+				result.setResult(LoginResult.Result.OK);
+			} else {
+				//TODO Собственная ошибка?
+				result.setResult(LoginResult.Result.ERROR);
+			}
+
 			return result;
 		}
 

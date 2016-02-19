@@ -14,6 +14,7 @@ public class LoginResult {
 
 	private Result result;
 	private List<String> errors;
+	private long memberId;
 
 	public Result getResult() {
 		return result;
@@ -30,4 +31,13 @@ public class LoginResult {
 	public void setErrors(List<String> errors) {
 		this.errors = errors;
 	}
+
+	public long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(long memberId) {
+		this.memberId = memberId;
+	}
+
 }
