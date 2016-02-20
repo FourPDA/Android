@@ -149,7 +149,7 @@ public class FourPdaClient {
 		}
 	}
 
-	public class LoginParams {
+	public static class LoginParams {
 
 		private String login;
 		private String password;

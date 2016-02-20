@@ -50,5 +50,9 @@
 	<string name="comments_network_error">Не удалось загрузить комментарии</string>
 	<string name="login">Войти</string>
 	<string name="logout">Выйти</string>
+	<string name="login_hint">Логин</string>
+	<string name="password_hint">Пароль</string>
+	<string name="captcha_hint">Введите число цифрами</string>
+	<string name="auth_title">Вход</string>
 
 </resources>

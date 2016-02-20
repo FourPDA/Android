@@ -1,5 +1,6 @@
 package four.pda.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -13,6 +14,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
@@ -39,6 +41,7 @@ public class DrawerFragment extends Fragment {
 	private static final Logger L = LoggerFactory.getLogger(DrawerFragment.class);
 
 	private static final int LOGOUT_LOADER_ID = 0;
+	private static final int LOGIN_REQUEST_CODE = 0;
 
 	@ViewById View allCategoryView;
 	@ViewById View newsCategoryView;
@@ -111,13 +114,21 @@ public class DrawerFragment extends Fragment {
 
 	@Click(R.id.login_view)
     void loginClicked() {
-		// Тестовые данные
-        preferences.profileId().put(1l);
-		preferences.profileLogin().put("Test");
-		preferences.profilePhoto().put("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
-
-		updateProfile();
+		startActivityForResult(new Intent(getActivity(), LoginActivity_.class), LOGIN_REQUEST_CODE);
     }
+
+	@OnActivityResult(LOGIN_REQUEST_CODE)
+	void onResult(int resultCode) {
+		if (getActivity().RESULT_OK == resultCode) {
+
+			// Тестовые данные
+			preferences.profileId().put(1l);
+			preferences.profileLogin().put("Test");
+			preferences.profilePhoto().put("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
+
+			updateProfile();
+		}
+	}
 
 	@Click(R.id.logout_view)
     void logoutClicked() {
