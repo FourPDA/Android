@@ -120,12 +120,6 @@ public class DrawerFragment extends Fragment {
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (getActivity().RESULT_OK == resultCode) {
-
-			// Тестовые данные
-			preferences.profileId().put(1l);
-			preferences.profileLogin().put("Test");
-			preferences.profilePhoto().put("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
-
 			updateProfile();
 		}
 	}

@@ -6,7 +6,7 @@ import org.androidannotations.annotations.sharedpreferences.SharedPref;
 /**
  * Created by asavinova on 13/04/15.
  */
-@SharedPref
+@SharedPref(SharedPref.Scope.UNIQUE)
 public interface Preferences {
 
 	@DefaultBoolean(true)

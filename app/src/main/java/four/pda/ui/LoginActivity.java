@@ -13,6 +13,7 @@ import com.rey.material.widget.EditText;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -26,6 +27,7 @@ import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.LoginResult;
+import four.pda.client.model.Profile;
 
 /**
  * Created by asavinova on 19/02/16.
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
 	private static final int CAPTCHA_LOADER_ID = 0;
 	private static final int LOGIN_LOADER_ID = 1;
+	private static final int PROFILE_LOADER_ID = 2;
 
 	@ViewById Toolbar toolbar;
 
@@ -68,9 +71,15 @@ public class LoginActivity extends AppCompatActivity {
 		getLoaderManager().restartLoader(CAPTCHA_LOADER_ID, null, new CaptchaCallbacks()).forceLoad();
 	}
 
-	private void login() {
+	@Click(R.id.enter_view)
+	void loginClicked() {
 		supportView.showProgress();
 		getLoaderManager().restartLoader(LOGIN_LOADER_ID, null, new LoginCallbacks()).forceLoad();
+	}
+
+	private void loadProfile() {
+		supportView.showProgress();
+		getLoaderManager().restartLoader(PROFILE_LOADER_ID, null, new ProfileCallbacks()).forceLoad();
 	}
 
 	class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captcha>> {
@@ -142,8 +151,7 @@ public class LoginActivity extends AppCompatActivity {
 
 				if (LoginResult.Result.OK.equals(loginResult.getResult())) {
 					preferences.profileId().put(loginResult.getMemberId());
-					setResult(RESULT_OK);
-					finish();
+					loadProfile();
 				} else {
 					StringBuilder errors = new StringBuilder();
 					for (String e : loginResult.getErrors()) {
@@ -161,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
 				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						login();
+						loginClicked();
 					}
 				});
 			}
@@ -169,6 +177,47 @@ public class LoginActivity extends AppCompatActivity {
 
 		@Override
 		public void onLoaderReset(Loader<LoadResult<LoginResult>> loader) {
+		}
+	}
+
+	class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profile>> {
+		@Override
+		public Loader<LoadResult<Profile>> onCreateLoader(int id, Bundle args) {
+			return new AsyncTaskLoader<LoadResult<Profile>>(LoginActivity.this) {
+				@Override
+				public LoadResult<Profile> loadInBackground() {
+					try {
+						return new LoadResult<>(client.getInstance().getProfile(preferences.profileId().get()));
+					} catch (IOException e) {
+						L.error("Profile request error", e);
+						return new LoadResult<>(e);
+					}
+				}
+			};
+		}
+
+		@Override
+		public void onLoadFinished(Loader<LoadResult<Profile>> loader, LoadResult<Profile> result) {
+			if (result.getException() == null) {
+				Profile profile = result.getData();
+				preferences.profileLogin().put(profile.getLogin());
+				preferences.profilePhoto().put(profile.getPhoto());
+
+				supportView.hide();
+				setResult(RESULT_OK);
+				finish();
+			} else {
+				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadProfile();
+					}
+				});
+			}
+		}
+
+		@Override
+		public void onLoaderReset(Loader<LoadResult<Profile>> loader) {
 		}
 	}
 
