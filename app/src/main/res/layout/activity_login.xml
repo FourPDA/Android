@@ -26,18 +26,16 @@
 
 				<com.rey.material.widget.EditText
 					android:id="@+id/login_view"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
+					style="@style/EditTextView"
 					android:inputType="text"
 					android:layout_marginBottom="@dimen/offset_normal"
 					android:hint="@string/login_hint" />
 
 				<com.rey.material.widget.EditText
 					android:id="@+id/password_view"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginBottom="@dimen/offset_normal"
+					style="@style/EditTextView"
 					android:inputType="textPassword"
+					android:layout_marginBottom="@dimen/offset_normal"
 					android:hint="@string/password_hint" />
 
 				<four.pda.ui.AspectRatioImageView
@@ -50,10 +48,9 @@
 
 				<com.rey.material.widget.EditText
 					android:id="@+id/captcha_text_view"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
+					style="@style/EditTextView"
+					android:inputType="number"
 					android:layout_marginBottom="@dimen/offset_normal"
-					android:inputType="text"
 					android:hint="@string/captcha_hint" />
 
 				<com.rey.material.widget.Button
