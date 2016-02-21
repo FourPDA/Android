@@ -2,6 +2,8 @@ package four.pda.client;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -15,6 +17,8 @@ import four.pda.client.model.ListArticle;
  * Created by asavinova on 19/01/16.
  */
 public class DatePublishedParserTest extends AbstractTest {
+
+	private static final Logger L = LoggerFactory.getLogger(DatePublishedParserTest.class);
 
 	@Test
 	public void fivePages() throws IOException {
@@ -36,7 +40,7 @@ public class DatePublishedParserTest extends AbstractTest {
 				nextDate = article.getPublishedDate();
 
 				if (prevDate.before(nextDate)) {
-					System.out.println(String.format("Next date %s before previous date %s", nextDate, prevDate));
+					L.debug(String.format("Next date %s before previous date %s", nextDate, prevDate));
 				}
 
 				Assert.assertTrue("Wrong dates published", !prevDate.before(nextDate));
