@@ -25,6 +25,7 @@ import java.io.IOException;
 import four.pda.FourPdaClient;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.client.LoginParams;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.LoginResult;
 import four.pda.client.model.Profile;
@@ -83,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 	}
 
 	class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captcha>> {
+
 		@Override
 		public Loader<LoadResult<Captcha>> onCreateLoader(int id, Bundle args) {
 			return new AsyncTaskLoader<LoadResult<Captcha>>(LoginActivity.this) {
@@ -100,33 +102,37 @@ public class LoginActivity extends AppCompatActivity {
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<Captcha>> loader, LoadResult<Captcha> result) {
-			if (result.getException() == null) {
-				captcha = result.getData();
-				ViewUtils.loadImage(captchaImageView, captcha.getUrl());
-				supportView.hide();
-			} else {
-				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+
+			if (result.isError()) {
+				supportView.showError(getString(R.string.auth_network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loadCaptcha();
 					}
 				});
+				return;
 			}
+
+			captcha = result.getData();
+			ViewUtils.loadImage(captchaImageView, captcha.getUrl());
+			supportView.hide();
 		}
 
 		@Override
 		public void onLoaderReset(Loader<LoadResult<Captcha>> loader) {
 		}
+
 	}
 
 	class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginResult>> {
+
 		@Override
 		public Loader<LoadResult<LoginResult>> onCreateLoader(int id, Bundle args) {
 			return new AsyncTaskLoader<LoadResult<LoginResult>>(LoginActivity.this) {
 				@Override
 				public LoadResult<LoginResult> loadInBackground() {
 					try {
-						four.pda.client.FourPdaClient.LoginParams params = new four.pda.client.FourPdaClient.LoginParams();
+						LoginParams params = new LoginParams();
 						params.setLogin(loginView.getText().toString());
 						params.setPassword(passwordView.getText().toString());
 						params.setCaptcha(captchaTextView.getText().toString());
@@ -145,42 +151,48 @@ public class LoginActivity extends AppCompatActivity {
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<LoginResult>> loader, LoadResult<LoginResult> result) {
-			if (result.getException() == null) {
-				LoginResult loginResult = result.getData();
-				supportView.hide();
 
-				if (LoginResult.Result.OK.equals(loginResult.getResult())) {
-					preferences.profileId().put(loginResult.getMemberId());
-					loadProfile();
-				} else {
-					StringBuilder errors = new StringBuilder();
-					for (String e : loginResult.getErrors()) {
-						errors.append(e);
-						errors.append(" ");
-					}
-					supportView.showError(errors.toString().trim(), new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							loadCaptcha();
-						}
-					});
-				}
-			} else {
-				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+			if (result.isError()) {
+				supportView.showError(getString(R.string.auth_network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loginClicked();
 					}
 				});
+				return;
 			}
+
+			LoginResult loginResult = result.getData();
+			supportView.hide();
+
+			if (loginResult.getResult() == LoginResult.Result.ERROR) {
+
+				StringBuilder errors = new StringBuilder();
+				for (String e : loginResult.getErrors()) {
+					errors.append(e);
+					errors.append(" ");
+				}
+				supportView.showError(errors.toString().trim(), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadCaptcha();
+					}
+				});
+				return;
+			}
+
+			preferences.profileId().put(loginResult.getMemberId());
+			loadProfile();
 		}
 
 		@Override
 		public void onLoaderReset(Loader<LoadResult<LoginResult>> loader) {
 		}
+
 	}
 
 	class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profile>> {
+
 		@Override
 		public Loader<LoadResult<Profile>> onCreateLoader(int id, Bundle args) {
 			return new AsyncTaskLoader<LoadResult<Profile>>(LoginActivity.this) {
@@ -198,27 +210,30 @@ public class LoginActivity extends AppCompatActivity {
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<Profile>> loader, LoadResult<Profile> result) {
-			if (result.getException() == null) {
-				Profile profile = result.getData();
-				preferences.profileLogin().put(profile.getLogin());
-				preferences.profilePhoto().put(profile.getPhoto());
 
-				supportView.hide();
-				setResult(RESULT_OK);
-				finish();
-			} else {
-				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+			if (result.isError()) {
+				supportView.showError(getString(R.string.auth_network_error), new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loadProfile();
 					}
 				});
+				return;
 			}
+
+			Profile profile = result.getData();
+			preferences.profileLogin().put(profile.getLogin());
+			preferences.profilePhoto().put(profile.getPhoto());
+
+			supportView.hide();
+			setResult(RESULT_OK);
+			finish();
 		}
 
 		@Override
 		public void onLoaderReset(Loader<LoadResult<Profile>> loader) {
 		}
+
 	}
 
 }

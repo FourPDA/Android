@@ -9,6 +9,7 @@ import java.net.CookiePolicy;
 import java.util.Scanner;
 
 import four.pda.client.FourPdaClient;
+import four.pda.client.LoginParams;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.LoginResult;
 import four.pda.client.model.Profile;
@@ -38,7 +39,7 @@ public class AuthTest {
 				.build();
 
 		FourPdaClient client = new FourPdaClient(httpClient);
-		FourPdaClient.LoginParams params = client.new LoginParams();
+		LoginParams params = new LoginParams();
 
 		Captcha captcha = client.getCaptcha();
 		params.setCaptchaTime(captcha.getTime());

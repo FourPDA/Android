@@ -43,6 +43,59 @@ public class FourPdaClient {
 		this.client = client;
 	}
 
+	public LoginResult login(LoginParams params) throws IOException {
+		String url = BASE_URL + "forum/index.php?act=auth";
+
+		RequestBody requestBody = new FormBody.Builder()
+				.add("login", params.getLogin())
+				.add("password", params.getPassword())
+				.add("captcha-time", params.getCaptchaTime())
+				.add("captcha-sig", params.getCaptchaSig())
+				.add("captcha", params.getCaptcha())
+				.build();
+
+		Request request = new Request.Builder()
+				.post(requestBody)
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+
+		try {
+			return new LoginParser().parse(response.body().string());
+		} catch (RuntimeException e) {
+			L.error("Can't parse login result page", e);
+			throw e;
+		}
+	}
+
+	public boolean logout() throws IOException {
+		String url = BASE_URL + "forum/index.php?act=login&CODE=03";
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		return response.isSuccessful();
+	}
+
+	public Profile getProfile(long id) throws IOException {
+		String url = BASE_URL + "forum/index.php?showuser=" + id;
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String body = response.body().string();
+
+		try {
+			return new ProfileParser().parse(body);
+		} catch (RuntimeException e) {
+			L.error("Can't parse profile page", e);
+			throw e;
+		}
+	}
+
 	public List<ListArticle> getArticles(CategoryType type, int page) throws IOException {
 		String category = "";
 		if (type != CategoryType.ALL) {
@@ -119,108 +172,6 @@ public class FourPdaClient {
 			return new CaptchaParser().parse(body);
 		} catch (RuntimeException e) {
 			L.error("Can't parse login page", e);
-			throw e;
-		}
-	}
-
-	public LoginResult login(LoginParams params) throws IOException {
-		String url = BASE_URL + "forum/index.php?act=auth";
-
-		RequestBody requestBody = new FormBody.Builder()
-				.add("login", params.getLogin())
-				.add("password", params.getPassword())
-				.add("captcha-time", params.getCaptchaTime())
-				.add("captcha-sig", params.getCaptchaSig())
-				.add("captcha", params.getCaptcha())
-				.build();
-
-		Request request = new Request.Builder()
-				.post(requestBody)
-				.url(url)
-				.build();
-
-		Response response = client.newCall(request).execute();
-
-		try {
-			return new LoginParser().parse(response.body().string());
-		} catch (RuntimeException e) {
-			L.error("Can't parse login result page", e);
-			throw e;
-		}
-	}
-
-	public static class LoginParams {
-
-		private String login;
-		private String password;
-		private String captchaTime;
-		private String captchaSig;
-		private String captcha;
-
-		public String getLogin() {
-			return login;
-		}
-
-		public void setLogin(String login) {
-			this.login = login;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
-		public String getCaptchaTime() {
-			return captchaTime;
-		}
-
-		public void setCaptchaTime(String captchaTime) {
-			this.captchaTime = captchaTime;
-		}
-
-		public String getCaptchaSig() {
-			return captchaSig;
-		}
-
-		public void setCaptchaSig(String captchaSig) {
-			this.captchaSig = captchaSig;
-		}
-
-		public String getCaptcha() {
-			return captcha;
-		}
-
-		public void setCaptcha(String captcha) {
-			this.captcha = captcha;
-		}
-	}
-
-	public boolean logout() throws IOException {
-		String url = BASE_URL + "forum/index.php?act=login&CODE=03";
-		Request request = new Request.Builder()
-				.url(url)
-				.build();
-
-		Response response = client.newCall(request).execute();
-		return response.isSuccessful();
-	}
-
-	public Profile getProfile(long id) throws IOException {
-		String url = BASE_URL + "forum/index.php?showuser=" + id;
-		Request request = new Request.Builder()
-				.url(url)
-				.build();
-
-		Response response = client.newCall(request).execute();
-		String body = response.body().string();
-
-		try {
-			return new ProfileParser().parse(body);
-		} catch (RuntimeException e) {
-			L.error("Can't parse profile page", e);
 			throw e;
 		}
 	}
