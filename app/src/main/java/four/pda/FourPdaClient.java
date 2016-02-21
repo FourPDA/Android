@@ -15,7 +15,9 @@ import java.util.List;
 
 import four.pda.client.ArticleListParser;
 import four.pda.client.ArticlePageParser;
+import four.pda.client.CommentTreeParser;
 import four.pda.client.ReviewListParser;
+import four.pda.client.model.AbstractComment;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.CategoryType;
 
@@ -77,4 +79,21 @@ public class FourPdaClient {
 		}
 	}
 
+	public List<AbstractComment> getArticleComments(Date date, Long id) throws IOException {
+		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
+		String url = BASE_URL + fullId;
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String body = response.body().string();
+
+		try {
+			return new CommentTreeParser().parse(body);
+		} catch (RuntimeException e) {
+			L.error(String.format("Can't parse comments at %s",  url), e);
+			throw e;
+		}
+	}
 }

@@ -11,9 +11,9 @@ public class Article {
     private java.util.Date date;
     private String title;
     private String description;
-    private Integer position;
     private String category;
     private String image;
+    private java.util.Date publishedDate;
 
     public Article() {
     }
@@ -22,15 +22,15 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, Long serverId, java.util.Date date, String title, String description, Integer position, String category, String image) {
+    public Article(Long id, Long serverId, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate) {
         this.id = id;
         this.serverId = serverId;
         this.date = date;
         this.title = title;
         this.description = description;
-        this.position = position;
         this.category = category;
         this.image = image;
+        this.publishedDate = publishedDate;
     }
 
     public Long getId() {
@@ -73,14 +73,6 @@ public class Article {
         this.description = description;
     }
 
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -95,6 +87,14 @@ public class Article {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public java.util.Date getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(java.util.Date publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
 }

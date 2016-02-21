@@ -34,14 +34,14 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 		final long id = cursor.getLong(ArticleDao.Properties.ServerId.ordinal);
 		final String title = cursor.getString(ArticleDao.Properties.Title.ordinal);
-		Date date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
-		String image = cursor.getString(ArticleDao.Properties.Image.ordinal);
+		final Date date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
+		final String image = cursor.getString(ArticleDao.Properties.Image.ordinal);
 
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				EventBus_.getInstance_(v.getContext())
-						.post(new ShowArticleEvent(id));
+						.post(new ShowArticleEvent(id, date, title, image));
 			}
 		});
 

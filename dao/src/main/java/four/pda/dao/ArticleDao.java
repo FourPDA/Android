@@ -28,9 +28,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Date = new Property(2, java.util.Date.class, "date", false, "DATE");
         public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
         public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
-        public final static Property Position = new Property(5, Integer.class, "position", false, "POSITION");
-        public final static Property Category = new Property(6, String.class, "category", false, "CATEGORY");
-        public final static Property Image = new Property(7, String.class, "image", false, "IMAGE");
+        public final static Property Category = new Property(5, String.class, "category", false, "CATEGORY");
+        public final static Property Image = new Property(6, String.class, "image", false, "IMAGE");
+        public final static Property PublishedDate = new Property(7, java.util.Date.class, "publishedDate", false, "PUBLISHED_DATE");
     };
 
 
@@ -51,9 +51,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "'DATE' INTEGER," + // 2: date
                 "'TITLE' TEXT," + // 3: title
                 "'DESCRIPTION' TEXT," + // 4: description
-                "'POSITION' INTEGER," + // 5: position
-                "'CATEGORY' TEXT," + // 6: category
-                "'IMAGE' TEXT);"); // 7: image
+                "'CATEGORY' TEXT," + // 5: category
+                "'IMAGE' TEXT," + // 6: image
+                "'PUBLISHED_DATE' INTEGER);"); // 7: publishedDate
     }
 
     /** Drops the underlying database table. */
@@ -92,19 +92,19 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             stmt.bindString(5, description);
         }
  
-        Integer position = entity.getPosition();
-        if (position != null) {
-            stmt.bindLong(6, position);
-        }
- 
         String category = entity.getCategory();
         if (category != null) {
-            stmt.bindString(7, category);
+            stmt.bindString(6, category);
         }
  
         String image = entity.getImage();
         if (image != null) {
-            stmt.bindString(8, image);
+            stmt.bindString(7, image);
+        }
+ 
+        java.util.Date publishedDate = entity.getPublishedDate();
+        if (publishedDate != null) {
+            stmt.bindLong(8, publishedDate.getTime());
         }
     }
 
@@ -123,9 +123,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // date
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // position
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // category
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // image
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // category
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // image
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)) // publishedDate
         );
         return entity;
     }
@@ -138,9 +138,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setDate(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
         entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setPosition(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
-        entity.setCategory(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setImage(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCategory(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setImage(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setPublishedDate(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
      }
     
     /** @inheritdoc */

@@ -11,22 +11,52 @@ android {
 	defaultConfig {
 		applicationId 'four.pda'
 		versionCode Integer.parseInt(project.versionCode)
-		versionName '1.0.5'
+		versionName '1.1.0'
 		minSdkVersion 16
 		targetSdkVersion 23
+		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
+		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
+	}
+
+	signingConfigs {
+
+		develop {
+			storeFile file('develop.keystore')
+			storePassword 'develop'
+			keyAlias 'fourpda_develop'
+			keyPassword 'develop'
+		}
+
 	}
 
 	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+		debug {
+			applicationIdSuffix ".debug"
+			signingConfig signingConfigs.develop
 		}
+
+		release {
+			signingConfig signingConfigs.develop
+		}
+
 	}
 
 	lintOptions {
 		//TODO Заигнорить нормально okhttp
 		warning 'InvalidPackage'
 	}
+
+	applicationVariants.all { variant ->
+		variant.outputs.each { output ->
+			def name = output.outputFile.name
+					.replace('app-', 'FourPDA-')
+					.replace('.apk', "-${variant.versionName}-b${variant.versionCode}.apk")
+					.replace('-release', '')
+			output.outputFile = new File(output.outputFile.parent, name)
+		}
+	}
+
 }
 
 configurations {
@@ -53,7 +83,7 @@ dependencies {
 
 	compile "com.android.support:appcompat-v7:$supportVersion"
 	compile "com.android.support:recyclerview-v7:$supportVersion"
-	compile "com.android.support:cardview-v7:$supportVersion"
+	compile "com.android.support:design:$supportVersion"
 
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
 
@@ -69,5 +99,7 @@ dependencies {
     }
 
 	compile 'org.slf4j:slf4j-api:1.7.12'
+
+	compile 'com.github.rey5137:material:1.2.2'
 
 }

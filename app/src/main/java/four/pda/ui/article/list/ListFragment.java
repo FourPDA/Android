@@ -2,10 +2,12 @@ package four.pda.ui.article.list;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,13 +15,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
@@ -28,12 +30,15 @@ import java.io.IOException;
 import java.util.List;
 
 import four.pda.Dao;
-import four.pda.R;
 import four.pda.FourPdaClient;
+import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryType;
 import four.pda.ui.DrawerFragment;
+import four.pda.ui.LoadResult;
+import four.pda.ui.SupportView;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -50,8 +55,11 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
+	@ViewById View upButton;
+	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
+	@Bean Analytics analytics;
 	@Bean FourPdaClient client;
 
 	private int page = 1;
@@ -91,7 +99,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 				if (!refresh.isRefreshing()
 						&& (totalItemCount - visibleItemCount) <= firstVisibleItemPosition) {
-
 					loadData(false);
 				}
 			}
@@ -103,6 +110,12 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 				(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
 
 		loadData(false);
+	}
+
+	@Click
+	void upButton() {
+		analytics.articlesList().scrollUp(layoutManager.findFirstVisibleItemPosition());
+		layoutManager.scrollToPosition(0);
 	}
 
 	private void selectedCategoryInDrawer() {
@@ -117,9 +130,14 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	private void loadData(boolean force) {
 		refresh.setRefreshing(true);
 
+		int itemCount = adapter.getItemCount();
+		if (itemCount == 0) {
+			supportView.showProgress();
+		}
+
 		Bundle bundle = new Bundle();
 		bundle.putBoolean(FORCE, force);
-		getLoaderManager().restartLoader(LOADER_ID, bundle, new Callbacks());
+		getLoaderManager().restartLoader(LOADER_ID, bundle, new Callbacks()).forceLoad();
 	}
 
 	@Override
@@ -136,21 +154,23 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					((DrawerLayout) view).openDrawer(Gravity.START);
+					((DrawerLayout) view).openDrawer(GravityCompat.START);
 				}
 			});
 		}
 	}
 
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<Cursor> {
+		private boolean force;
 
 		@Override
-		public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
-			return new CursorLoader(getActivity()) {
+		public Loader<LoadResult<Cursor>> onCreateLoader(int id, final Bundle args) {
+			return new AsyncTaskLoader<LoadResult<Cursor>>(getActivity()) {
+
 				@Override
-				public Cursor loadInBackground() {
-					boolean force = args.getBoolean(FORCE);
+				public LoadResult<Cursor> loadInBackground() {
+					force = args.getBoolean(FORCE);
 					if (force) {
 						page = 1;
 					}
@@ -159,27 +179,54 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 						List<ListArticle> articles = client.getArticles(category, page);
 
 						boolean needClearData = page == 1;
-						page++;
 						dao.setArticles(articles, category, needClearData);
 
-						return dao.getArticleCursor(category);
+						return new LoadResult<>(dao.getArticleCursor(category));
 					} catch (IOException e) {
-						e.printStackTrace();
+						L.error("Articles page request error", e);
+						return new LoadResult<>(e);
 					}
-					return null;
 				}
+
 			};
 		}
 
 		@Override
-		public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-			adapter.swapCursor(cursor);
-			adapter.notifyDataSetChanged();
+		public void onLoadFinished(Loader<LoadResult<Cursor>> loader, LoadResult<Cursor> result) {
 			refresh.setRefreshing(false);
+
+			if (result.getException() == null) {
+				page++;
+
+				adapter.swapCursor(result.getData());
+				adapter.notifyDataSetChanged();
+
+				supportView.hide();
+				upButton.setVisibility(View.VISIBLE);
+			} else {
+				int itemCount = adapter.getItemCount();
+
+				View.OnClickListener retryListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadData(force);
+					}
+				};
+
+				if (itemCount == 0) {
+					upButton.setVisibility(View.GONE);
+					supportView.showError(getString(R.string.article_list_network_error), retryListener);
+				} else {
+					Snackbar
+							.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
+							.setAction(R.string.retry_button, retryListener)
+							.show();
+				}
+			}
 		}
 
 		@Override
-		public void onLoaderReset(Loader<Cursor> loader) {
+		public void onLoaderReset(Loader<LoadResult<Cursor>> loader) {
 		}
 	}
 }

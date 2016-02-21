@@ -19,16 +19,23 @@ import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Date;
+
 import four.pda.Dao;
-import four.pda.R;
+import four.pda.EventBus;
 import four.pda.FourPdaClient;
+import four.pda.R;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.LoadResult;
+import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
+import four.pda.ui.article.ShowCommentsEvent;
 
 /**
  * Created by asavinova on 11/04/15.
@@ -39,7 +46,9 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	private static final int LOADER_ID = 0;
 
 	@FragmentArg long id;
+	@FragmentArg Date date;
 	@FragmentArg String title;
+	@FragmentArg String image;
 
 	@ViewById(R.id.scroll_view) ScrollView scrollView;
 	@ViewById ImageView imageView;
@@ -49,9 +58,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById View infoLayout;
 	@ViewById TextView titleView;
 	@ViewById TextView dateView;
+	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
 	@Bean FourPdaClient client;
+	@Bean EventBus eventBus;
 
 	@AfterViews
 	void afterViews() {
@@ -71,7 +82,13 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		});
 	}
 
+	@Click
+	void commentsButton() {
+		eventBus.post(new ShowCommentsEvent(id));
+	}
+
 	private void loadData() {
+		supportView.showProgress();
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks());
 	}
 
@@ -81,10 +98,10 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	@UiThread
-	void updateData(ArticleTaskLoader.WrapperInfo info) {
-		ViewUtils.loadImage(imageView, info.article.getImage());
-		titleView.setText(info.article.getTitle());
-		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(info.article.getDate()));
+	void updateData(String content) {
+		ViewUtils.loadImage(imageView, image);
+		titleView.setText(title);
+		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -93,7 +110,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				return true;
 			}
 		});
-		webView.loadData(getFormattedText(info.content), "text/html; charset=utf-8", null);
+		webView.loadData(getFormattedText(content), "text/html; charset=utf-8", null);
 	}
 
 	private void openActionViewIntent(String url) {
@@ -119,20 +136,30 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ "</body></html>";
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<ArticleTaskLoader.WrapperInfo> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
 
 		@Override
 		public Loader onCreateLoader(int loaderId, final Bundle args) {
-			return new ArticleTaskLoader(getActivity(), dao, client, id);
+			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 
 		@Override
-		public void onLoadFinished(Loader loader, ArticleTaskLoader.WrapperInfo wrapperInfo) {
-			updateData(wrapperInfo);
+		public void onLoadFinished(Loader<LoadResult<String>> loader, LoadResult<String> result) {
+			if (result.getException() == null) {
+				updateData(result.getData());
+				supportView.hide();
+			} else {
+				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loadData();
+					}
+				});
+			}
 		}
 
 		@Override
-		public void onLoaderReset(Loader<ArticleTaskLoader.WrapperInfo> loader) {
+		public void onLoaderReset(Loader<LoadResult<String>> loader) {
 		}
 
 	}
