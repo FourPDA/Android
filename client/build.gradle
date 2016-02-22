@@ -11,5 +11,6 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'commons-io:commons-io:2.4'
+    testCompile 'org.slf4j:slf4j-simple:1.7.16'
 
 }

@@ -57,6 +57,12 @@ public class ArticleListParser extends AbstractParser {
 			return null;
 		}
 
+		if (url.contains("/tag/")) {
+			// Не парсим статьи-тэги
+			// TODO Парсить статьи-тэги отдельно
+			return null;
+		}
+
 		IdAndDate idAndDate = getIdAndDateFromUrl(url);
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);

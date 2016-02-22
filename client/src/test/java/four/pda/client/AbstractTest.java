@@ -21,7 +21,7 @@ public abstract class AbstractTest {
 	private static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	protected String getHtmlSource(String urlPath) throws IOException {
-		return IOUtils.toString(new URL(BASE_URL + urlPath), "cp1251");
+		return IOUtils.toString(new URL(BASE_URL + urlPath + "?" + Math.random()), "cp1251");
 	}
 
 	protected void checkArticles(String pageSource) throws IOException {
