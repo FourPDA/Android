@@ -1,4 +1,4 @@
-package four.pda.ui.article.list;
+package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,18 +26,17 @@ import four.pda.R;
 import four.pda.client.CategoryType;
 import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.DrawerFragment;
-import four.pda.ui.article.ShowArticleEvent;
-import four.pda.ui.article.ShowCommentsEvent;
 import four.pda.ui.article.comments.CommentsFragment_;
+import four.pda.ui.article.list.ListFragment_;
 import four.pda.ui.article.one.ArticleFragment_;
 
 /**
  * Created by asavinova on 10/04/15.
  */
 @EActivity(R.layout.activity_articles)
-public class ListActivity extends FragmentActivity implements DrawerFragment.ChangeCategoryListener {
+public class NewsActivity extends FragmentActivity implements DrawerFragment.ChangeCategoryListener {
 
-	private static final Logger L = LoggerFactory.getLogger(ListActivity.class);
+	private static final Logger L = LoggerFactory.getLogger(NewsActivity.class);
 
 	@FragmentById DrawerFragment drawer;
 
