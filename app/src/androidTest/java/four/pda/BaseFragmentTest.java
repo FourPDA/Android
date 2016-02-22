@@ -1,9 +1,5 @@
 package four.pda;
 
-/**
- * Created by Klishin.Pavel on 01.02.2016.
- */
-
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -32,6 +28,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * Created by Klishin.Pavel on 01.02.2016.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class BaseFragmentTest {

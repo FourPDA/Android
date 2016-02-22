@@ -28,7 +28,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 /**
  * Created by Klishin.Pavel on 08.02.2016.
  */
-
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class GamesActivityTest {

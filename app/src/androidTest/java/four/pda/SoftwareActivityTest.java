@@ -1,9 +1,5 @@
 package four.pda;
 
-/**
- * Created by Klishin.Pavel on 08.02.2016.
- */
-
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -32,7 +28,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 /**
  * Created by Klishin.Pavel on 08.02.2016.
  */
-
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class SoftwareActivityTest {
@@ -41,7 +36,7 @@ public class SoftwareActivityTest {
 	private static final String TAG = "four.pda";
 
 	@Rule
-	public ActivityTestRule<ListActivity> mActivityRule = new ActivityTestRule(ListActivity_.class);
+	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
 
 
 	@Before
