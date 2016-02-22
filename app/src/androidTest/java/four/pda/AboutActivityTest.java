@@ -50,7 +50,7 @@ public class AboutActivityTest {
 	}
 
 	@Test
-	public void elementsPresented () throws UiObjectNotFoundException {
+	public void elementsPresented() throws UiObjectNotFoundException {
 
 		device.waitForWindowUpdate("four.pda", 100);
 		//Проверяем наличие всех элементов

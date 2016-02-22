@@ -52,7 +52,7 @@ public class SoftwareActivityTest {
 	}
 
 	@Test
-	public void SoftwareActivityTest () throws UiObjectNotFoundException, InterruptedException {
+	public void softwareActivityTest() throws UiObjectNotFoundException, InterruptedException {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();

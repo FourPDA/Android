@@ -52,7 +52,7 @@ public class BaseFragmentTest {
 	}
 
 	@Test
-	public void mainDrawerActivityTest () throws UiObjectNotFoundException, InterruptedException {
+	public void mainDrawerActivityTest() throws UiObjectNotFoundException, InterruptedException {
 
 		//Открываем Navigaton Drawer методами UiAutomator:
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));

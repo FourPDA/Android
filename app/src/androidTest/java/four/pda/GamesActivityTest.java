@@ -48,7 +48,7 @@ public class GamesActivityTest {
 	}
 
 	@Test
-	public void GamesActivityTest () throws UiObjectNotFoundException, InterruptedException {
+	public void gamesActivityTest() throws UiObjectNotFoundException, InterruptedException {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();
