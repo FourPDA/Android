@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 import four.pda.client.FourPdaClient;
 import four.pda.client.LoginParams;
+import four.pda.client.exceptions.LoginException;
 import four.pda.client.model.Captcha;
-import four.pda.client.model.LoginResult;
 import four.pda.client.model.Profile;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
@@ -53,21 +53,19 @@ public class AuthTest {
 		params.setLogin(args[0]);
 		params.setPassword(args[1]);
 
-		LoginResult result = client.login(params);
-
-		if (LoginResult.Result.OK.equals(result.getResult())) {
+		try {
+			long memberId = client.login(params);
 			L.debug("Login result OK");
-		} else {
+
+			Profile profile = client.getProfile(memberId);
+			L.debug("Profile login: " + profile.getLogin());
+			L.debug("Profile photo: " + profile.getPhoto());
+		} catch (LoginException e) {
 			L.debug("Login result ERROR");
-			for (String error : result.getErrors()) {
+			for (String error : e.getErrors()) {
 				L.debug("Error: " + error);
 			}
-			return;
 		}
-
-		Profile profile = client.getProfile(result.getMemberId());
-		L.debug("Profile login: " + profile.getLogin());
-		L.debug("Profile photo: " + profile.getPhoto());
 
 		boolean isSuccess = client.logout();
 		if (isSuccess) {

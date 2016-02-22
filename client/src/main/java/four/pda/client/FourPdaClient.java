@@ -8,10 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import four.pda.client.exceptions.LoginException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.ListArticle;
-import four.pda.client.model.LoginResult;
 import four.pda.client.model.Profile;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
@@ -43,7 +43,7 @@ public class FourPdaClient {
 		this.client = client;
 	}
 
-	public LoginResult login(LoginParams params) throws IOException {
+	public long login(LoginParams params) throws IOException {
 		String url = BASE_URL + "forum/index.php?act=auth";
 
 		RequestBody requestBody = new FormBody.Builder()
@@ -63,6 +63,9 @@ public class FourPdaClient {
 
 		try {
 			return new LoginParser().parse(response.body().string());
+		} catch (LoginException e) {
+			L.info("Login error", e);
+			throw e;
 		} catch (RuntimeException e) {
 			L.error("Can't parse login result page", e);
 			throw e;

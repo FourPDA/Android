@@ -9,17 +9,15 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 import four.pda.R;
 import four.pda.client.LoginParams;
-import four.pda.client.model.LoginResult;
+import four.pda.client.exceptions.LoginException;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 21/02/16.
  */
-class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginResult>> {
+class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Long>> {
 
 	private static final Logger L = LoggerFactory.getLogger(LoginCallbacks.class);
 
@@ -30,10 +28,10 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginRe
 	}
 
 	@Override
-	public Loader<LoadResult<LoginResult>> onCreateLoader(int id, Bundle args) {
-		return new AsyncTaskLoader<LoadResult<LoginResult>>(activity) {
+	public Loader<LoadResult<Long>> onCreateLoader(int id, Bundle args) {
+		return new AsyncTaskLoader<LoadResult<Long>>(activity) {
 			@Override
-			public LoadResult<LoginResult> loadInBackground() {
+			public LoadResult<Long> loadInBackground() {
 				try {
 					LoginParams params = new LoginParams();
 					params.setLogin(activity.loginView.getText().toString());
@@ -44,7 +42,7 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginRe
 						params.setCaptchaTime(activity.captcha.getTime());
 					}
 					return new LoadResult<>(activity.client.login(params));
-				} catch (IOException e) {
+				} catch (Exception e) {
 					L.error("Login request error", e);
 					return new LoadResult<>(e);
 				}
@@ -53,9 +51,26 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginRe
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoadResult<LoginResult>> loader, LoadResult<LoginResult> result) {
+	public void onLoadFinished(Loader<LoadResult<Long>> loader, LoadResult<Long> result) {
 
 		if (result.isError()) {
+
+			if (result.getException() instanceof LoginException) {
+				LoginException exception = (LoginException) result.getException();
+				StringBuilder errors = new StringBuilder();
+				for (String e : exception.getErrors()) {
+					errors.append(e);
+					errors.append(" ");
+				}
+				activity.supportView.showError(errors.toString().trim(), new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						activity.loadCaptcha();
+					}
+				});
+				return;
+			}
+
 			activity.supportView.showError(activity.getString(R.string.auth_network_error), new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -65,31 +80,14 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginRe
 			return;
 		}
 
-		LoginResult loginResult = result.getData();
-		activity.supportView.hide();
-
-		if (loginResult.getResult() == LoginResult.Result.ERROR) {
-
-			StringBuilder errors = new StringBuilder();
-			for (String e : loginResult.getErrors()) {
-				errors.append(e);
-				errors.append(" ");
-			}
-			activity.supportView.showError(errors.toString().trim(), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activity.loadCaptcha();
-				}
-			});
-			return;
-		}
-
-		activity.preferences.profileId().put(loginResult.getMemberId());
+		Long memberId = result.getData();
+		activity.preferences.profileId().put(memberId);
 		activity.loadProfile();
+		activity.supportView.hide();
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoadResult<LoginResult>> loader) {
+	public void onLoaderReset(Loader<LoadResult<Long>> loader) {
 	}
 
 }
