@@ -30,6 +30,7 @@ import four.pda.FourPdaClient;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.analytics.Analytics;
+import four.pda.client.CategoryType;
 import four.pda.ui.auth.AuthActivity_;
 
 /**

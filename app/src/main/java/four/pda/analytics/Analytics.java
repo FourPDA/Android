@@ -9,7 +9,7 @@ import org.androidannotations.annotations.EBean;
 import java.util.Map;
 
 import four.pda.BuildConfig;
-import four.pda.ui.CategoryType;
+import four.pda.client.CategoryType;
 
 /**
  * Analytics.

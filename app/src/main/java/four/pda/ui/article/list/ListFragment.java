@@ -33,9 +33,10 @@ import four.pda.Dao;
 import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.analytics.Analytics;
+import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.CategoryType;
+import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.DrawerFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
@@ -70,7 +71,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@AfterViews
 	void afterViews() {
 
-		toolbar.setTitle(category.getTitle());
+		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
 		selectedCategoryInDrawer();
 
@@ -176,7 +177,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 					}
 
 					try {
-						List<ListArticle> articles = client.getArticles(category.getType(), page);
+						List<ListArticle> articles = client.getArticles(category, page);
 
 						boolean needClearData = page == 1;
 						dao.setArticles(articles, category, needClearData);
