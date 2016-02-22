@@ -36,8 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class BaseFragmentTest {
 
 	private UiDevice device;
-	private static final String TAG = "four.pda";
-
+    //TODO Add SLF4J logging
 	@Rule
 	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
 
@@ -63,6 +62,5 @@ public class BaseFragmentTest {
 		onView(withId(four.pda.R.id.software_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
 		onView(withId(four.pda.R.id.games_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
 		onView(withId(four.pda.R.id.about_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		Log.v(TAG, "Installed, all is OK");
 	}
 }

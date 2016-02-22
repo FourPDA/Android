@@ -35,7 +35,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AllArticlesTest {
 
 	private UiDevice device;
-	private static final String TAG = "four.pda";
 
 	@Rule
 	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
