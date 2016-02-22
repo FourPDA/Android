@@ -16,6 +16,14 @@ public class LoadResult<T> {
 		this.exception = exception;
 	}
 
+	public boolean isSuccess() {
+		return exception == null;
+	}
+
+	public boolean isError() {
+		return exception != null;
+	}
+
 	public T getData() {
 		return data;
 	}

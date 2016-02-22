@@ -16,6 +16,7 @@ android {
 		targetSdkVersion 23
 		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
 		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
+		multiDexEnabled true
 	}
 
 	signingConfigs {
@@ -87,7 +88,7 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
 
-	compile 'com.squareup.okhttp:okhttp:2.3.0'
+	compile 'com.squareup.okhttp3:okhttp:3.1.1'
 	compile 'com.squareup.picasso:picasso:2.5.0'
 
 	compile 'com.jakewharton:butterknife:7.0.1'

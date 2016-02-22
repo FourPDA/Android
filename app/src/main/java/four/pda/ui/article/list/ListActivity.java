@@ -23,7 +23,8 @@ import java.util.TimerTask;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
-import four.pda.ui.CategoryType;
+import four.pda.client.CategoryType;
+import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.DrawerFragment;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.article.ShowCommentsEvent;
@@ -58,7 +59,8 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		}
 
 		if (savedInstanceState == null) {
-			L.debug("Start list activity with category {}", getString(category.getTitle()));
+			String categoryName = getString(CategoryTitleMap.get(category));
+			L.debug("Start list activity with category {}", categoryName);
 
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.list_container, ListFragment_.builder().category(category).build())

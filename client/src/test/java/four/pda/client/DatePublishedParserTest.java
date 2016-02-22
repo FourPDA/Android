@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import four.pda.client.model.ListArticle;
+import four.pda.client.parsers.ArticleListParser;
 
 /**
  * Created by asavinova on 19/01/16.
