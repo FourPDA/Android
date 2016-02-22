@@ -79,6 +79,7 @@ dependencies {
 
 	apt 'org.androidannotations:androidannotations:3.3.2'
 	compile 'org.androidannotations:androidannotations-api:3.3.2'
+	compile 'com.android.support:support-annotations:23.1.1'
 
 	def supportVersion = '23.0.1'
 
@@ -102,15 +103,15 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.12'
 
 	compile 'com.github.rey5137:material:1.2.2'
-
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+	androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
 	androidTestCompile 'com.android.support.test:runner:0.4.1'
 	androidTestCompile 'com.android.support.test:rules:0.4'
 	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1'){
 		exclude group: 'com.squareup.dagger'
 	}
 	androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-	androidTestCompile 'junit:junit:4.12'
-
+	testCompile 'junit:junit:4.12'
 }
 
 configurations.all {
