@@ -51,8 +51,7 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 
 	@InstanceState CategoryType category = CategoryType.ALL;
 
-	private Timer timer;
-	private Toast toast;
+	private long backButtonLastPressedTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +94,6 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 		super.onPause();
 		drawer.removeListener(this);
 		eventBus.unregister(this);
-		if (timer != null) {
-			timer.cancel();
-		}
 	}
 
 	@Override
@@ -176,25 +172,11 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 			return;
 		}
 
-		if (timer == null) {
-
-            toast = Toast.makeText(this, R.string.exit_message, Toast.LENGTH_SHORT);
-            toast.show();
-
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    timer = null;
-                }
-            }, 2000);
-
+		if (System.currentTimeMillis() - backButtonLastPressedTime > 2000) {
+			Toast.makeText(this, R.string.exit_message, Toast.LENGTH_SHORT).show();
+			backButtonLastPressedTime = System.currentTimeMillis();
 			return;
-        }
-
-		if (toast != null) {
-            toast.cancel();
-        }
+		}
 
 		finish();
 	}
