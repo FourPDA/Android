@@ -43,7 +43,7 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<LoginRe
 						params.setCaptchaSig(activity.captcha.getSig());
 						params.setCaptchaTime(activity.captcha.getTime());
 					}
-					return new LoadResult<>(activity.client.getInstance().login(params));
+					return new LoadResult<>(activity.client.login(params));
 				} catch (IOException e) {
 					L.error("Login request error", e);
 					return new LoadResult<>(e);

@@ -35,7 +35,7 @@ class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captc
 			@Override
 			public LoadResult<Captcha> loadInBackground() {
 				try {
-					return new LoadResult<>(activity.client.getInstance().getCaptcha());
+					return new LoadResult<>(activity.client.getCaptcha());
 				} catch (IOException e) {
 					L.error("Captcha request error", e);
 					return new LoadResult<>(e);

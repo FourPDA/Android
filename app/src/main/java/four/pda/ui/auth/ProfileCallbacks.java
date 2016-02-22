@@ -31,7 +31,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 
 	public ProfileCallbacks(AuthActivity activity) {
 		this.activity = activity;
-		pdaClient = activity.client.getInstance();
+		pdaClient = activity.client;
 		preferences = activity.preferences;
 	}
 

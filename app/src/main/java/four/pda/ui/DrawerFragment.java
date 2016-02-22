@@ -168,7 +168,7 @@ public class DrawerFragment extends Fragment {
 				@Override
 				public LoadResult<Boolean> loadInBackground() {
 					try {
-						return new LoadResult<>(client.getInstance().logout());
+						return new LoadResult<>(client.logout());
 					} catch (IOException e) {
 						L.error("Logout request error", e);
 						return new LoadResult<>(e);

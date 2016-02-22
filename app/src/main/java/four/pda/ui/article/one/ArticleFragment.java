@@ -140,7 +140,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		@Override
 		public Loader onCreateLoader(int loaderId, final Bundle args) {
-			return new ArticleTaskLoader(getActivity(), client.getInstance(), id, date);
+			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 
 		@Override

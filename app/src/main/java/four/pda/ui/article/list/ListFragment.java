@@ -176,7 +176,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 					}
 
 					try {
-						List<ListArticle> articles = client.getInstance().getArticles(category.getType(), page);
+						List<ListArticle> articles = client.getArticles(category.getType(), page);
 
 						boolean needClearData = page == 1;
 						dao.setArticles(articles, category, needClearData);
