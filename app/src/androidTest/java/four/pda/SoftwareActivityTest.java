@@ -38,7 +38,6 @@ public class SoftwareActivityTest {
 	@Rule
 	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
 
-
 	@Before
 	public void startMainActivityFromHomeScreen() throws RemoteException {
 		// Initialize UiDevice instance

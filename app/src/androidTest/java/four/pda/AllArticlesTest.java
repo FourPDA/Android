@@ -38,8 +38,7 @@ public class AllArticlesTest {
 	private static final String TAG = "four.pda";
 
 	@Rule
-	public ActivityTestRule<ListActivity> mActivityRule = new ActivityTestRule(ListActivity_.class);
-
+	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
 
 	@Before
 	public void startMainActivityFromHomeScreen() throws RemoteException {
