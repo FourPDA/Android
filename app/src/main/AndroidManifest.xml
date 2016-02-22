@@ -21,7 +21,7 @@
 		<activity android:name=".ui.AboutActivity_"
 			android:parentActivityName=".ui.article.list.ListActivity_"/>
 
-		<activity android:name=".ui.LoginActivity_"
+		<activity android:name=".ui.auth.AuthActivity_"
 			android:parentActivityName=".ui.article.list.ListActivity_"/>
 
 	    <meta-data

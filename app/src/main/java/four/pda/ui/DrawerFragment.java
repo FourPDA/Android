@@ -30,6 +30,7 @@ import four.pda.FourPdaClient;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.analytics.Analytics;
+import four.pda.ui.auth.AuthActivity_;
 
 /**
  * @author Anna Savinova
@@ -114,7 +115,7 @@ public class DrawerFragment extends Fragment {
 
 	@Click(R.id.login_view)
     void loginClicked() {
-		startActivityForResult(new Intent(getActivity(), LoginActivity_.class), LOGIN_REQUEST_CODE);
+		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
     }
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
