@@ -96,6 +96,12 @@ public class DrawerFragment extends Fragment {
 		updateProfile();
     }
 
+	public void setCategorySelected(CategoryType categoryType) {
+		for (Map.Entry<View, CategoryType> entry : map.entrySet()) {
+			entry.getKey().setSelected(entry.getValue() == categoryType);
+		}
+	}
+
 	private void updateProfile() {
 		long profileId = preferences.profileId().get();
 		String login = preferences.profileLogin().get();

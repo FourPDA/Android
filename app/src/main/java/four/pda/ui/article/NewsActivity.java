@@ -80,6 +80,7 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 			}
 			preferences.isFirstRun().put(false);
 		}
+		drawer.setCategorySelected(category);
 	}
 
 	@Override
