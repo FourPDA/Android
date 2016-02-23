@@ -17,7 +17,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -98,7 +97,7 @@ public class CommentsFragment extends BaseFragment {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
 						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
-					} catch (IOException e) {
+					} catch (Exception e) {
 						L.error("Article comments request error", e);
 						return new LoadResult<>(e);
 					}
@@ -114,14 +113,15 @@ public class CommentsFragment extends BaseFragment {
 				adapter.setComments(result.getData());
 				adapter.notifyDataSetChanged();
 				supportView.hide();
-			} else {
-				supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData();
-					}
-				});
+				return;
 			}
+
+			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData();
+				}
+			});
 		}
 
 		@Override

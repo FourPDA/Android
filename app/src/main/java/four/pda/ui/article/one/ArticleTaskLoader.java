@@ -6,7 +6,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -47,7 +46,7 @@ public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
 	public LoadResult<String> loadInBackground() {
 		try {
 			return new LoadResult<>(client.getArticleContent(date, id));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			L.error("Article request error", e);
 			return new LoadResult<>(e);
 		}

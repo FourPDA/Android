@@ -25,7 +25,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -176,7 +175,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 						dao.setArticles(articles, category, needClearData);
 
 						return new LoadResult<>(dao.getArticleCursor(category));
-					} catch (IOException e) {
+					} catch (Exception e) {
 						L.error("Articles page request error", e);
 						return new LoadResult<>(e);
 					}
@@ -197,26 +196,29 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 				supportView.hide();
 				upButton.setVisibility(View.VISIBLE);
-			} else {
-				int itemCount = adapter.getItemCount();
 
-				View.OnClickListener retryListener = new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData(force);
-					}
-				};
-
-				if (itemCount == 0) {
-					upButton.setVisibility(View.GONE);
-					supportView.showError(getString(R.string.article_list_network_error), retryListener);
-				} else {
-					Snackbar
-							.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
-							.setAction(R.string.retry_button, retryListener)
-							.show();
-				}
+				return;
 			}
+
+			int itemCount = adapter.getItemCount();
+
+			View.OnClickListener retryListener = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData(force);
+				}
+			};
+
+			if (itemCount == 0) {
+				upButton.setVisibility(View.GONE);
+				supportView.showError(getString(R.string.article_list_network_error), retryListener);
+				return;
+			}
+
+			Snackbar
+					.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
+					.setAction(R.string.retry_button, retryListener)
+					.show();
 		}
 
 		@Override
