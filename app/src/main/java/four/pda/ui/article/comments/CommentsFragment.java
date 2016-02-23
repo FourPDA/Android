@@ -20,9 +20,12 @@ import org.androidannotations.annotations.ViewById;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.FourPdaClient;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.AbstractComment;
 import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
@@ -45,11 +48,12 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Bean FourPdaClient client;
+	@Inject FourPdaClient client;
 	private CommentsAdapter adapter;
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.comments_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);

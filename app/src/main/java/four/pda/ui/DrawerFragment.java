@@ -26,11 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import four.pda.FourPdaClient;
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.analytics.Analytics;
 import four.pda.client.CategoryType;
+import four.pda.client.FourPdaClient;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -59,8 +62,9 @@ public class DrawerFragment extends Fragment {
 	@ViewById TextView profileLoginView;
 
 	@Bean Analytics analytics;
-	@Bean FourPdaClient client;
 	@Pref Preferences_ preferences;
+
+	@Inject FourPdaClient client;
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
     private Map<View, CategoryType> map = new HashMap<>();
@@ -75,8 +79,9 @@ public class DrawerFragment extends Fragment {
 
     @AfterViews
     void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
-        map.put(allCategoryView, CategoryType.ALL);
+		map.put(allCategoryView, CategoryType.ALL);
         map.put(newsCategoryView, CategoryType.NEWS);
         map.put(gamesCategoryView, CategoryType.GAMES);
         map.put(reviewsCategoryView, CategoryType.REVIEWS);

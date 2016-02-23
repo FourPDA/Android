@@ -28,11 +28,14 @@ import org.androidannotations.annotations.ViewById;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.analytics.Analytics;
 import four.pda.client.CategoryType;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryTitleMap;
@@ -59,7 +62,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@Bean Dao dao;
 	@Bean Analytics analytics;
-	@Bean FourPdaClient client;
+
+	@Inject FourPdaClient client;
 
 	private int page = 1;
 
@@ -68,6 +72,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();

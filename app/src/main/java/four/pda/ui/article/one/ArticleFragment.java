@@ -27,10 +27,13 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
-import four.pda.FourPdaClient;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
@@ -61,11 +64,13 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Bean FourPdaClient client;
 	@Bean EventBus eventBus;
+
+	@Inject FourPdaClient client;
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		webView.getSettings().setJavaScriptEnabled(true);
 

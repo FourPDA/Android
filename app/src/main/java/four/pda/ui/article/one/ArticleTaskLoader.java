@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.client.FourPdaClient;
 import four.pda.ui.LoadResult;
 
@@ -19,12 +22,16 @@ public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticleTaskLoader.class);
 
-	private FourPdaClient client;
+	@Inject FourPdaClient client;
+
 	private long id;
 	private Date date;
 
 	public ArticleTaskLoader(Context context, FourPdaClient client, long id, Date date) {
 		super(context);
+
+		((App) context.getApplicationContext()).component().inject(this);
+
 		this.client = client;
 		this.id = id;
 		this.date = date;
