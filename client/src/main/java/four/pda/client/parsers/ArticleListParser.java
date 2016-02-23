@@ -1,4 +1,4 @@
-package four.pda.client;
+package four.pda.client.parsers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,6 +54,12 @@ public class ArticleListParser extends AbstractParser {
 		if (url.contains("/special/")) {
 			// Не парсим специальные ссылки
 			// TODO Парсить спец. ссылки в отдельную модель
+			return null;
+		}
+
+		if (url.contains("/tag/")) {
+			// Не парсим статьи-тэги
+			// TODO Парсить статьи-тэги отдельно
 			return null;
 		}
 

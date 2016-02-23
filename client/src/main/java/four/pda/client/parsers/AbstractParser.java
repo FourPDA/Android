@@ -1,4 +1,4 @@
-package four.pda.client;
+package four.pda.client.parsers;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -15,8 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import four.pda.ui.article.list.ListActivity;
-import four.pda.ui.article.list.ListActivity_;
+import four.pda.ui.article.NewsActivity;
+import four.pda.ui.article.NewsActivity_;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -35,7 +35,7 @@ public class ArticlesActivityTest {
 	private UiDevice device;
 
 	@Rule
-	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
+	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
 
 	@Before
 	public void startMainActivityFromHomeScreen() throws RemoteException {

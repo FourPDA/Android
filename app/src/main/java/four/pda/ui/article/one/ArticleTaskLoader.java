@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Date;
 
-import four.pda.FourPdaClient;
+import four.pda.client.FourPdaClient;
 import four.pda.ui.LoadResult;
 
 /**

@@ -3,7 +3,6 @@ package four.pda.ui.article.list;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -33,10 +32,10 @@ import four.pda.Dao;
 import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.analytics.Analytics;
+import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.CategoryType;
-import four.pda.ui.DrawerFragment;
+import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 
@@ -70,9 +69,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@AfterViews
 	void afterViews() {
 
-		toolbar.setTitle(category.getTitle());
+		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
-		selectedCategoryInDrawer();
 
 		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
@@ -116,15 +114,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	void upButton() {
 		analytics.articlesList().scrollUp(layoutManager.findFirstVisibleItemPosition());
 		layoutManager.scrollToPosition(0);
-	}
-
-	private void selectedCategoryInDrawer() {
-		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.drawer);
-		if (fragment == null) return;
-
-		if (fragment instanceof DrawerFragment) {
-			((DrawerFragment) fragment).setCategorySelected(category);
-		}
 	}
 
 	private void loadData(boolean force) {

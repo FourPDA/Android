@@ -6,27 +6,23 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import four.pda.ui.article.list.ListActivity;
-import four.pda.ui.article.list.ListActivity_;
+import four.pda.ui.article.NewsActivity;
+import four.pda.ui.article.NewsActivity_;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by Klishin.Pavel on 01.02.2016.
@@ -38,7 +34,7 @@ public class BaseFragmentTest {
 	private UiDevice device;
     //TODO Add SLF4J logging
 	@Rule
-	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(ListActivity_.class);
+	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
 
 	@Before
 	public void startMainActivityFromHomeScreen() throws RemoteException {

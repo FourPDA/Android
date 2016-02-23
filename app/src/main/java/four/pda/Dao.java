@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
 import four.pda.dao.Article;
 import four.pda.dao.ArticleDao;
 import four.pda.dao.DaoMaster;
 import four.pda.dao.DaoSession;
-import four.pda.ui.CategoryType;
 
 /**
  * Created by asavinova on 10/04/15.

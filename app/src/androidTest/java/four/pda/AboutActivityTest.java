@@ -15,8 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import four.pda.ui.AboutActivity;
 import four.pda.ui.AboutActivity_;
-import four.pda.ui.article.list.ListActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -35,7 +35,7 @@ public class AboutActivityTest {
 	private UiDevice device;
 
 	@Rule
-	public ActivityTestRule<ListActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
+	public ActivityTestRule<AboutActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
 
 	@Before
 	public void startMainActivityFromHomeScreen() throws RemoteException {
