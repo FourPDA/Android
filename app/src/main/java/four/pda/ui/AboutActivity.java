@@ -1,6 +1,6 @@
 package four.pda.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -20,7 +20,7 @@ import four.pda.R;
  * Created by asavinova on 15/04/15.
  */
 @EActivity(R.layout.activity_about)
-public class AboutActivity extends ActionBarActivity {
+public class AboutActivity extends AppCompatActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(AboutActivity.class);
 
