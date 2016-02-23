@@ -96,6 +96,12 @@ public class DrawerFragment extends Fragment {
 		updateProfile();
     }
 
+	public void setCategorySelected(CategoryType categoryType) {
+		for (Map.Entry<View, CategoryType> entry : map.entrySet()) {
+			entry.getKey().setSelected(entry.getValue() == categoryType);
+		}
+	}
+
 	private void updateProfile() {
 		long profileId = preferences.profileId().get();
 		String login = preferences.profileLogin().get();
@@ -137,23 +143,12 @@ public class DrawerFragment extends Fragment {
         AboutActivity_.intent(getActivity()).start();
     }
 
-    public void setCategorySelected(CategoryType categoryType) {
-        for (Map.Entry<View, CategoryType> entry : map.entrySet()) {
-            if (entry.getValue() == categoryType) {
-                setViewSelected(entry.getKey());
-                return;
-            }
+	private void setViewSelected(View selectedView) {
+        for (View view : map.keySet()) {
+            view.setSelected(view == selectedView);
         }
-        throw new IllegalStateException("No view for category " + categoryType.name());
-    }
-
-    private void setViewSelected(View view) {
-        for (View iterView : map.keySet()) {
-            iterView.setSelected(false);
-        }
-        view.setSelected(true);
         for (ChangeCategoryListener listener : listeners) {
-            listener.onChange(map.get(view));
+            listener.onChange(map.get(selectedView));
         }
     }
 

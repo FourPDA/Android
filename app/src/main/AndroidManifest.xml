@@ -11,7 +11,7 @@
 		android:theme="@style/AppTheme"
         android:name="four.pda.App">
 
-		<activity android:name=".ui.article.list.ListActivity_">
+		<activity android:name=".ui.article.NewsActivity_">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -19,14 +19,15 @@
 		</activity>
 
 		<activity android:name=".ui.AboutActivity_"
-			android:parentActivityName=".ui.article.list.ListActivity_"/>
+			android:parentActivityName=".ui.article.NewsActivity_"/>
 
 		<activity android:name=".ui.auth.AuthActivity_"
-			android:parentActivityName=".ui.article.list.ListActivity_"/>
+			android:parentActivityName=".ui.article.NewsActivity_"/>
 
 	    <meta-data
             android:name="io.fabric.ApiKey"
             android:value="d724677e763ff1af8652a27b2a20f363c5193560" />
+
     </application>
 
 </manifest>

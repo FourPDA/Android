@@ -1,10 +1,11 @@
-package four.pda.ui.article.list;
+package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -17,64 +18,65 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.CategoryType;
-import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.DrawerFragment;
-import four.pda.ui.article.ShowArticleEvent;
-import four.pda.ui.article.ShowCommentsEvent;
+import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.comments.CommentsFragment_;
+import four.pda.ui.article.list.ListFragment;
+import four.pda.ui.article.list.ListFragment_;
+import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleFragment_;
 
 /**
  * Created by asavinova on 10/04/15.
  */
 @EActivity(R.layout.activity_articles)
-public class ListActivity extends FragmentActivity implements DrawerFragment.ChangeCategoryListener {
+public class NewsActivity extends FragmentActivity implements DrawerFragment.ChangeCategoryListener {
 
-	private static final Logger L = LoggerFactory.getLogger(ListActivity.class);
+	private static final Logger L = LoggerFactory.getLogger(NewsActivity.class);
 
 	@FragmentById DrawerFragment drawer;
 
 	@ViewById DrawerLayout drawerLayout;
 
-	@InstanceState CategoryType category;
 	@Pref Preferences_ preferences;
 	@Bean EventBus eventBus;
 
-	private Timer timer;
-	private Toast toast;
+	@InstanceState CategoryType category = CategoryType.ALL;
+
+	private long backButtonLastPressedTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (category == null) {
-			category = CategoryType.ALL;
-		}
-
 		if (savedInstanceState == null) {
-			String categoryName = getString(CategoryTitleMap.get(category));
-			L.debug("Start list activity with category {}", categoryName);
+
+			L.debug("Add list fragment with category {}", category);
+
+			ListFragment fragment = ListFragment_.builder()
+					.category(category)
+					.build();
 
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.list_container, ListFragment_.builder().category(category).build())
-					.addToBackStack(null)
+					.add(R.id.list_container, fragment)
 					.commit();
 		}
+
 	}
 
 	@AfterViews
 	void afterViews() {
 		if (preferences.isFirstRun().get()) {
-			if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
+			if (drawerLayout != null) {
+				drawerLayout.openDrawer(GravityCompat.START);
+			}
 			preferences.isFirstRun().put(false);
 		}
+		drawer.setCategorySelected(category);
 	}
 
 	@Override
@@ -89,16 +91,20 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 		super.onPause();
 		drawer.removeListener(this);
 		eventBus.unregister(this);
-		if (timer != null) timer.cancel();
 	}
 
 	@Override
 	public void onChange(CategoryType newCategory) {
-		L.debug("Category type changed on {} type", newCategory.name());
-		if (drawerLayout != null) drawerLayout.closeDrawer(Gravity.START);
+		L.debug("Category changed to {}", newCategory.name());
+
+		if (drawerLayout != null) {
+			drawerLayout.closeDrawer(GravityCompat.START);
+		}
 
 		Fragment itemFragment = getSupportFragmentManager().findFragmentById(R.id.item_container);
+
 		if (category == newCategory) {
+			// Если категория та же, то убираем фрагмент со статьей и все
 			if (itemFragment != null) {
 				getSupportFragmentManager().beginTransaction()
 						.remove(itemFragment)
@@ -108,74 +114,68 @@ public class ListActivity extends FragmentActivity implements DrawerFragment.Cha
 			return;
 		}
 
-		category = newCategory;
-		if (itemFragment == null) {
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.list_container,
-							ListFragment_.builder()
-									.category(category)
-									.build())
-					.addToBackStack(null)
-					.commit();
-		} else {
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.list_container,
-							ListFragment_.builder()
-									.category(category)
-									.build())
-					.remove(itemFragment)
-					.addToBackStack(null)
-					.commit();
+		ListFragment listFragment = ListFragment_.builder()
+				.category(newCategory)
+				.build();
+
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+				.replace(R.id.list_container, listFragment);
+
+		if (itemFragment != null) {
+			transaction.remove(itemFragment);
 		}
+
+		transaction
+				.addToBackStack(null)
+				.commit();
+
+		category = newCategory;
 	}
 
 	public void onEvent(ShowArticleEvent event) {
-		L.debug("Show article id {}", event.getId());
+		L.debug("Show article with id {}", event.getId());
+
+		ArticleFragment fragment = ArticleFragment_.builder()
+				.id(event.getId())
+				.date(event.getDate())
+				.title(event.getTitle())
+				.image(event.getImage())
+				.build();
+
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.item_container,
-						ArticleFragment_.builder()
-								.id(event.getId())
-								.date(event.getDate())
-								.title(event.getTitle())
-								.image(event.getImage())
-								.build())
+				.replace(R.id.item_container, fragment)
 				.addToBackStack(null)
 				.commit();
 	}
 
 	public void onEvent(ShowCommentsEvent event) {
-		L.debug("Show comments for article id {}", event.getId());
+		L.debug("Show comments for article with id {}", event.getId());
+
+		CommentsFragment fragment = CommentsFragment_.builder()
+				.id(event.getId())
+				.build();
+
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.item_container,
-						CommentsFragment_.builder()
-								.id(event.getId())
-								.build())
+				.replace(R.id.item_container, fragment)
 				.addToBackStack(null)
 				.commit();
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-			if (timer != null) {
-				if (toast != null) toast.cancel();
-				finish();
-			} else {
 
-				toast = Toast.makeText(this, R.string.exit_message, Toast.LENGTH_SHORT);
-				toast.show();
-
-				timer = new Timer();
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						timer = null;
-					}
-				}, 2000);
-
-			}
-		} else {
+		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 			super.onBackPressed();
+			return;
 		}
+
+		if (System.currentTimeMillis() - backButtonLastPressedTime > 2000) {
+			Toast.makeText(this, R.string.exit_message, Toast.LENGTH_SHORT).show();
+			backButtonLastPressedTime = System.currentTimeMillis();
+			return;
+		}
+
+		finish();
 	}
+
 }
