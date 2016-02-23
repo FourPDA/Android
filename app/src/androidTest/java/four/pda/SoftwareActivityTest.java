@@ -49,6 +49,7 @@ public class SoftwareActivityTest {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();
+		device.waitForWindowUpdate("four.pda", 100);
 
 		onView(withId(R.id.software_category_view)).perform(click());
 

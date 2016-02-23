@@ -51,6 +51,7 @@ public class AllArticlesTest {
 		//Открываем Navigaton Drawer методами UiAutomator:
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();
+		device.waitForWindowUpdate("four.pda", 100);
 		//Открываем категорию "Новости"
 		onView(withId(four.pda.R.id.all_category_view)).perform(click());
 		//Открываем первую статью из списка

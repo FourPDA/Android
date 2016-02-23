@@ -49,8 +49,10 @@ public class GamesActivityTest {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();
+		device.waitForWindowUpdate("four.pda", 100);
 
 		onView(withId(R.id.games_category_view)).perform(click());
+		device.waitForIdle();
 
 		UiObject openfirstButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
