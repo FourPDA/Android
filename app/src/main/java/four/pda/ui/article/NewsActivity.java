@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -18,14 +18,10 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.CategoryType;
-import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.DrawerFragment;
 import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.comments.CommentsFragment_;
@@ -76,7 +72,7 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 	void afterViews() {
 		if (preferences.isFirstRun().get()) {
 			if (drawerLayout != null) {
-				drawerLayout.openDrawer(Gravity.START);
+				drawerLayout.openDrawer(GravityCompat.START);
 			}
 			preferences.isFirstRun().put(false);
 		}
@@ -102,7 +98,7 @@ public class NewsActivity extends FragmentActivity implements DrawerFragment.Cha
 		L.debug("Category changed to {}", newCategory.name());
 
 		if (drawerLayout != null) {
-			drawerLayout.closeDrawer(Gravity.START);
+			drawerLayout.closeDrawer(GravityCompat.START);
 		}
 
 		Fragment itemFragment = getSupportFragmentManager().findFragmentById(R.id.item_container);
