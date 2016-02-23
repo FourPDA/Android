@@ -33,9 +33,9 @@ public class CaptchaParser {
 			Element img = divElement.select("img").first();
 			captcha.setUrl(img.attr("src"));
 		} catch (Exception e) {
-			String message = "Captcha parse exception";
+			String message = "Can't parse captcha";
 			L.error(message, e);
-			throw new ParseException(message);
+			throw new ParseException(message, e);
 		}
 
 		return captcha;

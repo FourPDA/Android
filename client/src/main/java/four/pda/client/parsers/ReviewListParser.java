@@ -30,9 +30,9 @@ public class ReviewListParser extends AbstractParser {
 			try {
 				articles.add(articleFromElement(element));
 			} catch (Exception e) {
-				String message = "Review list parse exception";
+				String message = "Can't parse reviews list";
 				L.error(message, e);
-				throw new ParseException(message);
+				throw new ParseException(message, e);
 			}
 		}
 

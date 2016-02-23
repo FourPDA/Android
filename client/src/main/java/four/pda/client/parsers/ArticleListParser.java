@@ -35,9 +35,9 @@ public class ArticleListParser extends AbstractParser {
 			try {
 				article = parseListItem(element);
 			} catch (Exception e) {
-				String message = "List article parse exception";
+				String message = "Can't parse articles list";
 				L.error(message, e);
-				throw new ParseException(message);
+				throw new ParseException(message, e);
 			}
 
 			if (article == null) {

@@ -9,4 +9,8 @@ public class ParseException extends RuntimeException {
 		super(message);
 	}
 
+	public ParseException(String message, Exception e) {
+		super(message, e);
+	}
+
 }

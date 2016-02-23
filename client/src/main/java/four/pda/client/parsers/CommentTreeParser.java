@@ -37,9 +37,9 @@ public class CommentTreeParser extends AbstractParser {
 		try {
 			return parseList(element, 0);
 		} catch (Exception e) {
-			String message = "Comment tree parse exception";
+			String message = "Can't parse comments tree";
 			L.error(message, e);
-			throw new ParseException(message);
+			throw new ParseException(message, e);
 		}
 	}
 

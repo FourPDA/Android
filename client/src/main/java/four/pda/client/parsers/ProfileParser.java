@@ -29,9 +29,9 @@ public class ProfileParser {
 			Element loginElement = document.select("div.user-box > h1").first();
 			profile.setLogin(loginElement.text());
 		} catch (Exception e) {
-			String message = "Profile page parse exception";
+			String message = "Can't parse profile page";
 			L.error(message, e);
-			throw new ParseException(message);
+			throw new ParseException(message, e);
 		}
 
 		return profile;

@@ -30,9 +30,9 @@ public class ArticlePageParser {
 		try {
 			replaceVideoBlocks(content);
 		} catch (Exception e) {
-			String message = "Article page parse exception";
+			String message = "Can't parse article page";
 			L.error(message, e);
-			throw new ParseException(message);
+			throw new ParseException(message, e);
 		}
 		return content.html();
 	}
