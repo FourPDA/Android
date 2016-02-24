@@ -91,7 +91,7 @@ dependencies {
 	compile 'com.squareup.okhttp3:okhttp:3.1.1'
 	compile 'com.squareup.picasso:picasso:2.5.0'
 
-	compile 'com.github.swapii:PersistentCookieJar:v1.0.0'
+	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
 	compile 'com.jakewharton:butterknife:7.0.1'
 
