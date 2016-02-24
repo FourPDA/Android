@@ -10,8 +10,6 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
@@ -43,7 +41,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 				try {
 					Long memberId = preferences.profileId().get();
 					return new LoadResult<>(pdaClient.getProfile(memberId));
-				} catch (IOException e) {
+				} catch (Exception e) {
 					L.error("Profile request error", e);
 					return new LoadResult<>(e);
 				}

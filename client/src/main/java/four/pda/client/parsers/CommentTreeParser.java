@@ -6,11 +6,11 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 import four.pda.client.model.DeletedComment;
@@ -27,7 +27,20 @@ public class CommentTreeParser extends AbstractParser {
 	public List<AbstractComment> parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
 		Element element = document.select("div#comments").first();
-		return parseList(element, 0);
+
+		if (element == null) {
+			String message = "Comments content not found";
+			L.error(message);
+			throw new ParseException(message);
+		}
+
+		try {
+			return parseList(element, 0);
+		} catch (Exception e) {
+			String message = "Can't parse comments tree";
+			L.error(message, e);
+			throw new ParseException(message, e);
+		}
 	}
 
 	private List<AbstractComment> parseList(Element rootElement, int level) {
@@ -64,7 +77,7 @@ public class CommentTreeParser extends AbstractParser {
 		String metaString = element.select(".h-meta").first().text().trim();
 		try {
 			comment.setDate(DATE_FORMAT.parse(metaString));
-		} catch (ParseException e) {
+		} catch (java.text.ParseException e) {
 			String message = "Can't parse h-meta tag content as date";
 			L.error(message, e);
 			throw new RuntimeException(message, e);
