@@ -48,19 +48,37 @@ public class AboutActivityTest {
 	public void elementsPresented() throws UiObjectNotFoundException {
 
 		device.waitForWindowUpdate("four.pda", 100);
-		//Проверяем наличие всех элементов
-		onView(withId(R.id.description_text_view)).check(matches(isDisplayed()));
-		onView(withId(R.id.version_text_view)).check(matches(isDisplayed()));
-		onView(withId(R.id.build_number_text_view)).check(matches(isDisplayed()));
-		onView(withId(R.id.build_type_text_view)).check(matches(isDisplayed()));
-		//Свайпаем вверх, чтобы увидеть остальные элементы
-		UiObject aboutActivityField = device.findObject(new UiSelector().className("android.widget.LinearLayout").packageName("four.pda.debug"));
-		aboutActivityField.swipeUp(2);
-		onView(withText("swapii@gmail.com")).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withText("varann@gmail.com")).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(R.id.swapi_4pda)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(R.id.varann_4pda)).check(matches(isDisplayed())).check(matches(isClickable()));
 
+		//Проверяем наличие всех элементов
+		onView(withId(R.id.description_text_view))
+				.check(matches(isDisplayed()));
+
+		onView(withId(R.id.version_text_view))
+				.check(matches(isDisplayed()));
+
+		onView(withId(R.id.build_number_text_view))
+				.check(matches(isDisplayed()));
+
+		onView(withId(R.id.build_type_text_view))
+				.check(matches(isDisplayed()));
+
+		//Свайпаем вверх, чтобы увидеть остальные элементы
+		UiObject aboutActivityField = device.findObject(new UiSelector()
+				.className("android.widget.LinearLayout")
+				.packageName("four.pda.debug"));
+		aboutActivityField.swipeUp(2);
+		onView(withText("swapii@gmail.com"))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
+		onView(withText("varann@gmail.com"))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
+		onView(withId(R.id.swapi_4pda))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
+		onView(withId(R.id.varann_4pda))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
 	}
 
 }

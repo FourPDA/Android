@@ -47,11 +47,15 @@ public class GamesActivityTest {
 	@Test
 	public void gamesActivityTest() throws UiObjectNotFoundException, InterruptedException {
 
-		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
+		UiObject openDrawerButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageButton")
+				.packageName("four.pda.debug")
+				.instance(0));
 		openDrawerButton.click();
 		device.waitForWindowUpdate("four.pda", 100);
 
-		onView(withId(R.id.games_category_view)).perform(click());
+		onView(withId(R.id.games_category_view))
+				.perform(click());
 		device.waitForIdle();
 
 		UiObject openfirstButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
@@ -61,24 +65,39 @@ public class GamesActivityTest {
 
 		device.waitForWindowUpdate("four.pda", 100);
 
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 		pressBack();
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 		device.waitForIdle();
 
-		onView(withId(R.id.up_button)).perform(click());
-		onView(withId(R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
+		onView(withId(R.id.up_button))
+				.perform(click());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeDown())
+				.perform(swipeDown());
 		device.waitForWindowUpdate("four.pda", 100);
 		device.waitForIdle(150);
 
-		UiObject openSecondButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
+		UiObject openSecondButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageView").packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
 				.instance(1));
 		openSecondButton.click();
 
 		device.waitForWindowUpdate("four.pda", 100);
 
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 
 		pressBack();
 

@@ -47,37 +47,56 @@ public class AllArticlesTest {
 	@Test
 	public void allArticlesActivityTest() throws UiObjectNotFoundException, InterruptedException {
 		//Открываем Navigaton Drawer методами UiAutomator:
-		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
+		UiObject openDrawerButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageButton")
+				.packageName("four.pda.debug")
+				.instance(0));
 		openDrawerButton.click();
 		device.waitForWindowUpdate("four.pda", 100);
 		//Открываем категорию "Новости"
-		onView(withId(R.id.all_category_view)).perform(click());
+		onView(withId(R.id.all_category_view))
+				.perform(click());
 		//Открываем первую статью из списка
-		UiObject openfirstButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
+		UiObject openfirstButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageView").packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
 				.instance(0));
 		openfirstButton.click();
 		//Ждем пока окошко загрузиться
 		device.waitForWindowUpdate("four.pda", 100);
 		//Свайпаем туда-сюда
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 		pressBack();
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 		device.waitForIdle();
 		//Нажимаем на Floating Button для возврата в начало списка
 		onView(withId(R.id.up_button)).perform(click());
-		onView(withId(R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeDown())
+				.perform(swipeDown());
 		device.waitForWindowUpdate("four.pda", 100);
 		device.waitForIdle(150);
 		//Открываем вторую статью
-		UiObject openSecondButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
+		UiObject openSecondButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageView").packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
 				.instance(1));
 		openSecondButton.click();
 		//Ждем пока окошко загрузиться
 		device.waitForWindowUpdate("four.pda", 100);
 		//Свайпаем туда-сюда
-		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout))
+				.perform(swipeUp())
+				.perform(swipeUp())
+				.perform(swipeUp());
 		//Возвращаемся назад
 		pressBack();
 
