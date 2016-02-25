@@ -61,7 +61,7 @@ public class Dao {
 				for (ListArticle listArticle : listArticles) {
 
 					Article article = new Article();
-					article.setServerId(listArticle.getId());
+					article.setId(listArticle.getId());
 					article.setDate(listArticle.getDate());
 					article.setTitle(listArticle.getTitle());
 					article.setDescription(listArticle.getDescription());
@@ -93,9 +93,6 @@ public class Dao {
 
 	public Article getArticle(long id) {
 		ArticleDao dao = daoSession.getArticleDao();
-		return dao.queryBuilder()
-				.where(ArticleDao.Properties.ServerId.eq(id))
-				.limit(1)
-				.build().unique();
+		return dao.load(id);
 	}
 }
