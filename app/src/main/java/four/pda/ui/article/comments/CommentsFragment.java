@@ -96,7 +96,7 @@ public class CommentsFragment extends BaseFragment {
 				public LoadResult<List<AbstractComment>> loadInBackground() {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
+						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
 					} catch (Exception e) {
 						L.error("Article comments request error", e);
 						return new LoadResult<>(e);

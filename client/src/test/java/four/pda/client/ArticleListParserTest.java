@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import four.pda.client.model.ListArticle;
 import four.pda.client.parsers.ArticleListParser;
@@ -33,6 +35,22 @@ public class ArticleListParserTest extends AbstractTest {
 		for (ListArticle article : articles) {
 			String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
 			new ArticlePageParser().parse(source);
+		}
+	}
+
+	@Test
+	public void checkUniqueArticles() throws IOException {
+		Map<Long, ListArticle> articlesMap = new HashMap<>();
+
+		for (int page = 1; page <= 20; page++) {
+
+			List<ListArticle> articles = new ArticleListParser().parse(getHtmlSource("/page/" + page));
+
+			for (ListArticle article : articles) {
+				Assert.assertFalse("Повтор статьи!", articlesMap.containsKey(article.getId()));
+				articlesMap.put(article.getId(), article);
+			}
+
 		}
 	}
 
