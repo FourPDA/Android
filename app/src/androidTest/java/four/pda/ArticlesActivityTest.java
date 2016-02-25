@@ -23,6 +23,9 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeUp;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
@@ -62,6 +65,10 @@ public class ArticlesActivityTest {
 
 		device.waitForWindowUpdate("four.pda", 100);
 
+		onView(withId(R.id.comments_button))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
+
 		onView(withId(R.id.drawer_layout))
 				.perform(swipeUp())
 				.perform(swipeUp())
@@ -90,6 +97,10 @@ public class ArticlesActivityTest {
 		openSecondButton.click();
 
 		device.waitForWindowUpdate("four.pda", 100);
+
+		onView(withId(R.id.comments_button))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
 
 		onView(withId(R.id.drawer_layout))
 				.perform(swipeUp())

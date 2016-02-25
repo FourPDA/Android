@@ -33,6 +33,7 @@ public class BaseFragmentTest {
 
 	private UiDevice device;
     //TODO Add SLF4J logging
+	//TODO Add Screenshots
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
 
