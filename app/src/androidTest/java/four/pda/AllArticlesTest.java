@@ -51,7 +51,7 @@ public class AllArticlesTest {
 		openDrawerButton.click();
 		device.waitForWindowUpdate("four.pda", 100);
 		//Открываем категорию "Новости"
-		onView(withId(four.pda.R.id.all_category_view)).perform(click());
+		onView(withId(R.id.all_category_view)).perform(click());
 		//Открываем первую статью из списка
 		UiObject openfirstButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
@@ -60,13 +60,13 @@ public class AllArticlesTest {
 		//Ждем пока окошко загрузиться
 		device.waitForWindowUpdate("four.pda", 100);
 		//Свайпаем туда-сюда
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 		pressBack();
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 		device.waitForIdle();
 		//Нажимаем на Floating Button для возврата в начало списка
-		onView(withId(four.pda.R.id.up_button)).perform(click());
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
+		onView(withId(R.id.up_button)).perform(click());
+		onView(withId(R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
 		device.waitForWindowUpdate("four.pda", 100);
 		device.waitForIdle(150);
 		//Открываем вторую статью
@@ -77,7 +77,7 @@ public class AllArticlesTest {
 		//Ждем пока окошко загрузиться
 		device.waitForWindowUpdate("four.pda", 100);
 		//Свайпаем туда-сюда
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 		//Возвращаемся назад
 		pressBack();
 

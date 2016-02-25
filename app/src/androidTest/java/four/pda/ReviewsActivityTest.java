@@ -60,13 +60,13 @@ public class ReviewsActivityTest {
 
 		device.waitForWindowUpdate("four.pda", 100);
 
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 		pressBack();
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 		device.waitForIdle();
 
-		onView(withId(four.pda.R.id.up_button)).perform(click());
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
+		onView(withId(R.id.up_button)).perform(click());
+		onView(withId(R.id.drawer_layout)).perform(swipeDown()).perform(swipeDown());
 		device.waitForWindowUpdate("four.pda", 100);
 		device.waitForIdle(150);
 
@@ -77,7 +77,7 @@ public class ReviewsActivityTest {
 
 		device.waitForWindowUpdate("four.pda", 100);
 
-		onView(withId(four.pda.R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
+		onView(withId(R.id.drawer_layout)).perform(swipeUp()).perform(swipeUp()).perform(swipeUp());
 
 		pressBack();
 

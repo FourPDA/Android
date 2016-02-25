@@ -51,12 +51,12 @@ public class BaseFragmentTest {
 		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName("four.pda.debug").instance(0));
 		openDrawerButton.click();
 		//Убеждаемся, что все пункты в наличии через Espresso:
-		onView(withId(four.pda.R.id.all_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.news_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.articles_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.reviews_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.software_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.games_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
-		onView(withId(four.pda.R.id.about_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.all_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.news_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.articles_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.reviews_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.software_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.games_category_view)).check(matches(isDisplayed())).check(matches(isClickable()));
+		onView(withId(R.id.about_view)).check(matches(isDisplayed())).check(matches(isClickable()));
 	}
 }
