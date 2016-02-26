@@ -3,18 +3,15 @@ package four.pda.ui.article.one;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,6 +31,7 @@ import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
@@ -53,14 +51,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String title;
 	@FragmentArg String image;
 
-	@ViewById(R.id.scroll_view) ScrollView scrollView;
-	@ViewById ImageView imageView;
+	@ViewById Toolbar toolbar;
+	@ViewById CollapsingToolbarLayout collapsingToolbar;
+	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById WebView webView;
-	@ViewById View headerLayout;
 
-	@ViewById View infoLayout;
-	@ViewById TextView titleView;
-	@ViewById TextView dateView;
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
@@ -74,17 +69,10 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		webView.getSettings().setJavaScriptEnabled(true);
 
-		loadData();
+		collapsingToolbar.setTitle(title);
+		ViewUtils.loadImage(backdropImageView, image);
 
-		scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-			@Override
-			public void onScrollChanged() {
-				int scrollY = scrollView.getScrollY();
-				ViewGroup.LayoutParams params = headerLayout.getLayoutParams();
-				params.height = Math.max(infoLayout.getHeight(), imageView.getHeight() - scrollY);
-				headerLayout.setLayoutParams(params);
-			}
-		});
+		loadData();
 	}
 
 	@Click
@@ -104,9 +92,6 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(String content) {
-		ViewUtils.loadImage(imageView, image);
-		titleView.setText(title);
-		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
