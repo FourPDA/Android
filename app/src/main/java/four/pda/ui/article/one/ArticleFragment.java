@@ -3,7 +3,6 @@ package four.pda.ui.article.one;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +12,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -68,6 +69,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		((App) getActivity().getApplication()).component().inject(this);
 
 		webView.getSettings().setJavaScriptEnabled(true);
+
+		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getActivity().onBackPressed();
+			}
+		});
 
 		collapsingToolbar.setTitle(title);
 		ViewUtils.loadImage(backdropImageView, image);

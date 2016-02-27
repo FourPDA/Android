@@ -14,14 +14,13 @@
 			android:layout_height="wrap_content"
 			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-			<android.support.design.widget.CollapsingToolbarLayout
+			<net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 				android:id="@+id/collapsing_toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				app:layout_scrollFlags="scroll|exitUntilCollapsed"
 				app:contentScrim="?attr/colorPrimary"
-				app:expandedTitleMarginStart="48dp"
-				app:expandedTitleMarginEnd="64dp">
+				app:expandedTitleTextAppearance="@style/TextAppearance.ExpandedTitle">
 
 				<four.pda.ui.AspectRatioImageView
 					android:id="@+id/backdrop_image_view"
@@ -38,7 +37,7 @@
 					android:layout_height="?attr/actionBarSize"
 					app:layout_collapseMode="pin" />
 
-			</android.support.design.widget.CollapsingToolbarLayout>
+			</net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
 
 		</android.support.design.widget.AppBarLayout>
 

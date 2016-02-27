@@ -103,4 +103,9 @@
 		<item name="et_dividerHeight">1dp</item>
 	</style>
 
+	<style name="TextAppearance.ExpandedTitle"
+		parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+		<item name="android:textSize">@dimen/article_one_title_text</item>
+	</style>
+
 </resources>
