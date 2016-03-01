@@ -62,7 +62,9 @@ public class GamesActivityTest {
 				.perform(click());
 		device.waitForIdle();
 
-		UiObject openfirstButton = device.findObject(new UiSelector().className("android.widget.ImageView").packageName("four.pda.debug")
+		UiObject openfirstButton = device.findObject(new UiSelector()
+				.className("android.widget.ImageView")
+				.packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
 				.instance(0));
 		openfirstButton.click();
@@ -95,7 +97,8 @@ public class GamesActivityTest {
 		device.waitForIdle(150);
 
 		UiObject openSecondButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName("four.pda.debug")
+				.className("android.widget.ImageView")
+				.packageName("four.pda.debug")
 				.resourceId("four.pda.debug:id/image_view")
 				.instance(1));
 		openSecondButton.click();
