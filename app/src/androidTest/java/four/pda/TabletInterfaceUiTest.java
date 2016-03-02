@@ -32,6 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by Seva Powerman on 02.03.2016.
+ * Tablet Device is strongly recommended!
  */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
@@ -89,9 +90,16 @@ public class TabletInterfaceUiTest {
 
 		tabletInterfaceTest();
 
-		for (int i=0; i <=30; i++) {
+		for (int i=0; i <=41; i++) {
 			onView(withId(R.id.recycler_view)).perform(swipeUp());
+			if (i == 10)
+				device.setOrientationNatural();
+			if (i == 20);
+			    device.setOrientationLeft();
+			if (i == 30);
+			    device.setOrientationRight();
+			if (i == 40);
+			    device.setOrientationNatural();
 		}
-		device.setOrientationNatural();
 	}
 }
