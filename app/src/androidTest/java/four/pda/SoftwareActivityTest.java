@@ -48,7 +48,7 @@ public class SoftwareActivityTest {
 	}
 
 	@Test
-	public void softwareActivityTest() throws UiObjectNotFoundException, InterruptedException {
+	public void softwareActivityTest() throws UiObjectNotFoundException, InterruptedException, RemoteException {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
@@ -112,7 +112,6 @@ public class SoftwareActivityTest {
 				.perform(swipeUp())
 				.perform(swipeUp());
 		pressBack();
-
 	}
 
 }
