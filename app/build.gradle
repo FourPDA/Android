@@ -119,5 +119,6 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.12'
 
 	compile 'com.github.rey5137:material:1.2.2'
+	compile 'net.opacapp:multiline-collapsingtoolbar:1.0.0'
 
 }
