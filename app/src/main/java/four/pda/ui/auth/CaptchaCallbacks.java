@@ -9,8 +9,6 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 import four.pda.R;
 import four.pda.client.model.Captcha;
 import four.pda.ui.LoadResult;
@@ -36,7 +34,7 @@ class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captc
 			public LoadResult<Captcha> loadInBackground() {
 				try {
 					return new LoadResult<>(activity.client.getCaptcha());
-				} catch (IOException e) {
+				} catch (Exception e) {
 					L.error("Captcha request error", e);
 					return new LoadResult<>(e);
 				}

@@ -106,6 +106,7 @@ public class FourPdaClient {
 		}
 
 		String url = BASE_URL + category + "page/" + page;
+		url = addRandomToUrl(url);
 
 		Request request = new Request.Builder()
 				.url(url)
@@ -147,6 +148,8 @@ public class FourPdaClient {
 	public List<AbstractComment> getArticleComments(Date date, Long id) throws IOException {
 		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
 		String url = BASE_URL + fullId;
+		url = addRandomToUrl(url);
+		
 		Request request = new Request.Builder()
 				.url(url)
 				.build();
@@ -177,6 +180,10 @@ public class FourPdaClient {
 			L.error("Can't parse login page", e);
 			throw e;
 		}
+	}
+
+	private String addRandomToUrl(String url) {
+		return url + "?" + Math.random();
 	}
 
 }

@@ -1,33 +1,36 @@
-package four.pda;
+package four.pda.dagger;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
-import org.androidannotations.annotations.EBean;
-
+import dagger.Module;
+import dagger.Provides;
+import four.pda.client.FourPdaClient;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by asavinova on 15/02/16.
+ * Created by asavinova on 23/02/16.
  */
-@EBean(scope = EBean.Scope.Singleton)
-public class FourPdaClient extends four.pda.client.FourPdaClient {
+@Module
+public class ClientModule {
 
-	public FourPdaClient(Context context) {
-		super(getOkHttpClient(context));
+	private Context context;
+
+	public ClientModule(Context context) {
+		this.context = context;
 	}
 
-	@NonNull
-	private static OkHttpClient getOkHttpClient(Context context) {
+	@Provides
+	public FourPdaClient client() {
 		ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-		return new OkHttpClient.Builder()
+		OkHttpClient httpClient = new OkHttpClient.Builder()
 				.cookieJar(cookieJar)
 				.build();
+		return new FourPdaClient(httpClient);
 	}
 
 }

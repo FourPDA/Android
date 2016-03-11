@@ -3,22 +3,37 @@ package four.pda.client.parsers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import four.pda.client.exceptions.ParseException;
 
 /**
  * Created by asavinova on 09/04/15.
  */
 public class ArticlePageParser {
 
+	private static final Logger L = LoggerFactory.getLogger(ArticlePageParser.class);
+
 	private static final String PREVIEW_URL_STRING = "http://i.ytimg.com/vi/%s/hqdefault.jpg";
 
 	public String parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
 		Element content = document.select("div.content").first();
-		replaceVideoBlocks(content);
+
+		if (content == null) {
+			String message = "Article content not found";
+			L.error(message);
+			throw new ParseException(message);
+		}
+
+		try {
+			replaceVideoBlocks(content);
+		} catch (Exception e) {
+			String message = "Can't parse article page";
+			L.error(message, e);
+			throw new ParseException(message, e);
+		}
 		return content.html();
 	}
 

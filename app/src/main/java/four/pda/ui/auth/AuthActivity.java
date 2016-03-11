@@ -7,7 +7,6 @@ import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -15,9 +14,12 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import four.pda.FourPdaClient;
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.Captcha;
 import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.SupportView;
@@ -43,7 +45,8 @@ public class AuthActivity extends AppCompatActivity {
 	@ViewById Button enterView;
 	@ViewById SupportView supportView;
 
-	@Bean FourPdaClient client;
+	@Inject FourPdaClient client;
+
 	@Pref Preferences_ preferences;
 
 	Captcha captcha;
@@ -51,6 +54,7 @@ public class AuthActivity extends AppCompatActivity {
 	@AfterViews
 	void afterViews() {
 		L.debug("Start login activity");
+		((App) getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.auth_title);
 		setSupportActionBar(toolbar);

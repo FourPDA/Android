@@ -17,12 +17,14 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.FourPdaClient;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.AbstractComment;
 import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
@@ -45,11 +47,12 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Bean FourPdaClient client;
+	@Inject FourPdaClient client;
 	private CommentsAdapter adapter;
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.comments_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -93,8 +96,8 @@ public class CommentsFragment extends BaseFragment {
 				public LoadResult<List<AbstractComment>> loadInBackground() {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
-					} catch (IOException e) {
+						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
+					} catch (Exception e) {
 						L.error("Article comments request error", e);
 						return new LoadResult<>(e);
 					}
@@ -110,14 +113,15 @@ public class CommentsFragment extends BaseFragment {
 				adapter.setComments(result.getData());
 				adapter.notifyDataSetChanged();
 				supportView.hide();
-			} else {
-				supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData();
-					}
-				});
+				return;
 			}
+
+			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData();
+				}
+			});
 		}
 
 		@Override
