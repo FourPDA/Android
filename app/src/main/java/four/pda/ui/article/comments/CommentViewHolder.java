@@ -16,7 +16,7 @@ import four.pda.client.model.Comment;
 /**
  * Created by asavinova on 05/12/15.
  */
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class CommentViewHolder extends RecyclerView.ViewHolder {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
 
@@ -24,25 +24,30 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.nick_view) TextView nickView;
 	@Bind(R.id.date_view) TextView dateView;
 	@Bind(R.id.content_view) TextView contentView;
+	@Bind(R.id.reply_button) TextView replyButton;
 
-	public ViewHolder(View view) {
+	public CommentViewHolder(View view) {
 		super(view);
 		ButterKnife.bind(this, view);
 	}
 
 	public void setComment(AbstractComment abstractComment) {
 
-		if (abstractComment instanceof Comment) {
+		boolean isNormalComment = abstractComment instanceof Comment;
+		if (isNormalComment) {
 			Comment comment = (Comment) abstractComment;
-
-			authorInfoView.setVisibility(View.VISIBLE);
 
 			nickView.setText(comment.getNickname());
 
 			String verboseDate = DATE_FORMAT.format(comment.getDate());
 			dateView.setText(verboseDate);
-		} else {
-			authorInfoView.setVisibility(View.GONE);
+		}
+
+		authorInfoView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
+
+		replyButton.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
+		if (abstractComment.getLevel() >= 8) {
+			replyButton.setVisibility(View.GONE);
 		}
 
 		contentView.setText(Html.fromHtml(abstractComment.getContent()));

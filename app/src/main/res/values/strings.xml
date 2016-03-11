@@ -55,5 +55,7 @@
 	<string name="captcha_hint">Введите число цифрами</string>
 	<string name="auth_title">Вход</string>
 	<string name="auth_network_error">Не удалось загрузить информацию для авторизации.</string>
+	<string name="reply">Ответить</string>
+	<string name="add_comment">Оставить комментарий</string>
 
 </resources>
