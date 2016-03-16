@@ -5,6 +5,7 @@ import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import four.pda.EventBus_;
 import four.pda.R;
 
 /**
@@ -17,6 +18,14 @@ public class AddCommentViewHolder extends RecyclerView.ViewHolder {
 	public AddCommentViewHolder(View view) {
 		super(view);
 		ButterKnife.bind(this, view);
+
+		addCommentButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EventBus_.getInstance_(v.getContext())
+						.post(new AddCommentEvent());
+			}
+		});
 	}
 
 }

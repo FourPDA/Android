@@ -56,6 +56,11 @@
 	<string name="auth_title">Вход</string>
 	<string name="auth_network_error">Не удалось загрузить информацию для авторизации.</string>
 	<string name="reply">Ответить</string>
+
 	<string name="add_comment">Оставить комментарий</string>
+	<string name="add_comment_dialog_title">Добавление комментария</string>
+	<string name="add_comment_text_hint">Важно! Мы напоминаем вам о необходимости уважать собеседников. Любые проявления хамства и неуважения к другим людям, их мнению, устройству или операционной системе наказываются переводом вашего аккаунта в режим &quot;только чтение&quot; на срок от 3 до 7 суток и автоматическому снижению кармы до отрицательных значений.</string>
+
+	<string name="cancel">Отменить</string>
 
 </resources>

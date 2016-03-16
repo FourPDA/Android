@@ -1,9 +1,5 @@
 package four.pda.ui.article.comments;
 
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,18 +13,14 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.Dao;
+import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.AbstractComment;
-import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 
 /**
@@ -47,8 +39,10 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
+	@Bean EventBus eventBus;
+
 	@Inject FourPdaClient client;
-	private CommentsAdapter adapter;
+	CommentsAdapter adapter;
 
 	@AfterViews
 	void afterViews() {
@@ -80,54 +74,29 @@ public class CommentsFragment extends BaseFragment {
 		loadData();
 	}
 
-	private void loadData() {
+	void loadData() {
 		refresh.setRefreshing(true);
 		supportView.showProgress();
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new CommentsCallbacks(this)).forceLoad();
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
 
-		@Override
-		public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
-			return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(getActivity()) {
-				@Override
-				public LoadResult<List<AbstractComment>> loadInBackground() {
-					Article article = dao.getArticle(CommentsFragment.this.id);
-					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
-					} catch (Exception e) {
-						L.error("Article comments request error", e);
-						return new LoadResult<>(e);
-					}
-				}
-			};
-		}
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
+	}
 
-		@Override
-		public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
-			refresh.setRefreshing(false);
-
-			if (result.getException() == null) {
-				adapter.setComments(result.getData());
-				adapter.notifyDataSetChanged();
-				supportView.hide();
-				return;
-			}
-
-			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData();
-				}
-			});
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
-		}
-
+	public void onEvent(AddCommentEvent event) {
+		AddCommentFragment_.builder()
+				.build()
+				.show(getChildFragmentManager(), "add_comment");
 	}
 
 }

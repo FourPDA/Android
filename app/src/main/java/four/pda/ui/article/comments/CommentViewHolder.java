@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
@@ -31,16 +32,24 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 		ButterKnife.bind(this, view);
 	}
 
-	public void setComment(AbstractComment abstractComment) {
+	public void setComment(final AbstractComment abstractComment) {
 
 		boolean isNormalComment = abstractComment instanceof Comment;
 		if (isNormalComment) {
-			Comment comment = (Comment) abstractComment;
+			final Comment comment = (Comment) abstractComment;
 
 			nickView.setText(comment.getNickname());
 
 			String verboseDate = DATE_FORMAT.format(comment.getDate());
 			dateView.setText(verboseDate);
+
+			replyButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					EventBus_.getInstance_(v.getContext())
+							.post(new AddCommentEvent(comment.getId(), comment.getNickname()));
+				}
+			});
 		}
 
 		authorInfoView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
