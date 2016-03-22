@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -186,4 +187,8 @@ public class FourPdaClient {
 		return url + "?" + Math.random();
 	}
 
+	public List<AbstractComment> addComment(String message, Long replyId) {
+		//TODO Реализовать запрос
+		return new ArrayList<>();
+	}
 }

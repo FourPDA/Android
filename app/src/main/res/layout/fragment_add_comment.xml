@@ -9,35 +9,52 @@
 		android:id="@+id/toolbar"
 		style="@style/Toolbar" />
 
-	<EditText
-		android:id="@+id/message_edit_text"
+	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1"
-		android:gravity="top"
-		android:hint="@string/add_comment_text_hint"
-		android:inputType="textMultiLine" />
+		android:layout_height="match_parent">
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="right"
-		android:orientation="horizontal"
-		android:padding="@dimen/offset_normal">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
 
-		<TextView
-			android:id="@+id/cancel_button"
-			style="@style/MaterialFlatButton"
-			android:layout_gravity="center"
-			android:text="@string/cancel" />
+			<EditText
+				android:id="@+id/message_edit_text"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="top"
+				android:hint="@string/add_comment_text_hint"
+				android:inputType="textMultiLine" />
 
-		<TextView
-			android:id="@+id/add_comment_button"
-			style="@style/MaterialFlatButton"
-			android:layout_gravity="center"
-			android:layout_marginLeft="@dimen/offset_normal"
-			android:text="@string/add_comment" />
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right"
+				android:orientation="horizontal"
+				android:padding="@dimen/offset_normal">
 
-	</LinearLayout>
+				<TextView
+					android:id="@+id/cancel_button"
+					style="@style/MaterialFlatButton"
+					android:layout_gravity="center"
+					android:text="@string/cancel" />
+
+				<TextView
+					android:id="@+id/add_comment_button"
+					style="@style/MaterialFlatButton"
+					android:layout_gravity="center"
+					android:layout_marginLeft="@dimen/offset_normal"
+					android:text="@string/add_comment" />
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+		<four.pda.ui.SupportView_
+			android:id="@+id/support_view"
+			style="@style/SupportView"/>
+
+	</FrameLayout>
 
 </LinearLayout>

@@ -5,7 +5,7 @@ package four.pda.ui.article.comments;
  */
 public class AddCommentEvent {
 
-	private long replyId;
+	private Long replyId;
 	private String replyAuthor;
 
 	public AddCommentEvent() {
@@ -16,7 +16,7 @@ public class AddCommentEvent {
 		this.replyAuthor = replyAuthor;
 	}
 
-	public long getReplyId() {
+	public Long getReplyId() {
 		return replyId;
 	}
 

@@ -127,4 +127,32 @@ public class DummyFourPdaClient extends FourPdaClient {
 
 		return comments;
 	}
+
+	@Override
+	public List<AbstractComment> addComment(String message, Long replyId) {
+		Comment comment = new Comment();
+		comment.setId(System.currentTimeMillis());
+		comment.setDate(new Date());
+		comment.setNickname("You");
+		comment.setContent(message);
+
+		if (replyId == null) {
+			comment.setLevel(0);
+			comments.add(comment);
+			return comments;
+		}
+
+		List<AbstractComment> updatedComments = new ArrayList<>();
+		for (AbstractComment cmnt : comments) {
+			updatedComments.add(cmnt);
+
+			if (cmnt.getId() == replyId) {
+				comment.setLevel(cmnt.getLevel() + 1);
+				updatedComments.add(comment);
+			}
+		}
+		comments = updatedComments;
+		return comments;
+	}
+
 }

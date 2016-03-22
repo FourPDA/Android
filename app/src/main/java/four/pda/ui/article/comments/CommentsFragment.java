@@ -95,8 +95,15 @@ public class CommentsFragment extends BaseFragment {
 
 	public void onEvent(AddCommentEvent event) {
 		AddCommentFragment_.builder()
+				.replyId(event.getReplyId())
+				.replyAuthor(event.getReplyAuthor())
 				.build()
 				.show(getChildFragmentManager(), "add_comment");
+	}
+
+	public void onEvent(UpdateCommentsEvent event) {
+		adapter.setComments(event.getComments());
+		adapter.notifyDataSetChanged();
 	}
 
 }
