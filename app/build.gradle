@@ -17,6 +17,7 @@ android {
 		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
 		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
 		multiDexEnabled true
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 
 	signingConfigs {
@@ -124,6 +125,7 @@ dependencies {
 	androidTestCompile 'com.android.support:support-annotations:23.1.1'
 	androidTestCompile 'com.android.support.test:runner:0.4.1'
 	androidTestCompile 'com.android.support.test:rules:0.4'
+	androidTestCompile 'junit:junit:4.+'
 	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1'){
 		exclude group: 'com.squareup.dagger'
 	}

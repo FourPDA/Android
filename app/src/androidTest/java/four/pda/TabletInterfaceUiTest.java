@@ -94,11 +94,11 @@ public class TabletInterfaceUiTest {
 			onView(withId(R.id.recycler_view)).perform(swipeUp());
 			if (i == 10)
 				device.setOrientationNatural();
-			if (i == 20);
+			if (i == 20)
 			    device.setOrientationLeft();
-			if (i == 30);
+			if (i == 30)
 			    device.setOrientationRight();
-			if (i == 40);
+			if (i == 40)
 			    device.setOrientationNatural();
 		}
 	}
