@@ -18,7 +18,7 @@ import four.pda.client.model.Comment;
  */
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
 	@Bind(R.id.author_info_view) View authorInfoView;
 	@Bind(R.id.nick_view) TextView nickView;
