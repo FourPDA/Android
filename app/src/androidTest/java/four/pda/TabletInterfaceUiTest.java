@@ -13,6 +13,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-@Deprecated
+@Ignore
 public class TabletInterfaceUiTest {
 
 	private UiDevice device;
