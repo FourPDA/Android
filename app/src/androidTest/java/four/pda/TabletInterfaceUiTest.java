@@ -31,7 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Created by Seva Powerman on 02.03.2016.
+ * Created by Klishin Pavel on 02.03.2016.
  * Tablet Device is strongly recommended!
  */
 @RunWith(AndroidJUnit4.class)
@@ -39,6 +39,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class TabletInterfaceUiTest {
 
 	private UiDevice device;
+	final String packageName = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -55,7 +56,7 @@ public class TabletInterfaceUiTest {
 
 		device.waitForIdle();
 		device.setOrientationRight();
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 
 		onView(withId(R.id.all_category_view))
 				.check(matches(isDisplayed()))

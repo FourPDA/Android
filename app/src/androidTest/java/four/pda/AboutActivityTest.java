@@ -33,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AboutActivityTest {
 
 	private UiDevice device;
+	final String packageName = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<AboutActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
@@ -47,7 +48,7 @@ public class AboutActivityTest {
 	@Test
 	public void elementsPresented() throws UiObjectNotFoundException {
 
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 
 		//Проверяем наличие всех элементов
 		onView(withId(R.id.description_text_view))
@@ -65,7 +66,7 @@ public class AboutActivityTest {
 		//Свайпаем вверх, чтобы увидеть остальные элементы
 		UiObject aboutActivityField = device.findObject(new UiSelector()
 				.className("android.widget.LinearLayout")
-				.packageName("four.pda.debug"));
+				.packageName(packageName));
 		aboutActivityField.swipeUp(2);
 		onView(withText("swapii@gmail.com"))
 				.check(matches(isDisplayed()))

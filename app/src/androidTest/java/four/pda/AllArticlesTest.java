@@ -36,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class AllArticlesTest {
 
 	private UiDevice device;
+	final String packageName = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -52,21 +53,21 @@ public class AllArticlesTest {
 		//Открываем Navigaton Drawer методами UiAutomator:
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
-				.packageName("four.pda.debug")
+				.packageName(packageName)
 				.instance(0));
 		openDrawerButton.click();
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 		//Открываем категорию "Новости"
 		onView(withId(R.id.all_category_view))
 				.perform(click());
 		//Открываем первую статью из списка
 		UiObject openfirstButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName("four.pda.debug")
-				.resourceId("four.pda.debug:id/image_view")
+				.className("android.widget.ImageView").packageName(packageName)
+				.resourceId(packageName + ":id/image_view")
 				.instance(0));
 		openfirstButton.click();
 		//Ждем пока окошко загрузиться
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 		//Убеждаемся что кнопка "комментарии" есть на экране
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
@@ -89,16 +90,16 @@ public class AllArticlesTest {
 		onView(withId(R.id.drawer_layout))
 				.perform(swipeDown())
 				.perform(swipeDown());
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 		device.waitForIdle(150);
 		//Открываем вторую статью
 		UiObject openSecondButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName("four.pda.debug")
-				.resourceId("four.pda.debug:id/image_view")
+				.className("android.widget.ImageView").packageName(packageName)
+				.resourceId(packageName + ":id/image_view")
 				.instance(1));
 		openSecondButton.click();
 		//Ждем пока окошко загрузиться
-		device.waitForWindowUpdate("four.pda", 100);
+		device.waitForWindowUpdate(packageName, 100);
 		//Убеждаемся что кнопка "комментарии" есть на экране
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
