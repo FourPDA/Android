@@ -36,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
+@Deprecated
 public class TabletInterfaceUiTest {
 
 	private UiDevice device;
