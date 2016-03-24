@@ -75,8 +75,15 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 
 		{
-			Comment comment = new Comment();
+			DeletedComment comment = new DeletedComment();
 			comment.setId(0);
+			comment.setLevel(0);
+			comment.setContent("Комментарий удален");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(1);
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(0);
@@ -84,10 +91,48 @@ public class DummyFourPdaClient extends FourPdaClient {
 			comments.add(comment);
 		}
 		{
-			DeletedComment comment = new DeletedComment();
-			comment.setId(1);
-			comment.setLevel(0);
-			comment.setContent("Комментарий удален");
+			Comment comment = new Comment();
+			comment.setId(2);
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(1);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(3);
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(2);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(4);
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(3);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(5);
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(4);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(6);
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(5);
+			comment.setContent("Комментарий");
 			comments.add(comment);
 		}
 	}

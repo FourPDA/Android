@@ -3,6 +3,7 @@ package four.pda.ui.article.comments;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -25,9 +26,25 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.date_view) TextView dateView;
 	@Bind(R.id.content_view) TextView contentView;
 
-	public ViewHolder(View view) {
+	private Integer leftPadding;
+	private Integer level;
+	private int normalPadding;
+
+	public ViewHolder(final View view) {
 		super(view);
 		ButterKnife.bind(this, view);
+
+		normalPadding = view.getResources().getDimensionPixelSize(R.dimen.offset_normal);
+
+		view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+				leftPadding = view.getWidth() / 30;
+				setViewPadding();
+			}
+		});
 	}
 
 	public void setComment(AbstractComment abstractComment) {
@@ -47,9 +64,19 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 		contentView.setText(Html.fromHtml(abstractComment.getContent()));
 
-		int padding = itemView.getResources().getDimensionPixelSize(R.dimen.offset_normal);
-		itemView.setPadding(padding * (abstractComment.getLevel() + 1), padding, padding, padding);
+		level = abstractComment.getLevel();
+		setViewPadding();
+	}
 
+	private void setViewPadding() {
+		if (leftPadding == null) return;
+		if (level == null) return;
+
+		int left = normalPadding;
+		if (level > 0) {
+			left = normalPadding + leftPadding * level;
+		}
+		itemView.setPadding(left, normalPadding, normalPadding, normalPadding);
 	}
 
 }
