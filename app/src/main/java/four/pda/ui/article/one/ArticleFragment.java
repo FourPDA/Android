@@ -56,6 +56,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
+	@ViewById AspectRatioImageView backdropImageShadowView;
 	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
@@ -93,15 +94,18 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				float k = (float) width / height;
 				if (k > 1) {
 					backdropImageView.setAspectRatio(0.75f / k);
+					backdropImageShadowView.setAspectRatio(0.75f / k);
 					return;
 				}
 
 				if (k < 0.5) {
 					backdropImageView.setAspectRatio(0.5f);
+					backdropImageShadowView.setAspectRatio(0.5f);
 					return;
 				}
 
 				backdropImageView.setAspectRatio(k);
+				backdropImageShadowView.setAspectRatio(k);
  			}
 		});
 
