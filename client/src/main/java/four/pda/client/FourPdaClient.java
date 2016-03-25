@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -189,6 +188,6 @@ public class FourPdaClient {
 
 	public List<AbstractComment> addComment(String message, Long replyId) {
 		//TODO Реализовать запрос
-		return new ArrayList<>();
+		throw new UnsupportedOperationException("Not implemented");
 	}
 }
