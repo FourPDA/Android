@@ -2,6 +2,7 @@ package four.pda.ui.article.one;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +23,12 @@ import four.pda.R;
 @EViewGroup(R.layout.text_zoom_view)
 public class TextZoomPanel extends LinearLayout {
 
+	private static final int MINIMUM = 10;
+	private static final int MAXIMUM = 500;
+
 	@ViewById TextView textSizeView;
+	@ViewById View decreaseButton;
+	@ViewById View increaseButton;
 
 	@Bean EventBus eventBus;
 	@Pref Preferences_ preferences;
@@ -67,6 +73,18 @@ public class TextZoomPanel extends LinearLayout {
 	}
 
 	private void zoom(int zoom) {
+
+		if (zoom < MINIMUM) {
+			zoom = MINIMUM;
+		}
+
+		if (zoom > MAXIMUM) {
+			zoom = MAXIMUM;
+		}
+
+		decreaseButton.setVisibility(zoom == MINIMUM ? INVISIBLE : VISIBLE);
+		increaseButton.setVisibility(zoom == MAXIMUM ? INVISIBLE : VISIBLE);
+
 		setZoom(zoom);
 		preferences.textZoom().put(zoom);
 		eventBus.post(new SetTextZoomEvent(zoom));
