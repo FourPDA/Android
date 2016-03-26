@@ -22,7 +22,7 @@ public class CommentTreeParser extends AbstractParser {
 
 	private static final Logger L = LoggerFactory.getLogger(CommentTreeParser.class);
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy | HH:ss");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy | HH:ss");
 
 	public List<AbstractComment> parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);

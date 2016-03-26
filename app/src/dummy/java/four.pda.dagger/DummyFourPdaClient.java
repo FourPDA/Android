@@ -75,8 +75,15 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 
 		{
-			Comment comment = new Comment();
+			DeletedComment comment = new DeletedComment();
 			comment.setId(0);
+			comment.setLevel(0);
+			comment.setContent("Комментарий удален");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(0);
@@ -84,17 +91,67 @@ public class DummyFourPdaClient extends FourPdaClient {
 			comments.add(comment);
 		}
 		{
-			DeletedComment comment = new DeletedComment();
-			comment.setId(1);
-			comment.setLevel(0);
-			comment.setContent("Комментарий удален");
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(1);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(2);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(3);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(4);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Test");
+			comment.setLevel(5);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Very long nick name that I can imagine in the world");
+			comment.setLevel(5);
+			comment.setContent("Комментарий");
 			comments.add(comment);
 		}
 	}
 
-
 	public DummyFourPdaClient(OkHttpClient client) {
 		super(client);
+	}
+
+	private static long newId() {
+		return (long) (Math.random() * Long.MAX_VALUE);
 	}
 
 	@Override
