@@ -1,6 +1,7 @@
 package four.pda;
 
 import org.androidannotations.annotations.sharedpreferences.DefaultBoolean;
+import org.androidannotations.annotations.sharedpreferences.DefaultInt;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
 /**
@@ -15,5 +16,8 @@ public interface Preferences {
 	long profileId();
 	String profileLogin();
 	String profilePhoto();
+
+	@DefaultInt(100)
+	int textZoom();
 
 }

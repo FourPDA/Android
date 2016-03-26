@@ -7,6 +7,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
@@ -23,6 +24,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.Date;
 
@@ -31,6 +33,7 @@ import javax.inject.Inject;
 import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
+import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.ui.AspectRatioImageView;
@@ -60,9 +63,12 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
+	@ViewById TextZoomPanel textZoomPanel;
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+
+	@Pref Preferences_ preferences;
 
 	@Inject FourPdaClient client;
 
@@ -71,12 +77,27 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		((App) getActivity().getApplication()).component().inject(this);
 
 		webView.getSettings().setJavaScriptEnabled(true);
+		webView.getSettings().setTextZoom(preferences.textZoom().get());
 
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getActivity().onBackPressed();
+			}
+		});
+
+		toolbar.inflateMenu(R.menu.article_menu);
+		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				if (item.getItemId() == R.id.text_zoom) {
+					textZoomPanel.setZoom(preferences.textZoom().get());
+					textZoomPanel.setVisibility(View.VISIBLE);
+					return true;
+				}
+
+				return false;
 			}
 		});
 
@@ -110,6 +131,18 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		});
 
 		loadData();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
 	}
 
 	@Click
@@ -154,6 +187,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ "<html lang=\"ru-RU\">\n"
 				+ "<head>"
 				+ "<link rel=\"stylesheet\" href=\"http://s.4pda.to/css/site.min.css?_=1429170453\"/>"
+				+ "<style>\n" +
+				"     .content-box {\n" +
+				"       font-size:110%!important;\n" +
+				"     }\n" +
+				"  </style>"
 				+ "</head>\n"
 				+ "\t<body itemscope itemtype=\"http://schema.org/WebPage\">"
 				+ "<div class=\"container\" itemscope=\"\" itemtype=\"http://schema.org/Article\">"
@@ -161,6 +199,10 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ content
 				+ "</div></div></div>"
 				+ "</body></html>";
+	}
+
+	public void onEvent(SetTextZoomEvent event) {
+		webView.getSettings().setTextZoom(event.getZoom());
 	}
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {

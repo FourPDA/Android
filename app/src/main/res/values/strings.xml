@@ -56,4 +56,9 @@
 	<string name="auth_title">Вход</string>
 	<string name="auth_network_error">Не удалось загрузить информацию для авторизации.</string>
 
+	<string name="text_zoom">Размер шрифта</string>
+	<string name="text_zoom_value">%s%%</string>
+	<string name="close">Закрыть</string>
+	<string name="reset">Сбросить</string>
+
 </resources>

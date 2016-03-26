@@ -48,6 +48,8 @@
 					android:id="@+id/toolbar"
 					android:layout_width="match_parent"
 					android:layout_height="?attr/actionBarSize"
+					app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+					app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
 					app:layout_collapseMode="pin" />
 
 			</net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
@@ -88,7 +90,14 @@
 
 	<four.pda.ui.SupportView_
 		android:id="@+id/support_view"
-		style="@style/SupportView"/>
+		style="@style/SupportView" />
+
+	<four.pda.ui.article.one.TextZoomPanel_
+		android:id="@+id/text_zoom_panel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:visibility="gone" />
 
 </FrameLayout>
 
