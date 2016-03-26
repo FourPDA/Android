@@ -41,16 +41,16 @@ public class TextZoomPanel extends LinearLayout {
 
 	@UiThread
 	public void setZoom(int zoom) {
-		textSizeView.setText(getResources().getString(R.string.zoom_text_size, zoom));
+		textSizeView.setText(getResources().getString(R.string.text_zoom_value, zoom));
 	}
 
-	@Click(R.id.decrease_view)
+	@Click(R.id.decrease_button)
 	void decrease() {
 		int zoom = preferences.textZoom().get();
 		zoom(zoom - 10);
 	}
 
-	@Click(R.id.increase_view)
+	@Click(R.id.increase_button)
 	void increase() {
 		int zoom = preferences.textZoom().get();
 		zoom(zoom + 10);
