@@ -83,7 +83,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(1);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(0);
@@ -92,7 +92,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(2);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(1);
@@ -101,7 +101,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(3);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(2);
@@ -110,7 +110,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(4);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(3);
@@ -119,7 +119,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(5);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(4);
@@ -128,18 +128,30 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 		{
 			Comment comment = new Comment();
-			comment.setId(6);
+			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(5);
 			comment.setContent("Комментарий");
 			comments.add(comment);
 		}
+		{
+			Comment comment = new Comment();
+			comment.setId(newId());
+			comment.setDate(new Date());
+			comment.setNickname("Very long nick name that I can imagine in the world");
+			comment.setLevel(5);
+			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
 	}
-
 
 	public DummyFourPdaClient(OkHttpClient client) {
 		super(client);
+	}
+
+	private static long newId() {
+		return (long) (Math.random() * Long.MAX_VALUE);
 	}
 
 	@Override
