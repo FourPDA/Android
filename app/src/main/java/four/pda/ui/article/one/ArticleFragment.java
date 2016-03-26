@@ -8,6 +8,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -55,6 +56,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
+	@ViewById AspectRatioImageView backdropImageShadowView;
 	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
@@ -80,6 +82,32 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		collapsingToolbar.setTitle(title);
 		ViewUtils.loadImage(backdropImageView, image);
+
+		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+				int width = getView().getWidth();
+				int height = getView().getHeight();
+
+				float k = (float) width / height;
+				if (k > 1) {
+					backdropImageView.setAspectRatio(0.75f / k);
+					backdropImageShadowView.setAspectRatio(0.75f / k);
+					return;
+				}
+
+				if (k < 0.5) {
+					backdropImageView.setAspectRatio(0.5f);
+					backdropImageShadowView.setAspectRatio(0.5f);
+					return;
+				}
+
+				backdropImageView.setAspectRatio(k);
+				backdropImageShadowView.setAspectRatio(k);
+ 			}
+		});
 
 		loadData();
 	}

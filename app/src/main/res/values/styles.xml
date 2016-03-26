@@ -106,6 +106,10 @@
 	<style name="TextAppearance.ExpandedTitle"
 		parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
 		<item name="android:textSize">@dimen/article_one_title_text</item>
+		<item name="android:shadowColor">#333</item>
+		<item name="android:shadowDx">1</item>
+		<item name="android:shadowDy">1</item>
+		<item name="android:shadowRadius">1</item>
 	</style>
 
 </resources>
