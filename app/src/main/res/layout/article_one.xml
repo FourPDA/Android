@@ -39,8 +39,9 @@
 						android:id="@+id/backdrop_image_shadow_view"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
+						android:layout_gravity="bottom"
 						app:aspectRatio="0.75"
-						android:background="@drawable/article_image_shadow"/>
+						android:background="@drawable/article_image_shadow" />
 
 				</FrameLayout>
 

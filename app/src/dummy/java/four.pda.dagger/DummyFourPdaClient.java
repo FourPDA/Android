@@ -63,12 +63,49 @@ public class DummyFourPdaClient extends FourPdaClient {
 			article.setPublishedDate(new Date());
 			articles.add(article);
 		}
+
 		{
 			ListArticle article = new ListArticle();
 			article.setId(4);
 			article.setTitle("Ошибка сети при запросе комментариев");
 			article.setDescription("");
 			article.setImage("http://s.4pda.to/Af3e6vSAQSlqjknILz0pcMd4igtNNtXXYZLvV.jpg");
+			article.setDate(new Date());
+			article.setPublishedDate(new Date());
+			articles.add(article);
+		}
+
+		{
+			// http://4pda.ru/2016/03/26/286724/
+			ListArticle article = new ListArticle();
+			article.setId(286724);
+			article.setTitle("Honor 7 получает обновление до Android Marshmallow");
+			article.setDescription("");
+			article.setImage("http://s.4pda.to/2RBAcCaBdc1x4jkcsl7mWqZlpBepS7dfWN5z0.jpg");
+			article.setDate(new Date());
+			article.setPublishedDate(new Date());
+			articles.add(article);
+		}
+
+		{
+			// http://4pda.ru/2016/03/25/286355/
+			ListArticle article = new ListArticle();
+			article.setId(286355);
+			article.setTitle("Microsoft работает над универсальным приложением Skype");
+			article.setDescription("");
+			article.setImage("http://s.4pda.to/2RBAdJQfItAff0ZxZkac7eLOd9jwhpr4Dw8W.jpg");
+			article.setDate(new Date());
+			article.setPublishedDate(new Date());
+			articles.add(article);
+		}
+
+		{
+			// http://4pda.ru/2016/03/25/286425/
+			ListArticle article = new ListArticle();
+			article.setId(286425);
+			article.setTitle("Выиграй 1 ТБ и антивирус на все гаджеты в конкурсе от Dr. Web");
+			article.setDescription("");
+			article.setImage("http://s.4pda.to/2RBAdFIaF2xopvCJdarD5jSlphuRODs2224z1.jpg");
 			article.setDate(new Date());
 			article.setPublishedDate(new Date());
 			articles.add(article);

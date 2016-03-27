@@ -113,20 +113,17 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				int height = getView().getHeight();
 
 				float k = (float) width / height;
+
 				if (k > 1) {
-					backdropImageView.setAspectRatio(0.75f / k);
-					backdropImageShadowView.setAspectRatio(0.75f / k);
-					return;
+					k = 0.75f / k;
 				}
 
 				if (k < 0.5) {
-					backdropImageView.setAspectRatio(0.5f);
-					backdropImageShadowView.setAspectRatio(0.5f);
-					return;
+					k = 0.5f;
 				}
 
 				backdropImageView.setAspectRatio(k);
-				backdropImageShadowView.setAspectRatio(k);
+				backdropImageShadowView.setAspectRatio(k * 0.6f);
  			}
 		});
 
