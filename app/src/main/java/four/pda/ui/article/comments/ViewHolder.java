@@ -28,21 +28,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 	private Integer leftPadding;
 	private Integer level;
-	private int normalPadding;
 
 	public ViewHolder(final View view) {
 		super(view);
 		ButterKnife.bind(this, view);
 
-		normalPadding = view.getResources().getDimensionPixelSize(R.dimen.offset_normal);
-
 		view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
 			public void onGlobalLayout() {
 				view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-				leftPadding = view.getWidth() / 30;
-				setViewPadding();
+				updatePaddings();
 			}
 		});
 	}
@@ -65,18 +60,26 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 		contentView.setText(Html.fromHtml(abstractComment.getContent()));
 
 		level = abstractComment.getLevel();
-		setViewPadding();
+		updatePaddings();
 	}
 
-	private void setViewPadding() {
-		if (leftPadding == null) return;
-		if (level == null) return;
+	private void updatePaddings() {
 
-		int left = normalPadding;
-		if (level > 0) {
-			left = normalPadding + leftPadding * level;
+		if (itemView.getWidth() > 0) {
+			leftPadding = itemView.getWidth() / 30;
 		}
-		itemView.setPadding(left, normalPadding, normalPadding, normalPadding);
+
+		if (leftPadding == null) {
+			return;
+		}
+
+		if (level == null) {
+			return;
+		}
+
+		int left = leftPadding * level;
+
+		itemView.setPadding(left, 0, 0, 0);
 	}
 
 }
