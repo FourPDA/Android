@@ -1,5 +1,9 @@
 package four.pda.ui;
 
+import com.crashlytics.android.Crashlytics;
+
+import four.pda.client.exceptions.ParseException;
+
 /**
  * Created by asavinova on 24/01/16.
  */
@@ -14,6 +18,17 @@ public class LoadResult<T> {
 
 	public LoadResult(Exception exception) {
 		this.exception = exception;
+		if (exception instanceof ParseException) {
+			Crashlytics.logException(exception);
+		}
+	}
+
+	public boolean isSuccess() {
+		return exception == null;
+	}
+
+	public boolean isError() {
+		return exception != null;
 	}
 
 	public T getData() {

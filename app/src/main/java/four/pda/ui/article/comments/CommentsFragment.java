@@ -1,5 +1,6 @@
 package four.pda.ui.article.comments;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -17,12 +18,14 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.FourPdaClient;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.AbstractComment;
 import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
@@ -45,11 +48,13 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Bean FourPdaClient client;
+	@Inject FourPdaClient client;
+
 	private CommentsAdapter adapter;
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.comments_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -60,9 +65,11 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		adapter = new CommentsAdapter(getActivity());
+
 		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.addItemDecoration(new SpaceDecorator(getResources().getDimensionPixelOffset(R.dimen.offset_normal)));
 
 		refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -93,8 +100,8 @@ public class CommentsFragment extends BaseFragment {
 				public LoadResult<List<AbstractComment>> loadInBackground() {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getServerId()));
-					} catch (IOException e) {
+						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
+					} catch (Exception e) {
 						L.error("Article comments request error", e);
 						return new LoadResult<>(e);
 					}
@@ -110,18 +117,45 @@ public class CommentsFragment extends BaseFragment {
 				adapter.setComments(result.getData());
 				adapter.notifyDataSetChanged();
 				supportView.hide();
-			} else {
-				supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData();
-					}
-				});
+				return;
 			}
+
+			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData();
+				}
+			});
 		}
 
 		@Override
 		public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
+		}
+
+	}
+
+	/**
+	 * http://stackoverflow.com/questions/24618829
+	 */
+	private class SpaceDecorator extends RecyclerView.ItemDecoration {
+
+		private final int verticalSpace;
+
+		public SpaceDecorator(int verticalSpace) {
+			this.verticalSpace = verticalSpace;
+		}
+
+		@Override
+		public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+								   RecyclerView.State state) {
+
+			outRect.bottom = verticalSpace;
+
+			// Last element has no margin
+			if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+				outRect.bottom = 0;
+			}
+
 		}
 
 	}

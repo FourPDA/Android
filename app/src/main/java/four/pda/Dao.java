@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
 import four.pda.dao.Article;
 import four.pda.dao.ArticleDao;
 import four.pda.dao.DaoMaster;
 import four.pda.dao.DaoSession;
-import four.pda.ui.CategoryType;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -61,7 +61,7 @@ public class Dao {
 				for (ListArticle listArticle : listArticles) {
 
 					Article article = new Article();
-					article.setServerId(listArticle.getId());
+					article.setId(listArticle.getId());
 					article.setDate(listArticle.getDate());
 					article.setTitle(listArticle.getTitle());
 					article.setDescription(listArticle.getDescription());
@@ -93,9 +93,6 @@ public class Dao {
 
 	public Article getArticle(long id) {
 		ArticleDao dao = daoSession.getArticleDao();
-		return dao.queryBuilder()
-				.where(ArticleDao.Properties.ServerId.eq(id))
-				.limit(1)
-				.build().unique();
+		return dao.load(id);
 	}
 }

@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
-	<RelativeLayout
+	<LinearLayout
 		android:id="@+id/author_info_view"
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
 		<TextView
 			android:id="@+id/nick_view"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:text="Nick"
-			android:textStyle="bold" />
+			android:layout_weight="1"
+			android:textStyle="bold"
+			android:singleLine="true"
+			tools:text="Nickname" />
+
+		<Space
+			android:layout_width="@dimen/offset_small"
+			android:layout_height="wrap_content" />
 
 		<TextView
 			android:id="@+id/date_view"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:text="5.12.15 | 20:30" />
+			android:singleLine="true"
+			tools:text="15.12.15 20:30" />
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentLeft="true"
-			android:layout_alignBottom="@id/nick_view"
-			android:background="@color/delimeter" />
+	</LinearLayout>
 
-	</RelativeLayout>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@color/delimeter" />
 
 	<TextView
 		android:id="@+id/content_view"

@@ -1,4 +1,4 @@
-package four.pda.client;
+package four.pda.client.parsers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,11 +7,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.ListArticle;
 
 /**
@@ -30,11 +30,26 @@ public class ArticleListParser extends AbstractParser {
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
-			ListArticle article = parseListItem(element);
+
+			ListArticle article;
+			try {
+				article = parseListItem(element);
+			} catch (Exception e) {
+				String message = "Can't parse articles list";
+				L.error(message, e);
+				throw new ParseException(message, e);
+			}
+
 			if (article == null) {
 				continue;
 			}
 			articles.add(article);
+		}
+
+		if (articles.isEmpty()) {
+			String message = "Articles list is empty";
+			L.error(message);
+			throw new ParseException(message);
 		}
 
 		return articles;
@@ -81,7 +96,7 @@ public class ArticleListParser extends AbstractParser {
 		String publishedDate = element.select("meta[itemprop=datePublished]").first().attr("content");
 		try {
 			article.setPublishedDate(PUBLISHED_DATE_FORMAT.parse(publishedDate));
-		} catch (ParseException e) {
+		} catch (java.text.ParseException e) {
 			String message = "Can't parse datePublished tag content as date";
 			L.error(message, e);
 			throw new RuntimeException(message, e);

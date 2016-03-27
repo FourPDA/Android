@@ -47,4 +47,8 @@ public class AspectRatioImageView extends ImageView {
 		typedArray.recycle();
 	}
 
+	public void setAspectRatio(float aspectRatio) {
+		this.aspectRatio = aspectRatio;
+		requestLayout();
+	}
 }

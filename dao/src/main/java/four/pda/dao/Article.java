@@ -7,7 +7,6 @@ package four.pda.dao;
 public class Article {
 
     private Long id;
-    private Long serverId;
     private java.util.Date date;
     private String title;
     private String description;
@@ -22,9 +21,8 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, Long serverId, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate) {
+    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate) {
         this.id = id;
-        this.serverId = serverId;
         this.date = date;
         this.title = title;
         this.description = description;
@@ -39,14 +37,6 @@ public class Article {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getServerId() {
-        return serverId;
-    }
-
-    public void setServerId(Long serverId) {
-        this.serverId = serverId;
     }
 
     public java.util.Date getDate() {

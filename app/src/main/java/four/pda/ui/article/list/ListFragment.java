@@ -3,7 +3,6 @@ package four.pda.ui.article.list;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -26,17 +25,19 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
-import four.pda.FourPdaClient;
 import four.pda.R;
 import four.pda.analytics.Analytics;
+import four.pda.client.CategoryType;
+import four.pda.client.FourPdaClient;
 import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.CategoryType;
-import four.pda.ui.DrawerFragment;
+import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 
@@ -60,7 +61,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@Bean Dao dao;
 	@Bean Analytics analytics;
-	@Bean FourPdaClient client;
+
+	@Inject FourPdaClient client;
 
 	private int page = 1;
 
@@ -69,10 +71,10 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
-		toolbar.setTitle(category.getTitle());
+		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
-		selectedCategoryInDrawer();
 
 		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
@@ -116,15 +118,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	void upButton() {
 		analytics.articlesList().scrollUp(layoutManager.findFirstVisibleItemPosition());
 		layoutManager.scrollToPosition(0);
-	}
-
-	private void selectedCategoryInDrawer() {
-		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.drawer);
-		if (fragment == null) return;
-
-		if (fragment instanceof DrawerFragment) {
-			((DrawerFragment) fragment).setCategorySelected(category);
-		}
 	}
 
 	private void loadData(boolean force) {
@@ -182,7 +175,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 						dao.setArticles(articles, category, needClearData);
 
 						return new LoadResult<>(dao.getArticleCursor(category));
-					} catch (IOException e) {
+					} catch (Exception e) {
 						L.error("Articles page request error", e);
 						return new LoadResult<>(e);
 					}
@@ -203,26 +196,29 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 				supportView.hide();
 				upButton.setVisibility(View.VISIBLE);
-			} else {
-				int itemCount = adapter.getItemCount();
 
-				View.OnClickListener retryListener = new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData(force);
-					}
-				};
-
-				if (itemCount == 0) {
-					upButton.setVisibility(View.GONE);
-					supportView.showError(getString(R.string.article_list_network_error), retryListener);
-				} else {
-					Snackbar
-							.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
-							.setAction(R.string.retry_button, retryListener)
-							.show();
-				}
+				return;
 			}
+
+			int itemCount = adapter.getItemCount();
+
+			View.OnClickListener retryListener = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData(force);
+				}
+			};
+
+			if (itemCount == 0) {
+				upButton.setVisibility(View.GONE);
+				supportView.showError(getString(R.string.article_list_network_error), retryListener);
+				return;
+			}
+
+			Snackbar
+					.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
+					.setAction(R.string.retry_button, retryListener)
+					.show();
 		}
 
 		@Override

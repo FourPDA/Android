@@ -6,16 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -24,13 +24,19 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
+import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
-import four.pda.FourPdaClient;
+import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.client.FourPdaClient;
+import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
@@ -50,36 +56,90 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String title;
 	@FragmentArg String image;
 
-	@ViewById(R.id.scroll_view) ScrollView scrollView;
-	@ViewById ImageView imageView;
+	@ViewById Toolbar toolbar;
+	@ViewById CollapsingToolbarLayout collapsingToolbar;
+	@ViewById AspectRatioImageView backdropImageView;
+	@ViewById AspectRatioImageView backdropImageShadowView;
 	@ViewById WebView webView;
-	@ViewById View headerLayout;
 
-	@ViewById View infoLayout;
-	@ViewById TextView titleView;
-	@ViewById TextView dateView;
 	@ViewById SupportView supportView;
+	@ViewById TextZoomPanel textZoomPanel;
 
 	@Bean Dao dao;
-	@Bean FourPdaClient client;
 	@Bean EventBus eventBus;
+
+	@Pref Preferences_ preferences;
+
+	@Inject FourPdaClient client;
 
 	@AfterViews
 	void afterViews() {
+		((App) getActivity().getApplication()).component().inject(this);
 
 		webView.getSettings().setJavaScriptEnabled(true);
+		webView.getSettings().setTextZoom(preferences.textZoom().get());
 
-		loadData();
-
-		scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onScrollChanged() {
-				int scrollY = scrollView.getScrollY();
-				ViewGroup.LayoutParams params = headerLayout.getLayoutParams();
-				params.height = Math.max(infoLayout.getHeight(), imageView.getHeight() - scrollY);
-				headerLayout.setLayoutParams(params);
+			public void onClick(View v) {
+				getActivity().onBackPressed();
 			}
 		});
+
+		toolbar.inflateMenu(R.menu.article_menu);
+		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				if (item.getItemId() == R.id.text_zoom) {
+					textZoomPanel.setZoom(preferences.textZoom().get());
+					textZoomPanel.setVisibility(View.VISIBLE);
+					return true;
+				}
+
+				return false;
+			}
+		});
+
+		collapsingToolbar.setTitle(title);
+		ViewUtils.loadImage(backdropImageView, image);
+
+		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+				int width = getView().getWidth();
+				int height = getView().getHeight();
+
+				float k = (float) width / height;
+
+				if (k > 1) {
+					k = 0.75f / k;
+				}
+
+				if (k < 0.5) {
+					k = 0.5f;
+				}
+
+				backdropImageView.setAspectRatio(k);
+				backdropImageShadowView.setAspectRatio(k * 0.6f);
+ 			}
+		});
+
+		loadData();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
 	}
 
 	@Click
@@ -99,9 +159,6 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(String content) {
-		ViewUtils.loadImage(imageView, image);
-		titleView.setText(title);
-		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -127,6 +184,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ "<html lang=\"ru-RU\">\n"
 				+ "<head>"
 				+ "<link rel=\"stylesheet\" href=\"http://s.4pda.to/css/site.min.css?_=1429170453\"/>"
+				+ "<style>\n" +
+				"     .content-box {\n" +
+				"       font-size:110%!important;\n" +
+				"     }\n" +
+				"  </style>"
 				+ "</head>\n"
 				+ "\t<body itemscope itemtype=\"http://schema.org/WebPage\">"
 				+ "<div class=\"container\" itemscope=\"\" itemtype=\"http://schema.org/Article\">"
@@ -134,6 +196,10 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				+ content
 				+ "</div></div></div>"
 				+ "</body></html>";
+	}
+
+	public void onEvent(SetTextZoomEvent event) {
+		webView.getSettings().setTextZoom(event.getZoom());
 	}
 
 	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
@@ -148,14 +214,15 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			if (result.getException() == null) {
 				updateData(result.getData());
 				supportView.hide();
-			} else {
-				supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loadData();
-					}
-				});
+				return;
 			}
+
+			supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadData();
+				}
+			});
 		}
 
 		@Override
