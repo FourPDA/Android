@@ -13,6 +13,5 @@
 			android:text="@string/add_comment" />
 
 	</android.support.v7.widget.CardView>
-
-
+	
 </FrameLayout>
