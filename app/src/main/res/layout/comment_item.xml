@@ -18,7 +18,7 @@
 			android:layout_weight="1"
 			android:textStyle="bold"
 			android:singleLine="true"
-			tools:text="Nickasasdas asd asd asd as dasd asd asd asd as dasd as das das das d" />
+			tools:text="Nickname" />
 
 		<Space
 			android:layout_width="@dimen/offset_small"
