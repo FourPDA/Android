@@ -2,10 +2,10 @@ package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,7 +34,7 @@ import four.pda.ui.article.one.ArticleFragment_;
  * Created by asavinova on 10/04/15.
  */
 @EActivity(R.layout.activity_articles)
-public class NewsActivity extends FragmentActivity implements DrawerFragment.ChangeCategoryListener {
+public class NewsActivity extends AppCompatActivity implements DrawerFragment.ChangeCategoryListener {
 
 	private static final Logger L = LoggerFactory.getLogger(NewsActivity.class);
 
