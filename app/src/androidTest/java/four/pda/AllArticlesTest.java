@@ -1,5 +1,6 @@
 package four.pda;
 
+import android.os.Environment;
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -14,6 +15,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import four.pda.ui.article.NewsActivity;
 import four.pda.ui.article.NewsActivity_;
@@ -37,6 +40,7 @@ public class AllArticlesTest {
 
 	private UiDevice device;
 	final String packageName = BuildConfig.APPLICATION_ID;
+	final String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -60,6 +64,7 @@ public class AllArticlesTest {
 		//Открываем категорию "Новости"
 		onView(withId(R.id.all_category_view))
 				.perform(click());
+		device.takeScreenshot(new File(WORKING_DIR + "/screenTwo.png"));
 		//Открываем первую статью из списка
 		UiObject openfirstButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageView").packageName(packageName)
