@@ -17,15 +17,13 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.Dao;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsResponse;
 import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
@@ -87,13 +85,13 @@ public class CommentsFragment extends BaseFragment {
 		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsResponse>> {
 
 		@Override
-		public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
-			return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(getActivity()) {
+		public Loader<LoadResult<CommentsResponse>> onCreateLoader(final int id, Bundle args) {
+			return new AsyncTaskLoader<LoadResult<CommentsResponse>>(getActivity()) {
 				@Override
-				public LoadResult<List<AbstractComment>> loadInBackground() {
+				public LoadResult<CommentsResponse> loadInBackground() {
 					Article article = dao.getArticle(CommentsFragment.this.id);
 					try {
 						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
@@ -106,11 +104,11 @@ public class CommentsFragment extends BaseFragment {
 		}
 
 		@Override
-		public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
+		public void onLoadFinished(Loader<LoadResult<CommentsResponse>> loader, LoadResult<CommentsResponse> result) {
 			refresh.setRefreshing(false);
 
 			if (result.getException() == null) {
-				adapter.setComments(result.getData());
+				adapter.setComments(result.getData().getComments());
 				adapter.notifyDataSetChanged();
 				supportView.hide();
 				return;
@@ -125,7 +123,7 @@ public class CommentsFragment extends BaseFragment {
 		}
 
 		@Override
-		public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
+		public void onLoaderReset(Loader<LoadResult<CommentsResponse>> loader) {
 		}
 
 	}
