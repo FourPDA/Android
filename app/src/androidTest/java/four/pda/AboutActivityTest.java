@@ -1,5 +1,6 @@
 package four.pda;
 
+import android.os.Environment;
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -14,6 +15,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import four.pda.ui.AboutActivity;
 import four.pda.ui.AboutActivity_;
@@ -34,6 +37,7 @@ public class AboutActivityTest {
 
 	private UiDevice device;
 	final String packageName = BuildConfig.APPLICATION_ID;
+	final String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
 	public ActivityTestRule<AboutActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
@@ -49,6 +53,9 @@ public class AboutActivityTest {
 	public void elementsPresented() throws UiObjectNotFoundException {
 
 		device.waitForWindowUpdate(packageName, 100);
+		if (packageName.matches("four.pda.debug")) {
+			device.takeScreenshot(new File(WORKING_DIR + "/screenFour.png"));
+		}
 
 		//Проверяем наличие всех элементов
 		onView(withId(R.id.description_text_view))
