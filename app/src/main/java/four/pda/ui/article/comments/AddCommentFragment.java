@@ -57,6 +57,11 @@ public class AddCommentFragment extends DialogFragment {
 			}
 		});
 
+		if (replyId != null){
+			String replyText = replyAuthor + ",\n";
+			messageEditText.setText(replyText);
+			messageEditText.setSelection(replyText.length());
+		}
 	}
 
 	@Override
