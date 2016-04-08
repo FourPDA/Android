@@ -1,6 +1,7 @@
 package four.pda.ui.article.comments;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,9 +68,11 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		adapter = new CommentsAdapter(getActivity());
+
 		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.addItemDecoration(new SpaceDecorator(getResources().getDimensionPixelOffset(R.dimen.offset_normal)));
 
 		refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -112,6 +115,7 @@ public class CommentsFragment extends BaseFragment {
 		} else {
 			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 		}
+
 	}
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
@@ -139,6 +143,32 @@ public class CommentsFragment extends BaseFragment {
 	public void onEvent(UpdateCommentsEvent event) {
 		adapter.setComments(event.getComments());
 		adapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * http://stackoverflow.com/questions/24618829
+	 */
+	private class SpaceDecorator extends RecyclerView.ItemDecoration {
+
+		private final int verticalSpace;
+
+		public SpaceDecorator(int verticalSpace) {
+			this.verticalSpace = verticalSpace;
+		}
+
+		@Override
+		public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+								   RecyclerView.State state) {
+
+			outRect.bottom = verticalSpace;
+
+			// Last element has no margin
+			if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+				outRect.bottom = 0;
+			}
+
+		}
+
 	}
 
 }

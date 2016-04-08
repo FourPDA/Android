@@ -22,19 +22,35 @@
 				app:contentScrim="?attr/colorPrimary"
 				app:expandedTitleTextAppearance="@style/TextAppearance.ExpandedTitle">
 
-				<four.pda.ui.AspectRatioImageView
-					android:id="@+id/backdrop_image_view"
+				<FrameLayout
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center"
-					android:scaleType="centerCrop"
-					app:layout_collapseMode="parallax"
-					app:aspectRatio="0.75" />
+					android:layout_height="wrap_content">
+
+					<four.pda.ui.AspectRatioImageView
+						android:id="@+id/backdrop_image_view"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center"
+						android:scaleType="centerCrop"
+						app:layout_collapseMode="parallax"
+						app:aspectRatio="0.75" />
+
+					<four.pda.ui.AspectRatioImageView
+						android:id="@+id/backdrop_image_shadow_view"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="bottom"
+						app:aspectRatio="0.75"
+						android:background="@drawable/article_image_shadow" />
+
+				</FrameLayout>
 
 				<android.support.v7.widget.Toolbar
 					android:id="@+id/toolbar"
 					android:layout_width="match_parent"
 					android:layout_height="?attr/actionBarSize"
+					app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+					app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
 					app:layout_collapseMode="pin" />
 
 			</net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
@@ -75,7 +91,14 @@
 
 	<four.pda.ui.SupportView_
 		android:id="@+id/support_view"
-		style="@style/SupportView"/>
+		style="@style/SupportView" />
+
+	<four.pda.ui.article.one.TextZoomPanel_
+		android:id="@+id/text_zoom_panel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:visibility="gone" />
 
 </FrameLayout>
 

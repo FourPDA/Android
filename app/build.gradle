@@ -17,6 +17,7 @@ android {
 		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
 		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
 		multiDexEnabled true
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 
 	signingConfigs {
@@ -95,8 +96,7 @@ dependencies {
 	compile 'com.google.dagger:dagger:2.0.2'
 	compile 'javax.annotation:javax.annotation-api:1.2'
 
-	def supportVersion = '23.0.1'
-
+	def supportVersion = '23.1.1'
 	compile "com.android.support:appcompat-v7:$supportVersion"
 	compile "com.android.support:recyclerview-v7:$supportVersion"
 	compile "com.android.support:design:$supportVersion"
@@ -121,4 +121,18 @@ dependencies {
 	compile 'com.github.rey5137:material:1.2.2'
 	compile 'net.opacapp:multiline-collapsingtoolbar:1.0.0'
 
+	androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+	androidTestCompile 'com.android.support:support-annotations:23.1.1'
+	androidTestCompile 'com.android.support.test:runner:0.4.1'
+	androidTestCompile 'com.android.support.test:rules:0.4'
+	androidTestCompile 'junit:junit:4.+'
+	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1'){
+		exclude group: 'com.squareup.dagger'
+	}
+	androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+	testCompile 'junit:junit:4.12'
+}
+
+configurations.all {
+	resolutionStrategy.force 'com.android.support:support-annotations:23.0.0'
 }

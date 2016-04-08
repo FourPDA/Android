@@ -114,8 +114,13 @@ public class DrawerFragment extends Fragment {
 
 		boolean isAuthorized = profileId != 0;
 
-		loginView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
-		logoutView.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
+		// TODO Раскомментировать при реализации добавления комментариев
+		// Закомментировано, так как авторизация без комментариев не нужна
+		//loginView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
+		//logoutView.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
+		loginView.setVisibility(View.GONE);
+		logoutView.setVisibility(View.GONE);
+
 		logoView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
 		profilePanel.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
 

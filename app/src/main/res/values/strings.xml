@@ -64,4 +64,9 @@
 	<string name="cancel">Отменить</string>
 	<string name="add_comment_network_error">Не удалось добавить комментарий</string>
 
+	<string name="text_zoom">Размер шрифта</string>
+	<string name="text_zoom_value">%s%%</string>
+	<string name="close">Закрыть</string>
+	<string name="reset">Сбросить</string>
+
 </resources>
