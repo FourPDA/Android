@@ -7,11 +7,13 @@ import java.util.List;
 
 import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
+import four.pda.client.LoginParams;
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
+import four.pda.client.model.Profile;
 import okhttp3.OkHttpClient;
 
 /**
@@ -155,4 +157,21 @@ public class DummyFourPdaClient extends FourPdaClient {
 		return comments;
 	}
 
+	@Override
+	public long login(LoginParams params) throws IOException {
+		return 4975039l;
+	}
+
+	@Override
+	public boolean logout() throws IOException {
+		return true;
+	}
+
+	@Override
+	public Profile getProfile(long id) throws IOException {
+		Profile profile = new Profile();
+		profile.setLogin("var.ann");
+		profile.setPhoto("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
+		return profile;
+	}
 }

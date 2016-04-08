@@ -107,7 +107,7 @@ public class DrawerFragment extends Fragment {
 		}
 	}
 
-	private void updateProfile() {
+	public void updateProfile() {
 		long profileId = preferences.profileId().get();
 		String login = preferences.profileLogin().get();
 		String photo = preferences.profilePhoto().get();
