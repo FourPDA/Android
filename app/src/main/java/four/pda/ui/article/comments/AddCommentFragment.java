@@ -1,11 +1,13 @@
 package four.pda.ui.article.comments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -62,6 +64,9 @@ public class AddCommentFragment extends DialogFragment {
 			messageEditText.setText(replyText);
 			messageEditText.setSelection(replyText.length());
 		}
+
+		InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 	}
 
 	@Override
