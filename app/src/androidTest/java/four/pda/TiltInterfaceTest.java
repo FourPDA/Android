@@ -57,7 +57,7 @@ public class TiltInterfaceTest {
 	}
 
 	@Test
-	public void tabletInterfaceTest () throws RemoteException, UiObjectNotFoundException {
+	public void tiltDevInterfaceTest () throws RemoteException, UiObjectNotFoundException {
 		device.waitForIdle();
 		device.setOrientationRight();
 
@@ -69,18 +69,31 @@ public class TiltInterfaceTest {
 
 		UiObject scrollView = device.findObject(new UiSelector()
 				.className("android.widget.ScrollView"));
-		scrollView.swipeUp(2);
+		scrollView.swipeUp(3);
 
 		device.waitForIdle();
-		scrollView.swipeDown(2);
+		scrollView.swipeDown(3);
 		device.waitForIdle();
 
 		device.setOrientationLeft();
 		openDrawerButton.click();
 
 		device.waitForIdle();
-		scrollView.swipeDown(2);
+		scrollView.swipeDown(3);
 		device.waitForIdle();
 
+		device.setOrientationNatural();
+		openDrawerButton.click();
+		device.waitForIdle();
+		scrollView.swipeDown(3);
+		scrollView.swipeUp(3);
+
+		device.waitForIdle();
+		device.setOrientationLeft();
+		openDrawerButton.click();
+		device.setOrientationRight();
+		device.setOrientationNatural();
+		device.setOrientationLeft();
+		device.setOrientationRight();
 	}
 }
