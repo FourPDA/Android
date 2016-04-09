@@ -10,6 +10,7 @@ import java.util.List;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsResponse;
+import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.CommentTreeParser;
@@ -120,13 +121,18 @@ public class CommentTreeParserTest extends AbstractTest {
 		if (tree == null) return;
 
 		for (AbstractComment comment : tree) {
+			checkCanComment(comment.getChildren());
+
+			if (comment instanceof DeletedComment) {
+				Assert.assertFalse("Deleted comment should not be able to comment", comment.canComment());
+				continue;
+			}
+
 			if (comment.getLevel() < 8) {
 				Assert.assertTrue("Comment below 8 level should be able to comment", comment.canComment());
 			} else {
 				Assert.assertFalse("Comment more than 8 levels should not be able to comment", comment.canComment());
 			}
-
-			checkCanComment(comment.getChildren());
 		}
 	}
 
