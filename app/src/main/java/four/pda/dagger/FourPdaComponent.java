@@ -2,6 +2,7 @@ package four.pda.dagger;
 
 import dagger.Component;
 import four.pda.ui.DrawerFragment;
+import four.pda.ui.article.comments.AddCommentFragment;
 import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.one.ArticleFragment;
@@ -25,5 +26,7 @@ public interface FourPdaComponent {
 	void inject(AuthActivity x);
 
 	void inject(DrawerFragment x);
+
+	void inject(AddCommentFragment x);
 
 }

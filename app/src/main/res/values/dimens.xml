@@ -11,6 +11,7 @@
 	<dimen name="offset_small">8dp</dimen>
 
 	<dimen name="button_min_height">48dp</dimen>
+	<dimen name="button_min_width">64dp</dimen>
 	<dimen name="button_internal_offset">8dp</dimen>
 
 	<dimen name="profile_photo_size">100dp</dimen>

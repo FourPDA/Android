@@ -1,10 +1,7 @@
 package four.pda.ui.article.comments;
 
+import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,19 +13,23 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.Dao;
+import four.pda.EventBus;
+import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.CommentsResponse;
-import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
+import four.pda.ui.UpdateProfileEvent;
+import four.pda.ui.auth.AuthActivity_;
 
 /**
  * Created by asavinova on 05/12/15.
@@ -37,6 +38,7 @@ import four.pda.ui.SupportView;
 public class CommentsFragment extends BaseFragment {
 
 	private static final int LOADER_ID = 0;
+	private static final int LOGIN_REQUEST_CODE = 0;
 
 	@FragmentArg long id;
 
@@ -46,9 +48,12 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Inject FourPdaClient client;
+	@Bean EventBus eventBus;
 
-	private CommentsAdapter adapter;
+	@Inject FourPdaClient client;
+	@Pref Preferences_ preferences;
+	CommentsAdapter adapter;
+	private AddCommentEvent addCommentEvent;
 
 	@AfterViews
 	void afterViews() {
@@ -82,54 +87,62 @@ public class CommentsFragment extends BaseFragment {
 		loadData();
 	}
 
-	private void loadData() {
+	void loadData() {
 		refresh.setRefreshing(true);
 		supportView.showProgress();
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new CommentsCallbacks(this)).forceLoad();
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsResponse>> {
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
 
-		@Override
-		public Loader<LoadResult<CommentsResponse>> onCreateLoader(final int id, Bundle args) {
-			return new AsyncTaskLoader<LoadResult<CommentsResponse>>(getActivity()) {
-				@Override
-				public LoadResult<CommentsResponse> loadInBackground() {
-					Article article = dao.getArticle(CommentsFragment.this.id);
-					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
-					} catch (Exception e) {
-						L.error("Article comments request error", e);
-						return new LoadResult<>(e);
-					}
-				}
-			};
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
+	}
+
+	public void onEvent(AddCommentEvent event) {
+		this.addCommentEvent = event;
+		boolean isAuthorized = preferences.profileId().get() != 0;
+
+		if (isAuthorized) {
+			showAddCommentDialog();
+		} else {
+			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 		}
 
-		@Override
-		public void onLoadFinished(Loader<LoadResult<CommentsResponse>> loader, LoadResult<CommentsResponse> result) {
-			refresh.setRefreshing(false);
+	}
 
-			if (result.getException() == null) {
-				adapter.setComments(result.getData().getComments());
-				adapter.notifyDataSetChanged();
-				supportView.hide();
-				return;
-			}
-
-			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData();
-				}
-			});
+	@OnActivityResult(LOGIN_REQUEST_CODE)
+	void onResult(int resultCode) {
+		if (getActivity().RESULT_OK == resultCode) {
+			updateProfile();
+			showAddCommentDialog();
 		}
+	}
 
-		@Override
-		public void onLoaderReset(Loader<LoadResult<CommentsResponse>> loader) {
-		}
+	@UiThread
+	void updateProfile() {
+		eventBus.post(new UpdateProfileEvent());
+	}
 
+	@UiThread
+	void showAddCommentDialog() {
+		AddCommentFragment_.builder()
+				.replyId(addCommentEvent.getReplyId())
+				.replyAuthor(addCommentEvent.getReplyAuthor())
+				.build()
+				.show(getChildFragmentManager(), "add_comment");
+	}
+
+	public void onEvent(UpdateCommentsEvent event) {
+		adapter.setComments(event.getComments());
+		adapter.notifyDataSetChanged();
 	}
 
 	/**

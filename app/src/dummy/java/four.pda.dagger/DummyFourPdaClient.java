@@ -7,12 +7,14 @@ import java.util.List;
 
 import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
+import four.pda.client.LoginParams;
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsResponse;
 import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
+import four.pda.client.model.Profile;
 import okhttp3.OkHttpClient;
 
 /**
@@ -113,19 +115,19 @@ public class DummyFourPdaClient extends FourPdaClient {
 		}
 
 		{
-			DeletedComment comment = new DeletedComment();
-			comment.setId(0);
-			comment.setLevel(0);
-			comment.setContent("Комментарий удален");
-			comments.add(comment);
-		}
-		{
 			Comment comment = new Comment();
 			comment.setId(newId());
 			comment.setDate(new Date());
 			comment.setNickname("Test");
 			comment.setLevel(0);
 			comment.setContent("Комментарий");
+			comments.add(comment);
+		}
+		{
+			DeletedComment comment = new DeletedComment();
+			comment.setId(0);
+			comment.setLevel(0);
+			comment.setContent("Комментарий удален");
 			comments.add(comment);
 		}
 		{
@@ -225,5 +227,50 @@ public class DummyFourPdaClient extends FourPdaClient {
 		response.setCanComment(true);
 
 		return response;
+	}
+
+	@Override
+	public List<AbstractComment> addComment(String message, Long replyId) {
+		Comment comment = new Comment();
+		comment.setId(System.currentTimeMillis());
+		comment.setDate(new Date());
+		comment.setNickname("You");
+		comment.setContent(message);
+
+		if (replyId == null) {
+			comment.setLevel(0);
+			comments.add(comment);
+			return comments;
+		}
+
+		List<AbstractComment> updatedComments = new ArrayList<>();
+		for (AbstractComment cmnt : comments) {
+			updatedComments.add(cmnt);
+
+			if (cmnt.getId() == replyId) {
+				comment.setLevel(cmnt.getLevel() + 1);
+				updatedComments.add(comment);
+			}
+		}
+		comments = updatedComments;
+		return comments;
+	}
+
+	@Override
+	public long login(LoginParams params) throws IOException {
+		return 4975039l;
+	}
+
+	@Override
+	public boolean logout() throws IOException {
+		return true;
+	}
+
+	@Override
+	public Profile getProfile(long id) throws IOException {
+		Profile profile = new Profile();
+		profile.setLogin("var.ann");
+		profile.setPhoto("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
+		return profile;
 	}
 }
