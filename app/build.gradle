@@ -6,18 +6,18 @@ apply plugin: 'io.fabric'
 android {
 
 	compileSdkVersion 23
-	buildToolsVersion '23.0.1'
+	buildToolsVersion '23.0.3'
 
 	defaultConfig {
 		applicationId 'four.pda'
 		versionCode Integer.parseInt(project.versionCode)
-		versionName '1.2.0'
+		versionName '1.3.0'
 		minSdkVersion 16
 		targetSdkVersion 23
-		buildConfigField "String", "VCS_BRANCH", "\"${project.vcsBranch}\""
-		buildConfigField "String", "VCS_COMMIT", "\"${project.vcsCommit}\""
+		buildConfigField 'String', 'VCS_BRANCH', "\"${project.vcsBranch}\""
+		buildConfigField 'String', 'VCS_COMMIT', "\"${project.vcsCommit}\""
 		multiDexEnabled true
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 	}
 
 	signingConfigs {
@@ -92,19 +92,20 @@ dependencies {
 	apt 'org.androidannotations:androidannotations:3.3.2'
 	compile 'org.androidannotations:androidannotations-api:3.3.2'
 
-	apt 'com.google.dagger:dagger-compiler:2.0.2'
-	compile 'com.google.dagger:dagger:2.0.2'
+	apt 'com.google.dagger:dagger-compiler:2.1'
+	compile 'com.google.dagger:dagger:2.1'
 	compile 'javax.annotation:javax.annotation-api:1.2'
 
-	def supportVersion = '23.1.1'
+	def supportVersion = '23.3.0'
 	compile "com.android.support:appcompat-v7:$supportVersion"
 	compile "com.android.support:recyclerview-v7:$supportVersion"
 	compile "com.android.support:design:$supportVersion"
+	compile "com.android.support:support-annotations:$supportVersion"
 
-    compile 'com.google.android.gms:play-services-analytics:8.1.0'
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
 
-	compile 'com.squareup.okhttp3:okhttp:3.1.1'
-	compile 'com.squareup.picasso:picasso:2.5.0'
+	compile 'com.squareup.okhttp3:okhttp:3.2.0'
+	compile 'com.squareup.picasso:picasso:2.5.2'
 
 	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
@@ -112,7 +113,7 @@ dependencies {
 
 	compile 'de.greenrobot:eventbus:2.4.0'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
@@ -122,15 +123,16 @@ dependencies {
 	compile 'net.opacapp:multiline-collapsingtoolbar:1.0.0'
 
 	androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
-	androidTestCompile 'com.android.support:support-annotations:23.1.1'
 	androidTestCompile 'com.android.support.test:runner:0.4.1'
 	androidTestCompile 'com.android.support.test:rules:0.4'
-	androidTestCompile 'junit:junit:4.+'
-	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1'){
+	androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1') {
 		exclude group: 'com.squareup.dagger'
 	}
-	androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+	androidTestCompile 'junit:junit:4.12'
+
 	testCompile 'junit:junit:4.12'
+
 }
 
 configurations.all {
