@@ -9,17 +9,15 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import four.pda.R;
-import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsResponse;
 import four.pda.dao.Article;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 11/03/16.
  */
-public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
+public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsResponse>> {
 
 	private static final Logger L = LoggerFactory.getLogger(CommentsCallbacks.class);
 
@@ -30,10 +28,10 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 	}
 
 	@Override
-	public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
-		return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(fragment.getActivity()) {
+	public Loader<LoadResult<CommentsResponse>> onCreateLoader(final int id, Bundle args) {
+		return new AsyncTaskLoader<LoadResult<CommentsResponse>>(fragment.getActivity()) {
 			@Override
-			public LoadResult<List<AbstractComment>> loadInBackground() {
+			public LoadResult<CommentsResponse> loadInBackground() {
 				Article article = fragment.dao.getArticle(fragment.id);
 				try {
 					return new LoadResult<>(fragment.client.getArticleComments(article.getDate(), article.getId()));
@@ -46,11 +44,11 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
+	public void onLoadFinished(Loader<LoadResult<CommentsResponse>> loader, LoadResult<CommentsResponse> result) {
 		fragment.refresh.setRefreshing(false);
 
 		if (result.getException() == null) {
-			fragment.adapter.setComments(result.getData());
+			fragment.adapter.setComments(result.getData().getComments());
 			fragment.adapter.notifyDataSetChanged();
 			fragment.supportView.hide();
 			return;
@@ -65,7 +63,7 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
+	public void onLoaderReset(Loader<LoadResult<CommentsResponse>> loader) {
 	}
 
 }
