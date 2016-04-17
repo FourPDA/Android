@@ -11,7 +11,7 @@ import four.pda.client.LoginParams;
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
-import four.pda.client.model.CommentsResponse;
+import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
@@ -213,7 +213,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 	}
 
 	@Override
-	public CommentsResponse getArticleComments(Date date, Long id) throws IOException {
+	public CommentsContainer getArticleComments(Date date, Long id) throws IOException {
 		if (id == 3) {
 			throw new ParseException("");
 		}
@@ -222,11 +222,11 @@ public class DummyFourPdaClient extends FourPdaClient {
 			throw new IOException();
 		}
 
-		CommentsResponse response = new CommentsResponse();
-		response.setComments(comments);
-		response.setCanComment(true);
+		CommentsContainer container = new CommentsContainer();
+		container.setComments(comments);
+		container.setCanAddNewComment(true);
 
-		return response;
+		return container;
 	}
 
 	@Override

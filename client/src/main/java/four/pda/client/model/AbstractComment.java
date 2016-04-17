@@ -11,7 +11,7 @@ public abstract class AbstractComment {
 	private String content;
 	private int level;
 	private List<AbstractComment> children;
-	private boolean canComment;
+	private boolean canReply;
 
 	public long getId() {
 		return id;
@@ -45,11 +45,11 @@ public abstract class AbstractComment {
 		this.children = children;
 	}
 
-	public boolean canComment() {
-		return canComment;
+	public boolean canReply() {
+		return canReply;
 	}
 
-	public void setCanComment(boolean canComment) {
-		this.canComment = canComment;
+	public void setCanReply(boolean canReply) {
+		this.canReply = canReply;
 	}
 }

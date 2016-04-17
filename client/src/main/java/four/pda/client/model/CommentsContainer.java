@@ -5,17 +5,17 @@ import java.util.List;
 /**
  * Created by asavinova on 05/04/16.
  */
-public class CommentsResponse {
+public class CommentsContainer {
 
-	private boolean canComment;
+	private boolean canAddNewComment;
 	private List<AbstractComment> comments;
 
-	public boolean canComment() {
-		return canComment;
+	public boolean canAddNewComment() {
+		return canAddNewComment;
 	}
 
-	public void setCanComment(boolean canComment) {
-		this.canComment = canComment;
+	public void setCanAddNewComment(boolean canAddNewComment) {
+		this.canAddNewComment = canAddNewComment;
 	}
 
 	public List<AbstractComment> getComments() {

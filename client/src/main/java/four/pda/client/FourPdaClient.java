@@ -11,7 +11,7 @@ import java.util.List;
 import four.pda.client.exceptions.LoginException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
-import four.pda.client.model.CommentsResponse;
+import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
 import four.pda.client.parsers.ArticleListParser;
@@ -146,7 +146,7 @@ public class FourPdaClient {
 		}
 	}
 
-	public CommentsResponse getArticleComments(Date date, Long id) throws IOException {
+	public CommentsContainer getArticleComments(Date date, Long id) throws IOException {
 		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
 		String url = BASE_URL + fullId;
 		url = addRandomToUrl(url);
