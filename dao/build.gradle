@@ -5,6 +5,12 @@ android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.3'
 
+	/**
+	 * Явное указание версии SDK нужно, чтобы при слиянии манифестов
+	 * Android не добавлял неявные разрешения для targetSdkVersion < 4.
+	 *
+	 * http://developer.android.com/intl/ru/tools/building/manifest-merge.html#implicit-permissions
+	 */
 	defaultConfig {
 		minSdkVersion 16
 		targetSdkVersion 23
