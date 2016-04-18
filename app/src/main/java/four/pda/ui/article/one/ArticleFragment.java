@@ -87,7 +87,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
-		toolbar.inflateMenu(R.menu.article_menu);
+		toolbar.inflateMenu(R.menu.article);
 		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {

@@ -2,13 +2,12 @@ package four.pda.ui.auth;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
-import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -43,7 +42,6 @@ public class AuthActivity extends AppCompatActivity {
 	@ViewById EditText passwordView;
 	@ViewById AspectRatioImageView captchaImageView;
 	@ViewById EditText captchaTextView;
-	@ViewById Button enterView;
 	@ViewById SupportView supportView;
 
 	@Inject FourPdaClient client;
@@ -65,8 +63,8 @@ public class AuthActivity extends AppCompatActivity {
 				finish();
 			}
 		});
-
-		setSupportActionBar(toolbar);
+		toolbar.inflateMenu(R.menu.auth);
+		toolbar.setOnMenuItemClickListener(new MenuListener());
 
 		loadCaptcha();
 	}
@@ -76,15 +74,28 @@ public class AuthActivity extends AppCompatActivity {
 		getLoaderManager().restartLoader(CAPTCHA_LOADER_ID, null, new CaptchaCallbacks(this)).forceLoad();
 	}
 
-	@Click(R.id.enter_view)
-	void loginClicked() {
+	void loadProfile() {
+		supportView.showProgress();
+		getLoaderManager().restartLoader(PROFILE_LOADER_ID, null, new ProfileCallbacks(this)).forceLoad();
+	}
+
+	void signIn() {
 		supportView.showProgress();
 		getLoaderManager().restartLoader(LOGIN_LOADER_ID, null, new LoginCallbacks(this)).forceLoad();
 	}
 
-	void loadProfile() {
-		supportView.showProgress();
-		getLoaderManager().restartLoader(PROFILE_LOADER_ID, null, new ProfileCallbacks(this)).forceLoad();
+	private class MenuListener implements Toolbar.OnMenuItemClickListener {
+
+		@Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.sign_in:
+                    signIn();
+                    break;
+            }
+            return false;
+        }
+
 	}
 
 }
