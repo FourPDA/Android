@@ -3,7 +3,7 @@
 	package="four.pda">
 
 	<uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 	<!-- Удалено необязательное разрешение WAKE_LOCK из библиотеки Measurement для Google Analytics.
 		При наличие Google Play на устройстве разрешение не нужно. -->
@@ -24,10 +24,11 @@
 		</activity>
 
 		<activity android:name=".ui.AboutActivity_"
-			android:parentActivityName=".ui.article.NewsActivity_"/>
+			android:parentActivityName=".ui.article.NewsActivity_" />
 
 		<activity android:name=".ui.auth.AuthActivity_"
-			android:parentActivityName=".ui.article.NewsActivity_"/>
+			android:parentActivityName=".ui.article.NewsActivity_"
+			android:theme="@style/Auth_Activity" />
 
 	    <meta-data
             android:name="io.fabric.ApiKey"

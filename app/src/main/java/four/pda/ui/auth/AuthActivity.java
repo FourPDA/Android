@@ -2,6 +2,7 @@ package four.pda.ui.auth;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
@@ -57,8 +58,15 @@ public class AuthActivity extends AppCompatActivity {
 		((App) getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.auth_title);
+		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		loadCaptcha();
 	}

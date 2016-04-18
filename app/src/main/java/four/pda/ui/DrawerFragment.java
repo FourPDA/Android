@@ -1,5 +1,6 @@
 package four.pda.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -114,12 +115,8 @@ public class DrawerFragment extends Fragment {
 
 		boolean isAuthorized = profileId != 0;
 
-		// TODO Раскомментировать при реализации добавления комментариев
-		// Закомментировано, так как авторизация без комментариев не нужна
-		//loginView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
-		//logoutView.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
-		loginView.setVisibility(View.GONE);
-		logoutView.setVisibility(View.GONE);
+		loginView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
+		logoutView.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
 
 		logoView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
 		profilePanel.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
@@ -137,7 +134,7 @@ public class DrawerFragment extends Fragment {
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
-		if (getActivity().RESULT_OK == resultCode) {
+		if (Activity.RESULT_OK == resultCode) {
 			updateProfile();
 		}
 	}
@@ -169,8 +166,8 @@ public class DrawerFragment extends Fragment {
 	class LogoutCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Boolean>> {
 
 		@Override
-		public Loader onCreateLoader(int loaderId, final Bundle args) {
-			return new AsyncTaskLoader(getActivity()) {
+		public Loader<LoadResult<Boolean>> onCreateLoader(int loaderId, final Bundle args) {
+			return new AsyncTaskLoader<LoadResult<Boolean>>(getActivity()) {
 				@Override
 				public LoadResult<Boolean> loadInBackground() {
 					try {
