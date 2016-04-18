@@ -1,10 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	package="four.pda">
 
 	<uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <application
+	<!-- Удалено необязательное разрешение WAKE_LOCK из библиотеки Measurement для Google Analytics.
+		При наличие Google Play на устройстве разрешение не нужно. -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" tools:node="remove" />
+
+	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
