@@ -26,6 +26,7 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsContainer;
 import four.pda.ui.SupportView;
 
 /**
@@ -101,7 +102,7 @@ public class AddCommentFragment extends DialogFragment {
 		getLoaderManager().restartLoader(ADD_COMMENT_LOADER_ID, null, new AddCommentCallbacks(this)).forceLoad();
 	}
 
-	void updateComments(List<AbstractComment> comments) {
+	void updateComments(CommentsContainer comments) {
 		eventBus.post(new UpdateCommentsEvent(comments));
 	}
 }

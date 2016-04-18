@@ -13,12 +13,13 @@ import java.util.List;
 
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsContainer;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 16/03/16.
  */
-public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
+public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
 
 	private static final Logger L = LoggerFactory.getLogger(AddCommentCallbacks.class);
 
@@ -29,10 +30,10 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
-		return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(fragment.getActivity()) {
+	public Loader<LoadResult<CommentsContainer>> onCreateLoader(final int id, Bundle args) {
+		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
-			public LoadResult<List<AbstractComment>> loadInBackground() {
+			public LoadResult<CommentsContainer> loadInBackground() {
 				try {
 					String message = fragment.messageEditText.getText().toString();
 					return new LoadResult<>(fragment.client.addComment(message, fragment.replyId));
@@ -45,7 +46,7 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
+	public void onLoadFinished(Loader<LoadResult<CommentsContainer>> loader, LoadResult<CommentsContainer> result) {
 		fragment.supportView.hide();
 
 		if (result.getException() == null) {
@@ -62,7 +63,7 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
+	public void onLoaderReset(Loader<LoadResult<CommentsContainer>> loader) {
 	}
 
 }

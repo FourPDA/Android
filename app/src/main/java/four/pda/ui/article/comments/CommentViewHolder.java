@@ -72,7 +72,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
 		authorInfoView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
 		delimeterView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
-		replyButton.setVisibility(isNormalComment || abstractComment.getLevel() < 8 ? View.VISIBLE : View.GONE);
+		replyButton.setVisibility(abstractComment.canReply() ? View.VISIBLE : View.GONE);
 
 		level = abstractComment.getLevel();
 		updatePaddings();

@@ -141,7 +141,7 @@ public class CommentsFragment extends BaseFragment {
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {
-		adapter.setComments(event.getComments());
+		adapter.setCommentsContainer(event.getCommentsContainer());
 		adapter.notifyDataSetChanged();
 	}
 

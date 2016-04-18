@@ -48,7 +48,7 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 		fragment.refresh.setRefreshing(false);
 
 		if (result.getException() == null) {
-			fragment.adapter.setComments(result.getData().getComments());
+			fragment.adapter.setCommentsContainer(result.getData());
 			fragment.adapter.notifyDataSetChanged();
 			fragment.supportView.hide();
 			return;

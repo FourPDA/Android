@@ -1,22 +1,20 @@
 package four.pda.ui.article.comments;
 
-import java.util.List;
-
-import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsContainer;
 
 /**
  * Created by asavinova on 16/03/16.
  */
 public class UpdateCommentsEvent {
 
-	private List<AbstractComment> comments;
+	private CommentsContainer container;
 
-	public UpdateCommentsEvent(List<AbstractComment> comments) {
-		this.comments = comments;
+	public UpdateCommentsEvent(CommentsContainer container) {
+		this.container = container;
 	}
 
-	public List<AbstractComment> getComments() {
-		return comments;
+	public CommentsContainer getCommentsContainer() {
+		return container;
 	}
 
 }
