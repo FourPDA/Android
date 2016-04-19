@@ -5,4 +5,8 @@
 		<attr name="aspectRatio" format="float"/>
 	</declare-styleable>
 
+	<declare-styleable name="SupportView">
+		<attr name="errorTextColor" format="color"/>
+	</declare-styleable>
+
 </resources>

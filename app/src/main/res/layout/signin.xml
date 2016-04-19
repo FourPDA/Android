@@ -58,7 +58,9 @@
 				<LinearLayout
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal">
+					android:orientation="horizontal"
+					android:divider="@drawable/divider_small"
+					android:showDividers="middle">
 
 					<four.pda.ui.AspectRatioImageView
 						android:id="@+id/captcha_image_view"
@@ -90,7 +92,8 @@
 
 		<four.pda.ui.SupportView_
 			android:id="@+id/support_view"
-			style="@style/SupportView"/>
+			style="@style/SupportView"
+			app:errorTextColor="@color/error" />
 
 	</FrameLayout>
 

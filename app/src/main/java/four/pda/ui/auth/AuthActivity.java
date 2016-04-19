@@ -26,7 +26,7 @@ import four.pda.ui.SupportView;
 /**
  * Created by asavinova on 19/02/16.
  */
-@EActivity(R.layout.activity_login)
+@EActivity(R.layout.signin)
 public class AuthActivity extends AppCompatActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(AuthActivity.class);
