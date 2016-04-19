@@ -1,11 +1,11 @@
 package four.pda.ui.auth;
 
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.rey.material.widget.EditText;
+import android.widget.ImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -21,7 +21,6 @@ import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Captcha;
-import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.SupportView;
 
 /**
@@ -38,10 +37,10 @@ public class AuthActivity extends AppCompatActivity {
 
 	@ViewById Toolbar toolbar;
 
-	@ViewById EditText loginView;
-	@ViewById EditText passwordView;
-	@ViewById AspectRatioImageView captchaImageView;
-	@ViewById EditText captchaTextView;
+	@ViewById TextInputEditText loginView;
+	@ViewById TextInputEditText passwordView;
+	@ViewById TextInputEditText captchaTextView;
+	@ViewById ImageView captchaImageView;
 	@ViewById SupportView supportView;
 
 	@Inject FourPdaClient client;

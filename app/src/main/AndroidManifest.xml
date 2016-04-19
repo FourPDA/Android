@@ -28,7 +28,8 @@
 
 		<activity android:name=".ui.auth.AuthActivity_"
 			android:parentActivityName=".ui.article.NewsActivity_"
-			android:theme="@style/Auth_Activity" />
+			android:theme="@style/Auth_Activity"
+			android:windowSoftInputMode="adjustResize" />
 
 	    <meta-data
             android:name="io.fabric.ApiKey"
