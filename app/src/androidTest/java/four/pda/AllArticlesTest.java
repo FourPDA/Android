@@ -60,17 +60,15 @@ public class AllArticlesTest {
 				.packageName(packageName)
 				.instance(0));
 		openDrawerButton.click();
-		if (packageName.matches("four.pda.debug")) {
 			device.waitForWindowUpdate(packageName, 300);
+		//Делаем первый скриншот
 			device.takeScreenshot(new File(WORKING_DIR + "/screenOne.png"));
-		}
 		//Открываем категорию "Новости"
 		onView(withId(R.id.all_category_view))
 				.perform(click());
-		if (packageName.matches("four.pda.debug")) {
 			device.waitForWindowUpdate(packageName, 300);
+		//Делаем второй скриншот
 			device.takeScreenshot(new File(WORKING_DIR + "/screenTwo.png"));
-		}
 		//Открываем первую статью из списка
 		UiObject openfirstButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageView").packageName(packageName)
@@ -111,10 +109,9 @@ public class AllArticlesTest {
 		openSecondButton.click();
 		//Ждем пока окошко загрузиться
 		device.waitForWindowUpdate(packageName, 100);
-		if (packageName.matches("four.pda.debug")) {
+		//Делаем третий скриншот
 			device.waitForWindowUpdate(packageName, 200);
 			device.takeScreenshot(new File(WORKING_DIR + "/screenThree.png"));
-		}
 		//Убеждаемся что кнопка "комментарии" есть на экране
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
