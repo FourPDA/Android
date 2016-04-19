@@ -44,7 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class TiltInterfaceTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
+	private final String packageName = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
