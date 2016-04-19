@@ -24,6 +24,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
 	private boolean canAddNewComment = false;
+	private int viewWidth;
 
 	public CommentsAdapter(Context context) {
 		inflater = LayoutInflater.from(context);
@@ -43,7 +44,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		if (getItemViewType(position) == COMMENT_TYPE) {
-			((CommentViewHolder) holder).setComment(comments.get(position));
+			((CommentViewHolder) holder).setComment(comments.get(position), viewWidth);
 		}
 	}
 
@@ -75,5 +76,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 			comments.add(comment);
 			addComments(comment.getChildren());
 		}
+	}
+
+	public void setViewWidth(int width) {
+		this.viewWidth = width;
 	}
 }
