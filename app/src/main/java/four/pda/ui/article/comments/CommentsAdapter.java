@@ -11,6 +11,7 @@ import java.util.List;
 
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.CommentsContainer;
 
 /**
  * Created by asavinova on 05/12/15.
@@ -22,6 +23,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
+	private boolean canAddNewComment = false;
 
 	public CommentsAdapter(Context context) {
 		inflater = LayoutInflater.from(context);
@@ -47,7 +49,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public int getItemCount() {
-		return comments.size() + 1;
+		return comments.size() + (canAddNewComment ? 1 : 0);
 	}
 
 	@Override
@@ -58,10 +60,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		return ADD_COMMENT_TYPE;
 	}
 
-	public void setComments(List<AbstractComment> tree) {
+	public void setCommentsContainer(CommentsContainer container) {
 		this.comments = new ArrayList<>();
 
-		addComments(tree);
+		canAddNewComment = container.canAddNewComment();
+		addComments(container.getComments());
 	}
 
 	private void addComments(List<AbstractComment> tree) {

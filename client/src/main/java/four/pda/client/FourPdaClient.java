@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import four.pda.client.exceptions.LoginException;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
@@ -187,7 +186,7 @@ public class FourPdaClient {
 		return url + "?" + Math.random();
 	}
 
-	public List<AbstractComment> addComment(String message, Long replyId) {
+	public CommentsContainer addComment(String message, Long replyId) {
 		//TODO Реализовать запрос
 		throw new UnsupportedOperationException("Not implemented");
 	}
