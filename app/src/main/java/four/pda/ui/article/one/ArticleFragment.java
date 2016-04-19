@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.internal.view.SupportMenuItem;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,15 +94,28 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				if (item.getItemId() == R.id.text_zoom) {
-					textZoomPanel.setZoom(preferences.textZoom().get());
-					textZoomPanel.setVisibility(View.VISIBLE);
-					return true;
+
+				switch (item.getItemId()) {
+					case R.id.text_zoom:
+						textZoomPanel.setZoom(preferences.textZoom().get());
+						textZoomPanel.setVisibility(View.VISIBLE);
+						return true;
 				}
 
 				return false;
 			}
 		});
+
+		{
+			Intent intent = ShareCompat.IntentBuilder.from(getActivity())
+					.setType("text/plain")
+					.setText(client.getArticleUrl(date, id))
+					.getIntent();
+
+			SupportMenuItem supportMenuItem = (SupportMenuItem) toolbar.getMenu().findItem(R.id.share);
+			ShareActionProvider actionProvider = (ShareActionProvider) supportMenuItem.getSupportActionProvider();
+			actionProvider.setShareIntent(intent);
+		}
 
 		collapsingToolbar.setTitle(title);
 		ViewUtils.loadImage(backdropImageView, image);
@@ -205,7 +221,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
 
 		@Override
-		public Loader onCreateLoader(int loaderId, final Bundle args) {
+		public Loader<LoadResult<String>> onCreateLoader(int loaderId, final Bundle args) {
 			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 
