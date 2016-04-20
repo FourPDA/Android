@@ -3,7 +3,6 @@ package four.pda.ui.article.comments;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -29,23 +28,12 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.content_view) TextView contentView;
 	@Bind(R.id.reply_button) TextView replyButton;
 
-	private Integer leftPadding;
-	private Integer level;
-
 	public CommentViewHolder(final View view) {
 		super(view);
 		ButterKnife.bind(this, view);
-
-		view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-				updatePaddings();
-			}
-		});
 	}
 
-	public void setComment(final AbstractComment abstractComment) {
+	public void setComment(final AbstractComment abstractComment, int viewWidth) {
 
 		boolean isNormalComment = abstractComment instanceof Comment;
 
@@ -74,27 +62,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 		delimeterView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
 		replyButton.setVisibility(abstractComment.canReply() ? View.VISIBLE : View.GONE);
 
-		level = abstractComment.getLevel();
-		updatePaddings();
-
-	}
-
-	private void updatePaddings() {
-
-		if (itemView.getWidth() > 0) {
-			leftPadding = itemView.getWidth() / 30;
-		}
-
-		if (leftPadding == null) {
-			return;
-		}
-
-		if (level == null) {
-			return;
-		}
-
-		int left = leftPadding * level;
-
+		int left = viewWidth / 30 * abstractComment.getLevel();
 		itemView.setPadding(left, 0, 0, 0);
 
 	}
