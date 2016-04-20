@@ -69,20 +69,21 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
-		adapter = new CommentsAdapter(getActivity());
-
-		if (getView() != null) {
-			adapter.setViewWidth(getView().getWidth());
-
-			getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-				@Override
-				public void onGlobalLayout() {
-					getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-					adapter.setViewWidth(getView().getWidth());
-					adapter.notifyDataSetChanged();
-				}
-			});
+		if (getView() == null) {
+			throw new IllegalStateException("View is NULL");
 		}
+
+		adapter = new CommentsAdapter(getActivity());
+		adapter.setViewWidth(getView().getWidth());
+
+		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				adapter.setViewWidth(getView().getWidth());
+				adapter.notifyDataSetChanged();
+			}
+		});
 
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

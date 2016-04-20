@@ -61,6 +61,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		return ADD_COMMENT_TYPE;
 	}
 
+	public void setViewWidth(int width) {
+		this.viewWidth = width;
+	}
+
 	public void setCommentsContainer(CommentsContainer container) {
 		this.comments = new ArrayList<>();
 
@@ -78,7 +82,4 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		}
 	}
 
-	public void setViewWidth(int width) {
-		this.viewWidth = width;
-	}
 }
