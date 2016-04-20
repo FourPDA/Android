@@ -1,5 +1,6 @@
 package four.pda.ui.article.comments;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -66,6 +67,12 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 				}
 			});
 
+			contentView.setTextColor(itemView.getResources().getColor(R.color.material_grey_600));
+			contentView.setTypeface(null, Typeface.NORMAL);
+
+		} else {
+			contentView.setTextColor(itemView.getResources().getColor(R.color.primary_text_disabled_material_light));
+			contentView.setTypeface(null, Typeface.ITALIC);
 		}
 
 		contentView.setText(Html.fromHtml(abstractComment.getContent()));
