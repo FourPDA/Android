@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
-import android.support.v4.internal.view.SupportMenuItem;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,31 +89,26 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		});
 
 		toolbar.inflateMenu(R.menu.article_menu);
-		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-
-				switch (item.getItemId()) {
-					case R.id.text_zoom:
-						textZoomPanel.setZoom(preferences.textZoom().get());
-						textZoomPanel.setVisibility(View.VISIBLE);
-						return true;
-				}
-
-				return false;
+				textZoomPanel.setZoom(preferences.textZoom().get());
+				textZoomPanel.setVisibility(View.VISIBLE);
+				return true;
 			}
 		});
 
-		{
-			Intent intent = ShareCompat.IntentBuilder.from(getActivity())
-					.setType("text/plain")
-					.setText(client.getArticleUrl(date, id))
-					.getIntent();
-
-			SupportMenuItem supportMenuItem = (SupportMenuItem) toolbar.getMenu().findItem(R.id.share);
-			ShareActionProvider actionProvider = (ShareActionProvider) supportMenuItem.getSupportActionProvider();
-			actionProvider.setShareIntent(intent);
-		}
+		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				startActivity(ShareCompat.IntentBuilder.from(getActivity())
+						.setType("text/plain")
+						.setText(client.getArticleUrl(date, id))
+						.createChooserIntent());
+				return true;
+			}
+		});
 
 		collapsingToolbar.setTitle(title);
 		ViewUtils.loadImage(backdropImageView, image);
