@@ -11,15 +11,18 @@ import java.util.List;
 
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsContainer;
+import four.pda.client.model.DeletedComment;
 
 /**
  * Created by asavinova on 05/12/15.
  */
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private final static int COMMENT_TYPE = 0;
-	private final static int ADD_COMMENT_TYPE = 1;
+	private final static int NORMAL_COMMENT_TYPE = 0;
+	private final static int DELETED_COMMENT_TYPE = 1;
+	private final static int ADD_COMMENT_TYPE = 2;
 
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
@@ -37,15 +40,31 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 			return new AddCommentViewHolder(view);
 		}
 
+		if (viewType == DELETED_COMMENT_TYPE) {
+			View view = inflater.inflate(R.layout.deleted_comment_item, parent, false);
+			return new RecyclerView.ViewHolder(view) {};
+		}
+
 		View view = inflater.inflate(R.layout.comment_item, parent, false);
 		return new CommentViewHolder(view);
 	}
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		if (getItemViewType(position) == COMMENT_TYPE) {
-			((CommentViewHolder) holder).setComment(comments.get(position), viewWidth);
+		int type = getItemViewType(position);
+
+		if (type == ADD_COMMENT_TYPE) {
+			return;
 		}
+
+		AbstractComment abstractComment = comments.get(position);
+
+		if (type == NORMAL_COMMENT_TYPE) {
+			((CommentViewHolder) holder).setComment((Comment) abstractComment);
+		}
+
+		int left = viewWidth / 30 * abstractComment.getLevel();
+		holder.itemView.setPadding(left, 0, 0, 0);
 	}
 
 	@Override
@@ -55,10 +74,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public int getItemViewType(int position) {
-		if (position < comments.size()) {
-			return COMMENT_TYPE;
+		if (position >= comments.size()) {
+			return ADD_COMMENT_TYPE;
 		}
-		return ADD_COMMENT_TYPE;
+
+		if (comments.get(position) instanceof DeletedComment) {
+			return DELETED_COMMENT_TYPE;
+		}
+		return NORMAL_COMMENT_TYPE;
 	}
 
 	public void setViewWidth(int width) {

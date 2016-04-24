@@ -1,6 +1,5 @@
 package four.pda.ui.article.comments;
 
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -12,7 +11,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 
 /**
@@ -34,43 +32,23 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 		ButterKnife.bind(this, view);
 	}
 
-	public void setComment(final AbstractComment abstractComment, int viewWidth) {
+	public void setComment(final Comment comment) {
 
-		boolean isNormalComment = abstractComment instanceof Comment;
+		nickView.setText(comment.getNickname());
 
-		if (isNormalComment) {
+		String verboseDate = DATE_FORMAT.format(comment.getDate());
+		dateView.setText(verboseDate);
 
-			final Comment comment = (Comment) abstractComment;
+		replyButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EventBus_.getInstance_(v.getContext())
+						.post(new AddCommentEvent(comment.getId(), comment.getNickname()));
+			}
+		});
 
-			nickView.setText(comment.getNickname());
-
-			String verboseDate = DATE_FORMAT.format(comment.getDate());
-			dateView.setText(verboseDate);
-
-			replyButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					EventBus_.getInstance_(v.getContext())
-							.post(new AddCommentEvent(comment.getId(), comment.getNickname()));
-				}
-			});
-
-			contentView.setTextColor(itemView.getResources().getColor(R.color.material_grey_600));
-			contentView.setTypeface(null, Typeface.NORMAL);
-
-		} else {
-			contentView.setTextColor(itemView.getResources().getColor(R.color.primary_text_disabled_material_light));
-			contentView.setTypeface(null, Typeface.ITALIC);
-		}
-
-		contentView.setText(Html.fromHtml(abstractComment.getContent()));
-
-		authorInfoView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
-		delimeterView.setVisibility(isNormalComment ? View.VISIBLE : View.GONE);
-		replyButton.setVisibility(abstractComment.canReply() ? View.VISIBLE : View.GONE);
-
-		int left = viewWidth / 30 * abstractComment.getLevel();
-		itemView.setPadding(left, 0, 0, 0);
+		contentView.setText(Html.fromHtml(comment.getContent()));
+		replyButton.setVisibility(comment.canReply() ? View.VISIBLE : View.GONE);
 
 	}
 
