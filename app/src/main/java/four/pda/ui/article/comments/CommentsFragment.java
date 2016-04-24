@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -68,7 +69,21 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
+		if (getView() == null) {
+			throw new IllegalStateException("View is NULL");
+		}
+
 		adapter = new CommentsAdapter(getActivity());
+		adapter.setViewWidth(getView().getWidth());
+
+		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				adapter.setViewWidth(getView().getWidth());
+				adapter.notifyDataSetChanged();
+			}
+		});
 
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
