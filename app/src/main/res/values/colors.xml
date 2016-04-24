@@ -9,6 +9,8 @@
 
 	<color name="white">@android:color/white</color>
 
+	<color name="primary_text_disabled">#39000000</color>
+
 	<color name="card_background">#333</color>
 	<color name="card_info_back">#50000000</color>
 	<color name="card_text_shadow">#333</color>

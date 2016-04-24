@@ -11,15 +11,20 @@ import java.util.List;
 
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsContainer;
+import four.pda.client.model.DeletedComment;
 
 /**
  * Created by asavinova on 05/12/15.
  */
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private final static int COMMENT_TYPE = 0;
-	private final static int ADD_COMMENT_TYPE = 1;
+	enum Type {
+		REGULAR,
+		DELETED,
+		ADD
+	}
 
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
@@ -32,9 +37,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		if (viewType == ADD_COMMENT_TYPE) {
+		if (viewType == Type.ADD.ordinal()) {
 			View view = inflater.inflate(R.layout.add_comment_item, parent, false);
 			return new AddCommentViewHolder(view);
+		}
+
+		if (viewType == Type.DELETED.ordinal()) {
+			View view = inflater.inflate(R.layout.deleted_comment_item, parent, false);
+			return new RecyclerView.ViewHolder(view) {};
 		}
 
 		View view = inflater.inflate(R.layout.comment_item, parent, false);
@@ -43,9 +53,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		if (getItemViewType(position) == COMMENT_TYPE) {
-			((CommentViewHolder) holder).setComment(comments.get(position), viewWidth);
+		int type = getItemViewType(position);
+
+		if (type == Type.ADD.ordinal()) {
+			return;
 		}
+
+		AbstractComment abstractComment = comments.get(position);
+
+		if (type == Type.REGULAR.ordinal()) {
+			((CommentViewHolder) holder).setComment((Comment) abstractComment);
+		}
+
+		int left = viewWidth / 30 * abstractComment.getLevel();
+		holder.itemView.setPadding(left, 0, 0, 0);
 	}
 
 	@Override
@@ -55,10 +76,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public int getItemViewType(int position) {
-		if (position < comments.size()) {
-			return COMMENT_TYPE;
+		if (position >= comments.size()) {
+			return Type.ADD.ordinal();
 		}
-		return ADD_COMMENT_TYPE;
+
+		if (comments.get(position) instanceof DeletedComment) {
+			return Type.DELETED.ordinal();
+		}
+
+		return Type.REGULAR.ordinal();
 	}
 
 	public void setViewWidth(int width) {

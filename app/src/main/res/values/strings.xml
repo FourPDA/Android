@@ -70,4 +70,6 @@
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
 
+	<string name="deleted_comment">Комментарий удален</string>
+
 </resources>
