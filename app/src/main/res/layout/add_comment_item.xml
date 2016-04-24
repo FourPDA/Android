@@ -9,7 +9,9 @@
 
 		<TextView
 			style="@style/MaterialRaisedButtonText"
-			android:text="@string/new_comment" />
+			android:text="@string/new_comment"
+			android:drawableLeft="@drawable/ic_add_white_24dp"
+			android:drawablePadding="@dimen/offset_small"/>
 
 	</android.support.v7.widget.CardView>
 	
