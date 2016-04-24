@@ -20,9 +20,11 @@ import four.pda.client.model.DeletedComment;
  */
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private final static int NORMAL_COMMENT_TYPE = 0;
-	private final static int DELETED_COMMENT_TYPE = 1;
-	private final static int ADD_COMMENT_TYPE = 2;
+	enum Type {
+		REGULAR,
+		DELETED,
+		ADD
+	}
 
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
@@ -35,12 +37,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		if (viewType == ADD_COMMENT_TYPE) {
+		if (viewType == Type.ADD.ordinal()) {
 			View view = inflater.inflate(R.layout.add_comment_item, parent, false);
 			return new AddCommentViewHolder(view);
 		}
 
-		if (viewType == DELETED_COMMENT_TYPE) {
+		if (viewType == Type.DELETED.ordinal()) {
 			View view = inflater.inflate(R.layout.deleted_comment_item, parent, false);
 			return new RecyclerView.ViewHolder(view) {};
 		}
@@ -53,13 +55,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		int type = getItemViewType(position);
 
-		if (type == ADD_COMMENT_TYPE) {
+		if (type == Type.ADD.ordinal()) {
 			return;
 		}
 
 		AbstractComment abstractComment = comments.get(position);
 
-		if (type == NORMAL_COMMENT_TYPE) {
+		if (type == Type.REGULAR.ordinal()) {
 			((CommentViewHolder) holder).setComment((Comment) abstractComment);
 		}
 
@@ -75,13 +77,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 	@Override
 	public int getItemViewType(int position) {
 		if (position >= comments.size()) {
-			return ADD_COMMENT_TYPE;
+			return Type.ADD.ordinal();
 		}
 
 		if (comments.get(position) instanceof DeletedComment) {
-			return DELETED_COMMENT_TYPE;
+			return Type.DELETED.ordinal();
 		}
-		return NORMAL_COMMENT_TYPE;
+
+		return Type.REGULAR.ordinal();
 	}
 
 	public void setViewWidth(int width) {
