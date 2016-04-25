@@ -9,10 +9,7 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import four.pda.R;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.ui.LoadResult;
 
@@ -23,9 +20,9 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 
 	private static final Logger L = LoggerFactory.getLogger(AddCommentCallbacks.class);
 
-	private AddCommentFragment fragment;
+	private AddCommentDialog fragment;
 
-	public AddCommentCallbacks(AddCommentFragment fragment) {
+	public AddCommentCallbacks(AddCommentDialog fragment) {
 		this.fragment = fragment;
 	}
 

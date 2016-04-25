@@ -1,11 +1,12 @@
 package four.pda.client.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by asavinova on 07/11/15.
  */
-public abstract class AbstractComment {
+public abstract class AbstractComment implements Serializable {
 
 	private long id;
 	private String content;

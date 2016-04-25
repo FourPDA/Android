@@ -121,6 +121,13 @@ public class CommentsFragment extends BaseFragment {
 		eventBus.unregister(this);
 	}
 
+	public void onEvent(ShowCommentEvent event) {
+		ShowCommentDialog_.builder()
+				.comment(event.getComment())
+				.build()
+				.show(getChildFragmentManager(), "show_comment");
+	}
+
 	public void onEvent(AddCommentEvent event) {
 		this.addCommentEvent = event;
 		boolean isAuthorized = preferences.profileId().get() != 0;
@@ -148,7 +155,7 @@ public class CommentsFragment extends BaseFragment {
 
 	@UiThread
 	void showAddCommentDialog() {
-		AddCommentFragment_.builder()
+		AddCommentDialog_.builder()
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()

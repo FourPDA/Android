@@ -17,23 +17,20 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.ui.SupportView;
 
 /**
  * Created by asavinova on 16/03/16.
  */
-@EFragment(R.layout.fragment_add_comment)
-public class AddCommentFragment extends DialogFragment {
+@EFragment(R.layout.add_comment_dialog)
+public class AddCommentDialog extends DialogFragment {
 
 	private static final int ADD_COMMENT_LOADER_ID = 0;
 
@@ -56,7 +53,7 @@ public class AddCommentFragment extends DialogFragment {
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AddCommentFragment.this.dismiss();
+				AddCommentDialog.this.dismiss();
 			}
 		});
 
