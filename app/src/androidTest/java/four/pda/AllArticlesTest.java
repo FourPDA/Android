@@ -40,7 +40,7 @@ public class AllArticlesTest {
 
 	private UiDevice device;
 	static final String APP_ID = BuildConfig.APPLICATION_ID;
-	final static String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
+	static final String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);

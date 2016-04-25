@@ -37,7 +37,7 @@ public class AboutActivityTest {
 
 	private UiDevice device;
 	static final String APP_ID = BuildConfig.APPLICATION_ID;
-	final static String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
+	static final String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
 	public ActivityTestRule<AboutActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
