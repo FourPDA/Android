@@ -39,7 +39,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class AllArticlesTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
+	static final String APP_ID = BuildConfig.APPLICATION_ID;
 	final static String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
@@ -57,26 +57,26 @@ public class AllArticlesTest {
 		//Открываем Navigaton Drawer методами UiAutomator:
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
-				.packageName(packageName)
+				.packageName(APP_ID)
 				.instance(0));
 		openDrawerButton.click();
-			device.waitForWindowUpdate(packageName, 300);
+		device.waitForWindowUpdate(APP_ID, 300);
 		//Делаем первый скриншот
-			device.takeScreenshot(new File(WORKING_DIR + "/screenOne.png"));
+		device.takeScreenshot(new File(WORKING_DIR + "/screenOne.png"));
 		//Открываем категорию "Новости"
 		onView(withId(R.id.all_category_view))
 				.perform(click());
-			device.waitForWindowUpdate(packageName, 300);
+		device.waitForWindowUpdate(APP_ID, 300);
 		//Делаем второй скриншот
-			device.takeScreenshot(new File(WORKING_DIR + "/screenTwo.png"));
+		device.takeScreenshot(new File(WORKING_DIR + "/screenTwo.png"));
 		//Открываем первую статью из списка
 		UiObject openfirstButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName(packageName)
-				.resourceId(packageName + ":id/image_view")
+				.className("android.widget.ImageView").packageName(APP_ID)
+				.resourceId(APP_ID + ":id/image_view")
 				.instance(0));
 		openfirstButton.click();
 		//Ждем пока окошко загрузиться
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 		//Убеждаемся что кнопка "комментарии" есть на экране
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
@@ -99,19 +99,19 @@ public class AllArticlesTest {
 		onView(withId(R.id.drawer_layout))
 				.perform(swipeDown())
 				.perform(swipeDown());
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 		device.waitForIdle(150);
 		//Открываем вторую статью
 		UiObject openSecondButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName(packageName)
-				.resourceId(packageName + ":id/image_view")
+				.className("android.widget.ImageView").packageName(APP_ID)
+				.resourceId(APP_ID + ":id/image_view")
 				.instance(1));
 		openSecondButton.click();
 		//Ждем пока окошко загрузиться
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 		//Делаем третий скриншот
-			device.waitForWindowUpdate(packageName, 200);
-			device.takeScreenshot(new File(WORKING_DIR + "/screenThree.png"));
+		device.waitForWindowUpdate(APP_ID, 200);
+		device.takeScreenshot(new File(WORKING_DIR + "/screenThree.png"));
 		//Убеждаемся что кнопка "комментарии" есть на экране
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
