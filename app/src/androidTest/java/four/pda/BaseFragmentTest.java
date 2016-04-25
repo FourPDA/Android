@@ -32,8 +32,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class BaseFragmentTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
-    //TODO Add SLF4J logging
+	static final String APP_ID = BuildConfig.APPLICATION_ID;
+	//TODO Add SLF4J logging
 	//TODO Add Screenshots
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -52,7 +52,7 @@ public class BaseFragmentTest {
 		//Открываем Navigaton Drawer методами UiAutomator:
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
-				.packageName(packageName)
+				.packageName(APP_ID)
 				.instance(0));
 		openDrawerButton.click();
 		//Убеждаемся, что все пункты в наличии через Espresso:
