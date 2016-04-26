@@ -60,11 +60,6 @@ public class ShowCommentDialog extends DialogFragment {
 
 	}
 
-	@Click(R.id.cancel_button)
-	void cancelClicked() {
-		dismiss();
-	}
-
 	@Click(R.id.reply_button)
 	void addCommentClicked() {
 		eventBus.post(new AddCommentEvent(comment.getId(), comment.getNickname()));
