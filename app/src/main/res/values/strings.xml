@@ -60,5 +60,6 @@
 	<string name="text_zoom_value">%s%%</string>
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
+	<string name="share">Поделиться</string>
 
 </resources>

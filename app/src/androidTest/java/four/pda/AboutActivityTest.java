@@ -1,5 +1,6 @@
 package four.pda;
 
+import android.os.Environment;
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -14,6 +15,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import four.pda.ui.AboutActivity;
 import four.pda.ui.AboutActivity_;
@@ -33,7 +36,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AboutActivityTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
+	static final String APP_ID = BuildConfig.APPLICATION_ID;
+	static final String WORKING_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	@Rule
 	public ActivityTestRule<AboutActivity> activityTestRule = new ActivityTestRule(AboutActivity_.class);
@@ -48,7 +52,10 @@ public class AboutActivityTest {
 	@Test
 	public void elementsPresented() throws UiObjectNotFoundException {
 
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
+		if (APP_ID.matches("four.pda.debug")) {
+			device.takeScreenshot(new File(WORKING_DIR + "/screenFour.png"));
+		}
 
 		//Проверяем наличие всех элементов
 		onView(withId(R.id.description_text_view))
@@ -66,7 +73,7 @@ public class AboutActivityTest {
 		//Свайпаем вверх, чтобы увидеть остальные элементы
 		UiObject aboutActivityField = device.findObject(new UiSelector()
 				.className("android.widget.LinearLayout")
-				.packageName(packageName));
+				.packageName(APP_ID));
 		aboutActivityField.swipeUp(2);
 		onView(withText("swapii@gmail.com"))
 				.check(matches(isDisplayed()))
