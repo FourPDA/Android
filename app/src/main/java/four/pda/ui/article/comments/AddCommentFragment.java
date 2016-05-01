@@ -22,6 +22,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import four.pda.App;
+import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
@@ -37,6 +38,7 @@ public class AddCommentFragment extends DialogFragment {
 
 	private static final int ADD_COMMENT_LOADER_ID = 0;
 
+	@FragmentArg long postId;
 	@FragmentArg Long replyId;
 	@FragmentArg String replyAuthor;
 
@@ -46,6 +48,7 @@ public class AddCommentFragment extends DialogFragment {
 
 	@Inject FourPdaClient client;
 	@Bean EventBus eventBus;
+	@Bean Dao dao;
 
 	@AfterViews
 	void afterViews() {

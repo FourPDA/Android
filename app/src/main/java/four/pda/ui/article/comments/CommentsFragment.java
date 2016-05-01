@@ -149,6 +149,7 @@ public class CommentsFragment extends BaseFragment {
 	@UiThread
 	void showAddCommentDialog() {
 		AddCommentFragment_.builder()
+				.postId(id)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()
