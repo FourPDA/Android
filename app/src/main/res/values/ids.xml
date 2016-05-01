@@ -3,6 +3,4 @@
 
     <item name="container" type="id" />
 
-	<integer name="signin_orientation">0</integer>
-
 </resources>

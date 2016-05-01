@@ -35,8 +35,6 @@ public class AuthActivity extends AppCompatActivity {
 	private static final int LOGIN_LOADER_ID = 1;
 	private static final int PROFILE_LOADER_ID = 2;
 
-	@ViewById View container;
-
 	@ViewById Toolbar toolbar;
 
 	@ViewById TextInputEditText loginView;
