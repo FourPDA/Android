@@ -121,8 +121,8 @@ public class CommentsFragment extends BaseFragment {
 		eventBus.unregister(this);
 	}
 
-	public void onEvent(ShowCommentEvent event) {
-		ShowCommentDialog_.builder()
+	public void onEvent(CommentActionsEvent event) {
+		CommentActionsDialog_.builder()
 				.comment(event.getComment())
 				.build()
 				.show(getChildFragmentManager(), "show_comment");

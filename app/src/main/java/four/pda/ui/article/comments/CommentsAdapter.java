@@ -47,7 +47,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 			return new RecyclerView.ViewHolder(view) {};
 		}
 
-		View view = inflater.inflate(R.layout.comment_item, parent, false);
+		View view = inflater.inflate(R.layout.comment_list_item, parent, false);
 		return new CommentViewHolder(view);
 	}
 

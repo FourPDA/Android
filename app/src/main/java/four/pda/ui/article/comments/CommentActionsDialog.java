@@ -22,8 +22,8 @@ import four.pda.client.model.Comment;
 /**
  * Created by asavinova on 25/04/16.
  */
-@EFragment(R.layout.show_comment_dialog)
-public class ShowCommentDialog extends DialogFragment {
+@EFragment(R.layout.comment_actions_dialog)
+public class CommentActionsDialog extends DialogFragment {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
@@ -45,7 +45,7 @@ public class ShowCommentDialog extends DialogFragment {
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShowCommentDialog.this.dismiss();
+				CommentActionsDialog.this.dismiss();
 			}
 		});
 

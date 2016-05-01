@@ -29,7 +29,7 @@ import four.pda.ui.SupportView;
 /**
  * Created by asavinova on 16/03/16.
  */
-@EFragment(R.layout.add_comment_dialog)
+@EFragment(R.layout.comment_add_dialog)
 public class AddCommentDialog extends DialogFragment {
 
 	private static final int ADD_COMMENT_LOADER_ID = 0;

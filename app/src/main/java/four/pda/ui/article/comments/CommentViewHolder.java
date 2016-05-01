@@ -44,7 +44,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 			@Override
 			public void onClick(View v) {
 				EventBus_.getInstance_(v.getContext())
-						.post(new ShowCommentEvent(comment));
+						.post(new CommentActionsEvent(comment));
 			}
 		});
 
