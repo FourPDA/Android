@@ -36,7 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class ArticlesActivityTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
+	static final String APP_ID = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -51,20 +51,20 @@ public class ArticlesActivityTest {
 	@Test
 	public void allArticlesActivityTest() throws UiObjectNotFoundException, InterruptedException {
 
-		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName(packageName).instance(0));
+		UiObject openDrawerButton = device.findObject(new UiSelector().className("android.widget.ImageButton").packageName(APP_ID).instance(0));
 		openDrawerButton.click();
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 
 		onView(withId(R.id.articles_category_view))
 				.perform(click());
 
 		UiObject openfirstButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName(packageName)
-				.resourceId(packageName + ":id/image_view")
+				.className("android.widget.ImageView").packageName(APP_ID)
+				.resourceId(APP_ID + ":id/image_view")
 				.instance(0));
 		openfirstButton.click();
 
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))
@@ -88,16 +88,16 @@ public class ArticlesActivityTest {
 		onView(withId(R.id.drawer_layout))
 				.perform(swipeDown())
 				.perform(swipeDown());
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 		device.waitForIdle(150);
 
 		UiObject openSecondButton = device.findObject(new UiSelector()
-				.className("android.widget.ImageView").packageName(packageName)
-				.resourceId(packageName + ":id/image_view")
+				.className("android.widget.ImageView").packageName(APP_ID)
+				.resourceId(APP_ID + ":id/image_view")
 				.instance(1));
 		openSecondButton.click();
 
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 
 		onView(withId(R.id.comments_button))
 				.check(matches(isDisplayed()))

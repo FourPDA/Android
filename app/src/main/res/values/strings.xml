@@ -48,11 +48,11 @@
 	<string name="article_network_error">Не удалось загрузить статью</string>
 	<string name="article_list_network_error">Не удалось загрузить список статей</string>
 	<string name="comments_network_error">Не удалось загрузить комментарии</string>
-	<string name="login">Войти</string>
-	<string name="logout">Выйти</string>
+	<string name="signIn">Войти</string>
+	<string name="signOut">Выйти</string>
 	<string name="login_hint">Логин</string>
 	<string name="password_hint">Пароль</string>
-	<string name="captcha_hint">Введите число цифрами</string>
+	<string name="captcha_hint">Число цифрами</string>
 	<string name="auth_title">Вход</string>
 	<string name="auth_network_error">Не удалось загрузить информацию для авторизации.</string>
 	<string name="reply">Ответить</string>
@@ -70,6 +70,7 @@
 	<string name="text_zoom_value">%s%%</string>
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
+	<string name="share">Поделиться</string>
 
 	<string name="deleted_comment">Комментарий удален</string>
 

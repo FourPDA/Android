@@ -127,9 +127,13 @@ public class FourPdaClient {
 		}
 	}
 
-	public String getArticleContent(Date date, long id) throws IOException {
+	public String getArticleUrl(Date date, long id) {
 		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
-		String url = BASE_URL + fullId;
+		return BASE_URL + fullId;
+	}
+
+	public String getArticleContent(Date date, long id) throws IOException {
+		String url = getArticleUrl(date, id);
 		Request request = new Request.Builder()
 				.url(url)
 				.build();
@@ -146,8 +150,7 @@ public class FourPdaClient {
 	}
 
 	public CommentsContainer getArticleComments(Date date, Long id) throws IOException {
-		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
-		String url = BASE_URL + fullId;
+		String url = getArticleUrl(date, id);
 		url = addRandomToUrl(url);
 		
 		Request request = new Request.Builder()

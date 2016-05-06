@@ -10,6 +10,7 @@ import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import four.pda.EventBus;
 import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.ArticleDao;
@@ -25,30 +26,41 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
 
+	private long id;
+	private Date date;
+	private String title;
+	private String image;
+
+	private final EventBus eventBus;
+
 	public ViewHolder(View view) {
 		super(view);
+		eventBus = EventBus_.getInstance_(view.getContext());
+
 		ButterKnife.bind(this, view);
-	}
-
-	public void setCursor(Cursor cursor) {
-
-		final long id = cursor.getLong(ArticleDao.Properties.Id.ordinal);
-		final String title = cursor.getString(ArticleDao.Properties.Title.ordinal);
-		final Date date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
-		final String image = cursor.getString(ArticleDao.Properties.Image.ordinal);
 
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EventBus_.getInstance_(v.getContext())
-						.post(new ShowArticleEvent(id, date, title, image));
+				if (id > 0) {
+					eventBus.post(new ShowArticleEvent(id, date, title, image));
+				}
 			}
 		});
+	}
 
-		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
+	public void setCursor(Cursor cursor) {
+
+		id = cursor.getLong(ArticleDao.Properties.Id.ordinal);
+		date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
+		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
+		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
+
+		titleView.setText(title);
 
 		ViewUtils.loadImage(imageView, image);
-		titleView.setText(title);
+
+		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
 
 	}
