@@ -30,10 +30,25 @@
 		<item name="android:background">@drawable/category_item_bg</item>
 	</style>
 
+	<style name="EditText" parent="TextAppearance.AppCompat">
+		<item name="colorControlNormal">@color/primary</item>
+		<item name="colorControlActivated">@color/accent</item>
+		<item name="android:textColor">@color/primary</item>
+		<item name="android:textColorPrimary">@color/primary</item>
+		<item name="android:textColorHint">@color/primary</item>
+	</style>
+
 	<style name="VerticalShadow">
 		<item name="android:layout_width">@dimen/vertical_shadow_width</item>
 		<item name="android:layout_height">match_parent</item>
 		<item name="android:background">@drawable/vertical_shadow</item>
+	</style>
+
+	<style name="Auth_Activity" parent="Theme.AppCompat.DialogWhenLarge">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="colorAccent">@color/accent</item>
+		<item name="windowNoTitle">true</item>
 	</style>
 
 	<style name="About_TextLabel">

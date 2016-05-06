@@ -74,7 +74,7 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Long>> 
 			activity.supportView.showError(activity.getString(R.string.auth_network_error), new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					activity.loginClicked();
+					activity.signIn();
 				}
 			});
 			return;

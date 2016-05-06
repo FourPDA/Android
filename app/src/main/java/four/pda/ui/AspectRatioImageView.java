@@ -17,7 +17,7 @@ import four.pda.R;
  */
 public class AspectRatioImageView extends ImageView {
 
-	private static final Logger L = LoggerFactory.getLogger(AspectRatioImageView.class.getSimpleName());
+	private static final Logger L = LoggerFactory.getLogger(AspectRatioImageView.class);
 
 	private float aspectRatio = 1;
 
@@ -35,20 +35,21 @@ public class AspectRatioImageView extends ImageView {
 		init(attrs);
 	}
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		setMeasuredDimension(widthMeasureSpec, (int) (getMeasuredWidth() * aspectRatio));
-	}
-
 	private void init(AttributeSet attrs) {
 		TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.AspectRatio);
 		aspectRatio = typedArray.getFloat(R.styleable.AspectRatio_aspectRatio, 1);
 		typedArray.recycle();
 	}
 
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(widthMeasureSpec, (int) (getMeasuredWidth() * aspectRatio));
+	}
+
 	public void setAspectRatio(float aspectRatio) {
 		this.aspectRatio = aspectRatio;
 		requestLayout();
 	}
+
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
@@ -87,17 +88,24 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
-		toolbar.inflateMenu(R.menu.article_menu);
-		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+		toolbar.inflateMenu(R.menu.article);
+		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				if (item.getItemId() == R.id.text_zoom) {
-					textZoomPanel.setZoom(preferences.textZoom().get());
-					textZoomPanel.setVisibility(View.VISIBLE);
-					return true;
-				}
+				textZoomPanel.setZoom(preferences.textZoom().get());
+				textZoomPanel.setVisibility(View.VISIBLE);
+				return true;
+			}
+		});
 
-				return false;
+		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				startActivity(ShareCompat.IntentBuilder.from(getActivity())
+						.setType("text/plain")
+						.setText(client.getArticleUrl(date, id))
+						.createChooserIntent());
+				return true;
 			}
 		});
 
@@ -205,7 +213,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
 
 		@Override
-		public Loader onCreateLoader(int loaderId, final Bundle args) {
+		public Loader<LoadResult<String>> onCreateLoader(int loaderId, final Bundle args) {
 			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 

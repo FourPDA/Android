@@ -10,8 +10,6 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,18 +18,15 @@ import org.junit.runner.RunWith;
 import four.pda.ui.article.NewsActivity;
 import four.pda.ui.article.NewsActivity_;
 
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-
 /**
- * Created by Seva Powerman on 27.02.2016.
+ * Created by Klishin Pavel on 06.04.2016.
  */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class LoginActivityTest {
+public class TiltInterfaceTest {
 
 	private UiDevice device;
 	static final String APP_ID = BuildConfig.APPLICATION_ID;
@@ -47,45 +42,43 @@ public class LoginActivityTest {
 	}
 
 	@Test
-	public void loginActivityTest() throws UiObjectNotFoundException, InterruptedException {
+	public void tiltDevInterfaceTest() throws RemoteException, UiObjectNotFoundException {
+		device.waitForIdle();
+		device.setOrientationRight();
 
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
 				.packageName(APP_ID)
 				.instance(0));
-		openDrawerButton
-				.click();
-		device.waitForWindowUpdate(APP_ID, 100);
+		openDrawerButton.click();
 
-		onView(withId(R.id.login_view)).perform(click());
+		UiObject scrollView = device.findObject(new UiSelector()
+				.className("android.widget.ScrollView"));
+		scrollView.swipeUp(3);
+
+		device.waitForIdle();
+		scrollView.swipeDown(3);
 		device.waitForIdle();
 
-		closeSoftKeyboard();
+		device.setOrientationLeft();
+		openDrawerButton.click();
+
+		device.waitForIdle();
+		scrollView.swipeDown(3);
 		device.waitForIdle();
 
-		UiObject loginField = device.findObject(new UiSelector()
-				.className("android.widget.EditText")
-				.resourceId(APP_ID + ":id/login_view"));
-		Assert.assertTrue(loginField.exists());
+		device.setOrientationNatural();
+		openDrawerButton.click();
+		device.waitForIdle();
+		scrollView.swipeDown(3);
+		scrollView.swipeUp(3);
 
-		UiObject passwordField = device.findObject(new UiSelector()
-				.className("android.widget.EditText")
-				.resourceId(APP_ID + ":id/password_view"));
-		Assert.assertTrue(passwordField.exists());
-
-		UiObject capchaPic = device.findObject(new UiSelector()
-				.className("android.widget.ImageView")
-				.resourceId(APP_ID + ":id/captcha_image_view"));
-		Assert.assertTrue(capchaPic.exists());
-
-		UiObject capchaText = device.findObject(new UiSelector()
-				.className("android.widget.EditText")
-				.resourceId(APP_ID + ":id/captcha_text_view"));
-		Assert.assertTrue(capchaText.exists());
-
-		UiObject capchaEnterButton = device.findObject(new UiSelector()
-				.className("android.widget.Button")
-				.resourceId(APP_ID + ":id/enter_view"));
-		Assert.assertTrue(capchaEnterButton.exists());
+		device.waitForIdle();
+		device.setOrientationLeft();
+		openDrawerButton.click();
+		device.setOrientationRight();
+		device.setOrientationNatural();
+		device.setOrientationLeft();
+		device.setOrientationRight();
 	}
 }
