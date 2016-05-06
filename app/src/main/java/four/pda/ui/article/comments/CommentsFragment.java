@@ -1,8 +1,11 @@
 package four.pda.ui.article.comments;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -122,6 +125,7 @@ public class CommentsFragment extends BaseFragment {
 	}
 
 	public void onEvent(AddCommentEvent event) {
+
 		this.addCommentEvent = event;
 		boolean isAuthorized = preferences.profileId().get() != 0;
 
@@ -135,7 +139,7 @@ public class CommentsFragment extends BaseFragment {
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
-		if (getActivity().RESULT_OK == resultCode) {
+		if (Activity.RESULT_OK == resultCode) {
 			updateProfile();
 			showAddCommentDialog();
 		}
@@ -148,11 +152,31 @@ public class CommentsFragment extends BaseFragment {
 
 	@UiThread
 	void showAddCommentDialog() {
+
+		if (preferences.isFirstComment().get()) {
+			showWarningFirstCommentDialog();
+			return;
+		}
+
 		AddCommentFragment_.builder()
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()
 				.show(getChildFragmentManager(), "add_comment");
+
+	}
+
+	@UiThread
+	void showWarningFirstCommentDialog() {
+		new AlertDialog.Builder(getActivity())
+				.setMessage(R.string.add_comment_text_hint)
+				.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						preferences.isFirstComment().put(false);
+					}
+				})
+				.show();
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {
