@@ -189,4 +189,9 @@ public class FourPdaClient {
 		return url + "?" + Math.random();
 	}
 
+	public List<ListArticle> searchArticles(String search, int page) throws IOException {
+		//TODO Подставить настоящую реализацию
+		return getArticles(CategoryType.ALL, page);
+	}
+
 }

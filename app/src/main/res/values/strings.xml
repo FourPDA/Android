@@ -9,6 +9,7 @@
 	<string name="category_reviews">Обзоры</string>
 	<string name="category_software">Программы</string>
 	<string name="category_games">Игры</string>
+	<string name="category_search">Поиск</string>
 
 	<string name="about">О программе</string>
 	<string name="chooser_title">Что использовать?</string>
@@ -61,5 +62,6 @@
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
 	<string name="share">Поделиться</string>
+	<string name="find">Найти</string>
 
 </resources>

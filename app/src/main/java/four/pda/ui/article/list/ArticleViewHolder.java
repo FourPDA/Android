@@ -20,7 +20,7 @@ import four.pda.ui.article.ShowArticleEvent;
 /**
  * Created by pavel on 12/04/15.
  */
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
@@ -33,7 +33,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 	private final EventBus eventBus;
 
-	public ViewHolder(View view) {
+	public ArticleViewHolder(View view) {
 		super(view);
 		eventBus = EventBus_.getInstance_(view.getContext());
 

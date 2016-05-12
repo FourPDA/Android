@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:padding="@dimen/offset_normal"
+	android:gravity="center_vertical">
+
+	<SearchView
+		android:id="@+id/search_view"
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:id="@+id/find_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/offset_normal"
+		android:paddingBottom="@dimen/offset_normal"
+		android:layout_marginLeft="@dimen/offset_normal"
+		style="@style/MaterialFlatButton"
+		android:text="@string/find"/>
+
+</LinearLayout>
