@@ -153,8 +153,18 @@ public class CommentsFragment extends BaseFragment {
 	@UiThread
 	void showAddCommentDialog() {
 
-		if (preferences.isFirstComment().get()) {
-			showWarningFirstCommentDialog();
+		if (!preferences.isAcceptedCommentRules().get()) {
+
+			new AlertDialog.Builder(getActivity())
+					.setMessage(R.string.add_comment_text_hint)
+					.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							preferences.isAcceptedCommentRules().put(true);
+						}
+					})
+					.show();
+
 			return;
 		}
 
@@ -164,19 +174,6 @@ public class CommentsFragment extends BaseFragment {
 				.build()
 				.show(getChildFragmentManager(), "add_comment");
 
-	}
-
-	@UiThread
-	void showWarningFirstCommentDialog() {
-		new AlertDialog.Builder(getActivity())
-				.setMessage(R.string.add_comment_text_hint)
-				.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						preferences.isFirstComment().put(false);
-					}
-				})
-				.show();
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {

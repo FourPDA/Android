@@ -20,7 +20,6 @@ public interface Preferences {
 	@DefaultInt(100)
 	int textZoom();
 
-	@DefaultBoolean(true)
-	boolean isFirstComment();
+	boolean isAcceptedCommentRules();
 
 }
