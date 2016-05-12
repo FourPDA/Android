@@ -30,7 +30,7 @@ public class SearchArticlesParser extends AbstractParser {
 		Element searchBoxElement = document.select(".search-box").first();
 
 		if (searchBoxElement == null) {
-			String message = "Search box element is null";
+			String message = "Can't find search element";
 			L.error(message);
 			throw new ParseException(message);
 		}

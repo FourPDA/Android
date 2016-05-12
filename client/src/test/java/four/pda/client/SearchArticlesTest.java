@@ -40,12 +40,14 @@ public class SearchArticlesTest extends AbstractTest {
 	@Test
 	public void parseException() throws IOException {
 		String pageSource = IOUtils.toString(new URL("http://www.google.ru/"), "utf-8");
+		boolean isParserError = true;
 		try {
 			new SearchArticlesParser().parse(pageSource);
+			isParserError = false;
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		Assert.assertTrue("Wrong result from http://www.google.ru/ page", true);
+		Assert.assertTrue("Wrong result from http://www.google.ru/ page", isParserError);
 	}
 
 }
