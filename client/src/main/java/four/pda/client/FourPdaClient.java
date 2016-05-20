@@ -189,7 +189,7 @@ public class FourPdaClient {
 		return url + "?" + Math.random();
 	}
 
-	public CommentsContainer addComment(long postId, Date date, Long replyId, String message) throws IOException {
+	public CommentsContainer addComment(long postId, Long replyId, String message) throws IOException {
 		String url = BASE_URL + "wp-comments-post.php";
 
 		RequestBody requestBody = new FormBody.Builder()

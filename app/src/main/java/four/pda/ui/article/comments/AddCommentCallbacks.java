@@ -9,12 +9,8 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import four.pda.R;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.CommentsContainer;
-import four.pda.dao.Article;
 import four.pda.ui.LoadResult;
 
 /**
@@ -35,12 +31,9 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<CommentsContainer> loadInBackground() {
-				Article article = fragment.dao.getArticle(fragment.postId);
-
 				try {
 					String message = fragment.messageEditText.getText().toString();
-					return new LoadResult<>(fragment.client.addComment(article.getId(),
-							article.getDate(),
+					return new LoadResult<>(fragment.client.addComment(fragment.postId,
 							fragment.replyId,
 							message));
 				} catch (Exception e) {

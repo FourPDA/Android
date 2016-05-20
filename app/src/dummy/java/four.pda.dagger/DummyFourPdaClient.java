@@ -133,7 +133,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 	}
 
 	@Override
-	public CommentsContainer addComment(long postId, Date date, Long replyId, String message) {
+	public CommentsContainer addComment(long postId, Long replyId, String message) {
 		CommentsContainer container = new CommentsContainer();
 		container.setCanAddNewComment(true);
 

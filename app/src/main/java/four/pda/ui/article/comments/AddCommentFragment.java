@@ -17,8 +17,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import four.pda.App;
@@ -26,7 +24,6 @@ import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.ui.SupportView;
 
@@ -96,7 +93,6 @@ public class AddCommentFragment extends DialogFragment {
 			messageEditText.setError("Empty!");
 		} else {
 			addComment();
-			dismiss();
 		}
 	}
 
@@ -107,5 +103,6 @@ public class AddCommentFragment extends DialogFragment {
 
 	void updateComments(CommentsContainer comments) {
 		eventBus.post(new UpdateCommentsEvent(comments));
+		dismiss();
 	}
 }
