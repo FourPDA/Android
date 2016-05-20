@@ -73,4 +73,6 @@
 
 	<string name="deleted_comment">Комментарий удален</string>
 
+	<string name="first_comment_dialog_ok">Все понял</string>
+
 </resources>
