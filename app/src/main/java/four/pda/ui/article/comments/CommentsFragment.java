@@ -161,6 +161,7 @@ public class CommentsFragment extends BaseFragment {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							preferences.isAcceptedCommentRules().put(true);
+							showAddCommentDialog();
 						}
 					})
 					.show();
