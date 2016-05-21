@@ -1,13 +1,11 @@
 package four.pda.ui.article.comments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -25,6 +23,7 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.CommentsContainer;
+import four.pda.ui.Keyboard;
 import four.pda.ui.SupportView;
 
 /**
@@ -44,6 +43,8 @@ public class AddCommentDialog extends DialogFragment {
 	@ViewById SupportView supportView;
 
 	@Inject FourPdaClient client;
+	@Inject Keyboard keyboard;
+
 	@Bean EventBus eventBus;
 	@Bean Dao dao;
 
@@ -51,7 +52,7 @@ public class AddCommentDialog extends DialogFragment {
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
-		toolbar.setTitle(R.string.add_comment_dialog_title);
+		toolbar.setTitle(replyId == null ? R.string.comments_new : R.string.comments_reply_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
@@ -60,14 +61,13 @@ public class AddCommentDialog extends DialogFragment {
 			}
 		});
 
-		if (replyId != null){
+		if (replyId != null) {
 			String replyText = replyAuthor + ",\n";
 			messageEditText.setText(replyText);
 			messageEditText.setSelection(replyText.length());
 		}
 
-		InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+		keyboard.showFor(messageEditText);
 	}
 
 	@Override
@@ -79,11 +79,6 @@ public class AddCommentDialog extends DialogFragment {
 			// Максимально растягивает окно диалога
 			dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		}
-	}
-
-	@Click(R.id.cancel_button)
-	void cancelClicked() {
-		dismiss();
 	}
 
 	@Click(R.id.add_comment_button)
@@ -105,4 +100,5 @@ public class AddCommentDialog extends DialogFragment {
 		eventBus.post(new UpdateCommentsEvent(comments));
 		dismiss();
 	}
+
 }
