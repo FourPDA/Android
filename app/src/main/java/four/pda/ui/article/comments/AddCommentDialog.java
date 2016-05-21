@@ -20,6 +20,7 @@ import org.androidannotations.annotations.ViewById;
 import javax.inject.Inject;
 
 import four.pda.App;
+import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
@@ -34,6 +35,7 @@ public class AddCommentDialog extends DialogFragment {
 
 	private static final int ADD_COMMENT_LOADER_ID = 0;
 
+	@FragmentArg long postId;
 	@FragmentArg Long replyId;
 	@FragmentArg String replyAuthor;
 
@@ -43,6 +45,7 @@ public class AddCommentDialog extends DialogFragment {
 
 	@Inject FourPdaClient client;
 	@Bean EventBus eventBus;
+	@Bean Dao dao;
 
 	@AfterViews
 	void afterViews() {
@@ -90,7 +93,6 @@ public class AddCommentDialog extends DialogFragment {
 			messageEditText.setError("Empty!");
 		} else {
 			addComment();
-			dismiss();
 		}
 	}
 
@@ -101,5 +103,6 @@ public class AddCommentDialog extends DialogFragment {
 
 	void updateComments(CommentsContainer comments) {
 		eventBus.post(new UpdateCommentsEvent(comments));
+		dismiss();
 	}
 }

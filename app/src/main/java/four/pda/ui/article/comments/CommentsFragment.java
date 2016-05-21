@@ -1,8 +1,11 @@
 package four.pda.ui.article.comments;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -137,12 +140,11 @@ public class CommentsFragment extends BaseFragment {
 		} else {
 			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 		}
-
 	}
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
-		if (getActivity().RESULT_OK == resultCode) {
+		if (Activity.RESULT_OK == resultCode) {
 			updateProfile();
 			showAddCommentDialog();
 		}
@@ -155,11 +157,30 @@ public class CommentsFragment extends BaseFragment {
 
 	@UiThread
 	void showAddCommentDialog() {
+
+		if (!preferences.isAcceptedCommentRules().get()) {
+
+			new AlertDialog.Builder(getActivity())
+					.setMessage(R.string.add_comment_text_hint)
+					.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							preferences.isAcceptedCommentRules().put(true);
+							showAddCommentDialog();
+						}
+					})
+					.show();
+
+			return;
+		}
+
 		AddCommentDialog_.builder()
+				.postId(id)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()
 				.show(getChildFragmentManager(), "add_comment");
+
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {
