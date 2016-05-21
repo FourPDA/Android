@@ -27,7 +27,7 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public Loader<LoadResult<CommentsContainer>> onCreateLoader(final int id, final Bundle args) {
+	public Loader<LoadResult<CommentsContainer>> onCreateLoader(int id, Bundle args) {
 		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<CommentsContainer> loadInBackground() {
