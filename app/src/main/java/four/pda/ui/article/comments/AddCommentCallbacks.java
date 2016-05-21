@@ -20,9 +20,9 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 
 	private static final Logger L = LoggerFactory.getLogger(AddCommentCallbacks.class);
 
-	private AddCommentFragment fragment;
+	private AddCommentDialog fragment;
 
-	public AddCommentCallbacks(AddCommentFragment fragment) {
+	public AddCommentCallbacks(AddCommentDialog fragment) {
 		this.fragment = fragment;
 	}
 

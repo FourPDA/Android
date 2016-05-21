@@ -124,8 +124,14 @@ public class CommentsFragment extends BaseFragment {
 		eventBus.unregister(this);
 	}
 
-	public void onEvent(AddCommentEvent event) {
+	public void onEvent(CommentActionsEvent event) {
+		CommentActionsDialog_.builder()
+				.comment(event.getComment())
+				.build()
+				.show(getChildFragmentManager(), "show_comment");
+	}
 
+	public void onEvent(AddCommentEvent event) {
 		this.addCommentEvent = event;
 		boolean isAuthorized = preferences.profileId().get() != 0;
 
@@ -134,7 +140,6 @@ public class CommentsFragment extends BaseFragment {
 		} else {
 			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 		}
-
 	}
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
@@ -169,7 +174,7 @@ public class CommentsFragment extends BaseFragment {
 			return;
 		}
 
-		AddCommentFragment_.builder()
+		AddCommentDialog_.builder()
 				.postId(id)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())

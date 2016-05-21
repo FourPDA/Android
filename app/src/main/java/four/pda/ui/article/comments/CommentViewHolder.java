@@ -25,7 +25,6 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.nick_view) TextView nickView;
 	@Bind(R.id.date_view) TextView dateView;
 	@Bind(R.id.content_view) TextView contentView;
-	@Bind(R.id.reply_button) TextView replyButton;
 
 	public CommentViewHolder(final View view) {
 		super(view);
@@ -39,16 +38,15 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 		String verboseDate = DATE_FORMAT.format(comment.getDate());
 		dateView.setText(verboseDate);
 
-		replyButton.setOnClickListener(new View.OnClickListener() {
+		contentView.setText(Html.fromHtml(comment.getContent()));
+
+		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				EventBus_.getInstance_(v.getContext())
-						.post(new AddCommentEvent(comment.getId(), comment.getNickname()));
+						.post(new CommentActionsEvent(comment));
 			}
 		});
-
-		contentView.setText(Html.fromHtml(comment.getContent()));
-		replyButton.setVisibility(comment.canReply() ? View.VISIBLE : View.GONE);
 
 	}
 

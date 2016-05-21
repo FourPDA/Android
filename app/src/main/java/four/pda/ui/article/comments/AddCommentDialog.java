@@ -30,8 +30,8 @@ import four.pda.ui.SupportView;
 /**
  * Created by asavinova on 16/03/16.
  */
-@EFragment(R.layout.fragment_add_comment)
-public class AddCommentFragment extends DialogFragment {
+@EFragment(R.layout.comment_add_dialog)
+public class AddCommentDialog extends DialogFragment {
 
 	private static final int ADD_COMMENT_LOADER_ID = 0;
 
@@ -56,7 +56,7 @@ public class AddCommentFragment extends DialogFragment {
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AddCommentFragment.this.dismiss();
+				AddCommentDialog.this.dismiss();
 			}
 		});
 
