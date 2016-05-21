@@ -88,19 +88,16 @@
 	<TextView
 		android:id="@+id/login_view"
 		style="@style/CategoryItem"
-		android:text="@string/signIn"
-        android:elevation="6dp" />
+		android:text="@string/signIn" />
 
 	<TextView
 		android:id="@+id/logout_view"
 		style="@style/CategoryItem"
-		android:text="@string/signOut"
-        android:elevation="6dp" />
+		android:text="@string/signOut" />
 
 	<TextView
 		android:id="@+id/about_view"
 		style="@style/CategoryItem"
-		android:text="@string/about"
-        android:elevation="6dp" />
+		android:text="@string/about" />
 
 </LinearLayout>
