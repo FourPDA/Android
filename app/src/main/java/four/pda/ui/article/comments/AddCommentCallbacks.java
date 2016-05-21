@@ -9,10 +9,7 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import four.pda.R;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.ui.LoadResult;
 
@@ -30,13 +27,15 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public Loader<LoadResult<CommentsContainer>> onCreateLoader(final int id, Bundle args) {
+	public Loader<LoadResult<CommentsContainer>> onCreateLoader(int id, Bundle args) {
 		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<CommentsContainer> loadInBackground() {
 				try {
 					String message = fragment.messageEditText.getText().toString();
-					return new LoadResult<>(fragment.client.addComment(message, fragment.replyId));
+					return new LoadResult<>(fragment.client.addComment(fragment.postId,
+							fragment.replyId,
+							message));
 				} catch (Exception e) {
 					L.error("Add comment request error", e);
 					return new LoadResult<>(e);

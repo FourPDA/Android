@@ -170,6 +170,7 @@ public class CommentsFragment extends BaseFragment {
 		}
 
 		AddCommentFragment_.builder()
+				.postId(id)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()
