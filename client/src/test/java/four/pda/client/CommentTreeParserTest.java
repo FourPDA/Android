@@ -9,6 +9,10 @@ import java.util.List;
 
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
+import four.pda.client.model.CommentsContainer;
+import four.pda.client.model.DeletedComment;
+import four.pda.client.model.ListArticle;
+import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.CommentTreeParser;
 
 /**
@@ -21,7 +25,8 @@ public class CommentTreeParserTest extends AbstractTest {
 	@Test
 	public void firstComment() throws IOException {
 		String pageSource = getHtmlSource("/2014/10/27/182819/");
-		List<AbstractComment> comments = new CommentTreeParser().parse(pageSource);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
 
 		Assert.assertNotNull(comments);
 		Assert.assertTrue(comments.size() > 0);
@@ -37,7 +42,8 @@ public class CommentTreeParserTest extends AbstractTest {
 	@Test
 	public void childComments() throws IOException {
 		String pageSource = getHtmlSource("/2014/10/27/182819/");
-		List<AbstractComment> comments = new CommentTreeParser().parse(pageSource);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
 
 		Assert.assertNotNull(comments);
 		Assert.assertTrue(comments.size() > 0);
@@ -56,7 +62,8 @@ public class CommentTreeParserTest extends AbstractTest {
 	@Test
 	public void deletedComments() throws IOException {
 		String pageSource = getHtmlSource("/2014/10/19/181576/");
-		List<AbstractComment> comments = new CommentTreeParser().parse(pageSource);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
 
 		Assert.assertNotNull(comments);
 		Assert.assertTrue(comments.size() > 0);
@@ -83,10 +90,73 @@ public class CommentTreeParserTest extends AbstractTest {
 	@Test
 	public void treeDeletedComments() throws IOException {
 		String pageSource = getHtmlSource("/2013/12/20/130961/");
-		List<AbstractComment> comments = new CommentTreeParser().parse(pageSource);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
 
 		Assert.assertNotNull(comments);
 		Assert.assertEquals(35, comments.size());
+	}
+
+	@Test
+	public void firstArticleCanComment() throws IOException {
+		String url = getArticleUrlFromPage(1);
+		String pageSource = getHtmlSource(url);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		Assert.assertTrue("The first article must be able to comment", container.canAddNewComment());
+	}
+
+	@Test
+	public void articleCanComment() throws IOException {
+		String url = getArticleUrlFromPage(2);
+		String pageSource = getHtmlSource(url);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+
+		Assert.assertTrue("The article from second page must be able to comment", container.canAddNewComment());
+
+		checkCanComment(container.getComments());
+	}
+
+	private void checkCanComment(List<AbstractComment> tree) {
+
+		if (tree == null) return;
+
+		for (AbstractComment comment : tree) {
+			checkCanComment(comment.getChildren());
+
+			if (comment instanceof DeletedComment) {
+				Assert.assertFalse("Deleted comment should not be able to comment", comment.canReply());
+				continue;
+			}
+
+			if (comment.getLevel() < 8) {
+				Assert.assertTrue("Comment below 8 level should be able to comment", comment.canReply());
+			} else {
+				Assert.assertFalse("Comment more than 8 levels should not be able to comment", comment.canReply());
+			}
+		}
+	}
+
+	@Test
+	public void oldArticleCantComment() throws IOException {
+		String url = getArticleUrlFromPage(30);
+		String pageSource = getHtmlSource(url);
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+
+		Assert.assertFalse("Older article should not be able to comment", container.canAddNewComment());
+
+		List<AbstractComment> comments = container.getComments();
+		for (AbstractComment comment : comments) {
+			Assert.assertFalse("Older comments should not be able to comment", comment.canReply());
+		}
+	}
+
+
+
+	private String getArticleUrlFromPage(int page) throws IOException {
+		String pageSource = getHtmlSource("/page/" + page);
+		List<ListArticle> articles = new ArticleListParser().parse(pageSource);
+		ListArticle article = articles.get(0);
+		return getArticleUrl(article.getDate(), article.getId());
 	}
 
 }

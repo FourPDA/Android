@@ -1,36 +1,39 @@
 package four.pda.ui.article.comments;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
-
-import java.util.List;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.Dao;
+import four.pda.EventBus;
+import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.AbstractComment;
-import four.pda.dao.Article;
 import four.pda.ui.BaseFragment;
-import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
+import four.pda.ui.UpdateProfileEvent;
+import four.pda.ui.auth.AuthActivity_;
 
 /**
  * Created by asavinova on 05/12/15.
@@ -39,6 +42,7 @@ import four.pda.ui.SupportView;
 public class CommentsFragment extends BaseFragment {
 
 	private static final int LOADER_ID = 0;
+	private static final int LOGIN_REQUEST_CODE = 0;
 
 	@FragmentArg long id;
 
@@ -48,9 +52,12 @@ public class CommentsFragment extends BaseFragment {
 	@ViewById SupportView supportView;
 
 	@Bean Dao dao;
-	@Inject FourPdaClient client;
+	@Bean EventBus eventBus;
 
-	private CommentsAdapter adapter;
+	@Inject FourPdaClient client;
+	@Pref Preferences_ preferences;
+	CommentsAdapter adapter;
+	private AddCommentEvent addCommentEvent;
 
 	@AfterViews
 	void afterViews() {
@@ -65,7 +72,21 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
+		if (getView() == null) {
+			throw new IllegalStateException("View is NULL");
+		}
+
 		adapter = new CommentsAdapter(getActivity());
+		adapter.setViewWidth(getView().getWidth());
+
+		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				adapter.setViewWidth(getView().getWidth());
+				adapter.notifyDataSetChanged();
+			}
+		});
 
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -84,54 +105,87 @@ public class CommentsFragment extends BaseFragment {
 		loadData();
 	}
 
-	private void loadData() {
+	void loadData() {
 		refresh.setRefreshing(true);
 		supportView.showProgress();
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new Callbacks()).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new CommentsCallbacks(this)).forceLoad();
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<AbstractComment>>> {
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
 
-		@Override
-		public Loader<LoadResult<List<AbstractComment>>> onCreateLoader(final int id, Bundle args) {
-			return new AsyncTaskLoader<LoadResult<List<AbstractComment>>>(getActivity()) {
-				@Override
-				public LoadResult<List<AbstractComment>> loadInBackground() {
-					Article article = dao.getArticle(CommentsFragment.this.id);
-					try {
-						return new LoadResult<>(client.getArticleComments(article.getDate(), article.getId()));
-					} catch (Exception e) {
-						L.error("Article comments request error", e);
-						return new LoadResult<>(e);
-					}
-				}
-			};
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
+	}
+
+	public void onEvent(CommentActionsEvent event) {
+		CommentActionsDialog_.builder()
+				.comment(event.getComment())
+				.build()
+				.show(getChildFragmentManager(), "show_comment");
+	}
+
+	public void onEvent(AddCommentEvent event) {
+		this.addCommentEvent = event;
+		boolean isAuthorized = preferences.profileId().get() != 0;
+
+		if (isAuthorized) {
+			showAddCommentDialog();
+		} else {
+			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
+		}
+	}
+
+	@OnActivityResult(LOGIN_REQUEST_CODE)
+	void onResult(int resultCode) {
+		if (Activity.RESULT_OK == resultCode) {
+			updateProfile();
+			showAddCommentDialog();
+		}
+	}
+
+	@UiThread
+	void updateProfile() {
+		eventBus.post(new UpdateProfileEvent());
+	}
+
+	@UiThread
+	void showAddCommentDialog() {
+
+		if (!preferences.isAcceptedCommentRules().get()) {
+
+			new AlertDialog.Builder(getActivity())
+					.setMessage(R.string.add_comment_text_hint)
+					.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							preferences.isAcceptedCommentRules().put(true);
+							showAddCommentDialog();
+						}
+					})
+					.show();
+
+			return;
 		}
 
-		@Override
-		public void onLoadFinished(Loader<LoadResult<List<AbstractComment>>> loader, LoadResult<List<AbstractComment>> result) {
-			refresh.setRefreshing(false);
+		AddCommentDialog_.builder()
+				.postId(id)
+				.replyId(addCommentEvent.getReplyId())
+				.replyAuthor(addCommentEvent.getReplyAuthor())
+				.build()
+				.show(getChildFragmentManager(), "add_comment");
 
-			if (result.getException() == null) {
-				adapter.setComments(result.getData());
-				adapter.notifyDataSetChanged();
-				supportView.hide();
-				return;
-			}
+	}
 
-			supportView.showError(getString(R.string.comments_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData();
-				}
-			});
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoadResult<List<AbstractComment>>> loader) {
-		}
-
+	public void onEvent(UpdateCommentsEvent event) {
+		adapter.setCommentsContainer(event.getCommentsContainer());
+		adapter.notifyDataSetChanged();
 	}
 
 	/**
