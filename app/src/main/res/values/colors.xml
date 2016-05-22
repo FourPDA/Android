@@ -4,10 +4,13 @@
 	<color name="primary">#0072bc</color>
 	<color name="primary_dark">#00568c</color>
 	<color name="accent">#4ebaf6</color>
+	<color name="error">#bc0000</color>
 	<color name="background">@android:color/white</color>
 	<color name="delimeter">#999</color>
 
 	<color name="white">@android:color/white</color>
+
+	<color name="primary_text_disabled">#39000000</color>
 
 	<color name="card_background">#333</color>
 	<color name="card_info_back">#50000000</color>

@@ -1,6 +1,7 @@
 package four.pda.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.rey.material.widget.ProgressView;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
@@ -25,16 +27,39 @@ public class SupportView extends FrameLayout {
 	@ViewById TextView errorMessage;
 	@ViewById TextView retryView;
 
+	private int errorTextColor;
+
 	public SupportView(Context context) {
 		super(context);
 	}
 
 	public SupportView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		init(attrs);
 	}
 
 	public SupportView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		init(attrs);
+	}
+
+	private void init(AttributeSet attrs) {
+		TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SupportView);
+		{
+			int defaultColor;
+			if (android.os.Build.VERSION.SDK_INT >= 23) {
+				defaultColor = getResources().getColor(android.R.color.primary_text_light, null);
+			} else {
+				defaultColor = getResources().getColor(android.R.color.primary_text_light);
+			}
+			errorTextColor = typedArray.getColor(R.styleable.SupportView_errorTextColor, defaultColor);
+		}
+		typedArray.recycle();
+	}
+
+	@AfterViews
+	void afterViews() {
+		errorMessage.setTextColor(errorTextColor);
 	}
 
 	@UiThread

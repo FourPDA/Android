@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import four.pda.client.exceptions.LoginException;
-import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Captcha;
+import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
 import four.pda.client.parsers.ArticleListParser;
@@ -127,9 +127,13 @@ public class FourPdaClient {
 		}
 	}
 
-	public String getArticleContent(Date date, long id) throws IOException {
+	public String getArticleUrl(Date date, long id) {
 		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
-		String url = BASE_URL + fullId;
+		return BASE_URL + fullId;
+	}
+
+	public String getArticleContent(Date date, long id) throws IOException {
+		String url = getArticleUrl(date, id);
 		Request request = new Request.Builder()
 				.url(url)
 				.build();
@@ -145,9 +149,8 @@ public class FourPdaClient {
 		}
 	}
 
-	public List<AbstractComment> getArticleComments(Date date, Long id) throws IOException {
-		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
-		String url = BASE_URL + fullId;
+	public CommentsContainer getArticleComments(Date date, Long id) throws IOException {
+		String url = getArticleUrl(date, id);
 		url = addRandomToUrl(url);
 		
 		Request request = new Request.Builder()
@@ -186,4 +189,29 @@ public class FourPdaClient {
 		return url + "?" + Math.random();
 	}
 
+	public CommentsContainer addComment(long postId, Long replyId, String message) throws IOException {
+		String url = BASE_URL + "wp-comments-post.php";
+
+		RequestBody requestBody = new FormBody.Builder()
+				.add("comment_post_ID", String.valueOf(postId))
+				.add("comment_reply_ID", String.valueOf(replyId == null ? 0 : replyId))
+				.add("comment_reply_dp", String.valueOf(replyId == null ? 0 : 1))
+				.add("comment", message)
+				.build();
+
+		Request request = new Request.Builder()
+				.post(requestBody)
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String source = response.body().string();
+
+		try {
+			return new CommentTreeParser().parse(source);
+		} catch (RuntimeException e) {
+			L.error(String.format("Can't parse comments at %s", url), e);
+			throw e;
+		}
+	}
 }

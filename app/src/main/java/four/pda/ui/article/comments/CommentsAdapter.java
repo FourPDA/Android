@@ -11,39 +11,91 @@ import java.util.List;
 
 import four.pda.R;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.Comment;
+import four.pda.client.model.CommentsContainer;
+import four.pda.client.model.DeletedComment;
 
 /**
  * Created by asavinova on 05/12/15.
  */
-public class CommentsAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+	enum Type {
+		REGULAR,
+		DELETED,
+		ADD
+	}
 
 	private final LayoutInflater inflater;
 	private List<AbstractComment> comments = new ArrayList<>();
+	private boolean canAddNewComment = false;
+	private int viewWidth;
 
 	public CommentsAdapter(Context context) {
 		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View view = inflater.inflate(R.layout.comment_item, parent, false);
-		return new ViewHolder(view);
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		if (viewType == Type.ADD.ordinal()) {
+			View view = inflater.inflate(R.layout.add_comment_item, parent, false);
+			return new AddCommentViewHolder(view);
+		}
+
+		if (viewType == Type.DELETED.ordinal()) {
+			View view = inflater.inflate(R.layout.deleted_comment_item, parent, false);
+			return new RecyclerView.ViewHolder(view) {};
+		}
+
+		View view = inflater.inflate(R.layout.comment_list_item, parent, false);
+		return new CommentViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
-		holder.setComment(comments.get(position));
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		int type = getItemViewType(position);
+
+		if (type == Type.ADD.ordinal()) {
+			return;
+		}
+
+		AbstractComment abstractComment = comments.get(position);
+
+		if (type == Type.REGULAR.ordinal()) {
+			((CommentViewHolder) holder).setComment((Comment) abstractComment);
+		}
+
+		int left = viewWidth / 30 * abstractComment.getLevel();
+		holder.itemView.setPadding(left, 0, 0, 0);
 	}
 
 	@Override
 	public int getItemCount() {
-		return comments.size();
+		return comments.size() + (canAddNewComment ? 1 : 0);
 	}
 
-	public void setComments(List<AbstractComment> tree) {
+	@Override
+	public int getItemViewType(int position) {
+		if (position >= comments.size()) {
+			return Type.ADD.ordinal();
+		}
+
+		if (comments.get(position) instanceof DeletedComment) {
+			return Type.DELETED.ordinal();
+		}
+
+		return Type.REGULAR.ordinal();
+	}
+
+	public void setViewWidth(int width) {
+		this.viewWidth = width;
+	}
+
+	public void setCommentsContainer(CommentsContainer container) {
 		this.comments = new ArrayList<>();
 
-		addComments(tree);
+		canAddNewComment = container.canAddNewComment();
+		addComments(container.getComments());
 	}
 
 	private void addComments(List<AbstractComment> tree) {
@@ -55,4 +107,5 @@ public class CommentsAdapter extends RecyclerView.Adapter<ViewHolder> {
 			addComments(comment.getChildren());
 		}
 	}
+
 }

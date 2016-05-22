@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class LoginActivityTest {
 
 	private UiDevice device;
-	final String packageName = BuildConfig.APPLICATION_ID;
+	static final String APP_ID = BuildConfig.APPLICATION_ID;
 
 	@Rule
 	public ActivityTestRule<NewsActivity> activityTestRule = new ActivityTestRule(NewsActivity_.class);
@@ -51,11 +51,11 @@ public class LoginActivityTest {
 
 		UiObject openDrawerButton = device.findObject(new UiSelector()
 				.className("android.widget.ImageButton")
-				.packageName(packageName)
+				.packageName(APP_ID)
 				.instance(0));
 		openDrawerButton
 				.click();
-		device.waitForWindowUpdate(packageName, 100);
+		device.waitForWindowUpdate(APP_ID, 100);
 
 		onView(withId(R.id.login_view)).perform(click());
 		device.waitForIdle();
@@ -65,27 +65,27 @@ public class LoginActivityTest {
 
 		UiObject loginField = device.findObject(new UiSelector()
 				.className("android.widget.EditText")
-		        .resourceId(packageName + ":id/login_view"));
+				.resourceId(APP_ID + ":id/login_view"));
 		Assert.assertTrue(loginField.exists());
 
 		UiObject passwordField = device.findObject(new UiSelector()
 				.className("android.widget.EditText")
-				.resourceId(packageName + ":id/password_view"));
+				.resourceId(APP_ID + ":id/password_view"));
 		Assert.assertTrue(passwordField.exists());
 
 		UiObject capchaPic = device.findObject(new UiSelector()
-		        .className("android.widget.ImageView")
-		        .resourceId(packageName + ":id/captcha_image_view"));
+				.className("android.widget.ImageView")
+				.resourceId(APP_ID + ":id/captcha_image_view"));
 		Assert.assertTrue(capchaPic.exists());
 
 		UiObject capchaText = device.findObject(new UiSelector()
 				.className("android.widget.EditText")
-				.resourceId(packageName + ":id/captcha_text_view"));
+				.resourceId(APP_ID + ":id/captcha_text_view"));
 		Assert.assertTrue(capchaText.exists());
 
 		UiObject capchaEnterButton = device.findObject(new UiSelector()
 				.className("android.widget.Button")
-				.resourceId(packageName + ":id/enter_view"));
+				.resourceId(APP_ID + ":id/enter_view"));
 		Assert.assertTrue(capchaEnterButton.exists());
 	}
 }

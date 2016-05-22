@@ -48,17 +48,33 @@
 	<string name="article_network_error">Не удалось загрузить статью</string>
 	<string name="article_list_network_error">Не удалось загрузить список статей</string>
 	<string name="comments_network_error">Не удалось загрузить комментарии</string>
-	<string name="login">Войти</string>
-	<string name="logout">Выйти</string>
+	<string name="signIn">Войти</string>
+	<string name="signOut">Выйти</string>
 	<string name="login_hint">Логин</string>
 	<string name="password_hint">Пароль</string>
-	<string name="captcha_hint">Введите число цифрами</string>
+	<string name="captcha_hint">Число цифрами</string>
 	<string name="auth_title">Вход</string>
 	<string name="auth_network_error">Не удалось загрузить информацию для авторизации.</string>
+	<string name="reply">Ответить</string>
+
+	<string name="comments_new">Новый комментарий</string>
+	<string name="comments_reply_title">Ответ на комментарий</string>
+	<string name="add_comment">Оставить комментарий</string>
+	<string name="add_comment_dialog_title">Добавление комментария</string>
+	<string name="add_comment_text_hint">Важно! Мы напоминаем вам о необходимости уважать собеседников. Любые проявления хамства и неуважения к другим людям, их мнению, устройству или операционной системе наказываются переводом вашего аккаунта в режим &quot;только чтение&quot; на срок от 3 до 7 суток и автоматическому снижению кармы до отрицательных значений.</string>
+	<string name="show_comment_dialog_title">Комментарий</string>
+
+	<string name="cancel">Отменить</string>
+	<string name="add_comment_network_error">Не удалось добавить комментарий</string>
 
 	<string name="text_zoom">Размер шрифта</string>
 	<string name="text_zoom_value">%s%%</string>
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
+	<string name="share">Поделиться</string>
+
+	<string name="deleted_comment">Комментарий удален</string>
+
+	<string name="first_comment_dialog_ok">Все понял</string>
 
 </resources>
