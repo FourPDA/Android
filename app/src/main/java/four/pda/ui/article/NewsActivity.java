@@ -149,11 +149,12 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 				.commit();
 	}
 
-	public void onEvent(ShowCommentsEvent event) {
-		L.debug("Show comments for article with id {}", event.getId());
+	public void onEvent(ShowArticleCommentsEvent event) {
+		L.debug("Show comments for article with id {}", event.getArticleId());
 
 		CommentsFragment fragment = CommentsFragment_.builder()
-				.id(event.getId())
+				.articleId(event.getArticleId())
+				.articleDate(event.getArticleDate())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()

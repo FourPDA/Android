@@ -214,4 +214,9 @@ public class FourPdaClient {
 			throw e;
 		}
 	}
+
+	public String getCommentUrl(long articleId, Date articleDate, long commentId) {
+		return getArticleUrl(articleDate, articleId) + "/#comment" + commentId;
+	}
+
 }

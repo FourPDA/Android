@@ -32,7 +32,7 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<CommentsContainer> loadInBackground() {
-				Article article = fragment.dao.getArticle(fragment.id);
+				Article article = fragment.dao.getArticle(fragment.articleId);
 				try {
 					return new LoadResult<>(fragment.client.getArticleComments(article.getDate(), article.getId()));
 				} catch (Exception e) {
