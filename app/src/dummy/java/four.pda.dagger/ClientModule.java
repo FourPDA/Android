@@ -16,12 +16,10 @@ import okhttp3.OkHttpClient;
  * Created by asavinova on 23/02/16.
  */
 @Module
-public class ClientModule {
-
-	private Context context;
+public class ClientModule extends BaseModule {
 
 	public ClientModule(Context context) {
-		this.context = context;
+		super(context);
 	}
 
 	@Provides
