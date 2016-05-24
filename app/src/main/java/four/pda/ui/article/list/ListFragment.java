@@ -128,6 +128,10 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		loadData(true);
 	}
 
+	public CategoryType getCategory() {
+		return category;
+	}
+
 	private void showMenuIcon() {
 		final View view = getActivity().findViewById(R.id.drawer_layout);
 		if (view == null) return;

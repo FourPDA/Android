@@ -93,8 +93,13 @@ public class DrawerFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    analytics.drawer().categoryClicked(map.get(view));
-                    setViewSelected(view);
+					CategoryType category = map.get(view);
+
+					analytics.drawer().categoryClicked(category);
+
+					for (ChangeCategoryListener listener : listeners) {
+						listener.onChange(category);
+					}
                 }
             });
         }
@@ -148,15 +153,6 @@ public class DrawerFragment extends Fragment {
     void aboutClicked() {
         analytics.drawer().aboutClicked();
         AboutActivity_.intent(getActivity()).start();
-    }
-
-	private void setViewSelected(View selectedView) {
-        for (View view : map.keySet()) {
-            view.setSelected(view == selectedView);
-        }
-        for (ChangeCategoryListener listener : listeners) {
-            listener.onChange(map.get(selectedView));
-        }
     }
 
     public interface ChangeCategoryListener {
