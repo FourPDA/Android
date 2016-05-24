@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
@@ -112,6 +112,9 @@ dependencies {
 	compile 'com.jakewharton:butterknife:7.0.1'
 
 	compile 'de.greenrobot:eventbus:2.4.0'
+
+	provided 'frankiesardo:auto-parcel:1.0.1'
+	apt 'frankiesardo:auto-parcel:1.0.1'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;

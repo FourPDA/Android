@@ -42,7 +42,7 @@ import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
-import four.pda.ui.article.ShowCommentsEvent;
+import four.pda.ui.article.ShowArticleCommentsEvent;
 
 /**
  * Created by asavinova on 11/04/15.
@@ -152,7 +152,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@Click
 	void commentsButton() {
-		eventBus.post(new ShowCommentsEvent(id));
+		eventBus.post(new ShowArticleCommentsEvent(id, date));
 	}
 
 	private void loadData() {
