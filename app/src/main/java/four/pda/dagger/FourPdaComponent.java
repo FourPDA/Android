@@ -6,6 +6,7 @@ import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleTaskLoader;
+import four.pda.ui.article.search.SearchFragment;
 import four.pda.ui.auth.AuthActivity;
 
 /**
@@ -25,5 +26,7 @@ public interface FourPdaComponent {
 	void inject(AuthActivity x);
 
 	void inject(DrawerFragment x);
+
+	void inject(SearchFragment x);
 
 }

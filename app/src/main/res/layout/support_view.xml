@@ -11,6 +11,7 @@
 		android:layout_width="32dp"
 		android:layout_height="32dp"
 		android:layout_gravity="center"
+		android:visibility="gone"
 		app:pv_autostart="true"
 		app:pv_circular="true"
 		app:pv_progressMode="indeterminate" />

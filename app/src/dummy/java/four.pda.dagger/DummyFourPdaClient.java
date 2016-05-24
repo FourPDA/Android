@@ -221,4 +221,10 @@ public class DummyFourPdaClient extends FourPdaClient {
 
 		return comments;
 	}
+
+	@Override
+	public List<ListArticle> searchArticles(String search, int page) throws IOException {
+		return articles;
+	}
+
 }

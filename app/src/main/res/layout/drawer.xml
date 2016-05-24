@@ -81,6 +81,11 @@
 				style="@style/CategoryItem"
 				android:text="@string/category_games" />
 
+			<TextView
+				android:id="@+id/search_view"
+				style="@style/CategoryItem"
+				android:text="@string/category_search" />
+
 		</LinearLayout>
 
 	</ScrollView>

@@ -1,13 +1,6 @@
 package four.pda.ui.article.list;
 
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,8 +18,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import four.pda.App;
@@ -35,10 +26,8 @@ import four.pda.R;
 import four.pda.analytics.Analytics;
 import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
-import four.pda.client.model.ListArticle;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryTitleMap;
-import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 
 /**
@@ -48,7 +37,7 @@ import four.pda.ui.SupportView;
 public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
-	private static final String FORCE = "force";
+	static final String FORCE = "force";
 
 	@FragmentArg CategoryType category;
 
@@ -64,9 +53,9 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@Inject FourPdaClient client;
 
-	private int page = 1;
+	int page = 1;
 
-	private ArticlesAdapter adapter;
+	ArticlesAdapter adapter;
 	private GridLayoutManager layoutManager;
 
 	@AfterViews
@@ -120,7 +109,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		layoutManager.scrollToPosition(0);
 	}
 
-	private void loadData(boolean force) {
+	void loadData(boolean force) {
 		refresh.setRefreshing(true);
 
 		int itemCount = adapter.getItemCount();
@@ -130,7 +119,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 		Bundle bundle = new Bundle();
 		bundle.putBoolean(FORCE, force);
-		getLoaderManager().restartLoader(LOADER_ID, bundle, new Callbacks()).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, bundle, new Callbacks(this)).forceLoad();
 	}
 
 	@Override
@@ -138,91 +127,4 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		loadData(true);
 	}
 
-	private void showMenuIcon() {
-		final View view = getActivity().findViewById(R.id.drawer_layout);
-		if (view == null) return;
-
-		if (view instanceof DrawerLayout) {
-			toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					((DrawerLayout) view).openDrawer(GravityCompat.START);
-				}
-			});
-		}
-	}
-
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
-
-		private boolean force;
-
-		@Override
-		public Loader<LoadResult<Cursor>> onCreateLoader(int id, final Bundle args) {
-			return new AsyncTaskLoader<LoadResult<Cursor>>(getActivity()) {
-
-				@Override
-				public LoadResult<Cursor> loadInBackground() {
-					force = args.getBoolean(FORCE);
-					if (force) {
-						page = 1;
-					}
-
-					try {
-						List<ListArticle> articles = client.getArticles(category, page);
-
-						boolean needClearData = page == 1;
-						dao.setArticles(articles, category, needClearData);
-
-						return new LoadResult<>(dao.getArticleCursor(category));
-					} catch (Exception e) {
-						L.error("Articles page request error", e);
-						return new LoadResult<>(e);
-					}
-				}
-
-			};
-		}
-
-		@Override
-		public void onLoadFinished(Loader<LoadResult<Cursor>> loader, LoadResult<Cursor> result) {
-			refresh.setRefreshing(false);
-
-			if (result.getException() == null) {
-				page++;
-
-				adapter.swapCursor(result.getData());
-				adapter.notifyDataSetChanged();
-
-				supportView.hide();
-				upButton.setVisibility(View.VISIBLE);
-
-				return;
-			}
-
-			int itemCount = adapter.getItemCount();
-
-			View.OnClickListener retryListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData(force);
-				}
-			};
-
-			if (itemCount == 0) {
-				upButton.setVisibility(View.GONE);
-				supportView.showError(getString(R.string.article_list_network_error), retryListener);
-				return;
-			}
-
-			Snackbar
-					.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
-					.setAction(R.string.retry_button, retryListener)
-					.show();
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoadResult<Cursor>> loader) {
-		}
-	}
 }

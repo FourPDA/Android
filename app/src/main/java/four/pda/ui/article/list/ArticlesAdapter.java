@@ -12,7 +12,7 @@ import four.pda.ui.CursorRecyclerViewAdapter;
 /**
  * Created by asavinova on 10/04/15.
  */
-public class ArticlesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
+public class ArticlesAdapter extends CursorRecyclerViewAdapter<ArticleViewHolder> {
 
 	private LayoutInflater inflater;
 
@@ -22,13 +22,13 @@ public class ArticlesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.article_list_item, parent, false);
-		return new ViewHolder(view);
+		return new ArticleViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+	public void onBindViewHolder(ArticleViewHolder viewHolder, Cursor cursor) {
 		viewHolder.setCursor(cursor);
 	}
 
