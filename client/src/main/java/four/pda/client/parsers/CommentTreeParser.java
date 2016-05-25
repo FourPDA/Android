@@ -13,6 +13,7 @@ import java.util.List;
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
+import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
 
 /**
@@ -24,7 +25,7 @@ public class CommentTreeParser extends AbstractParser {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy | HH:ss");
 
-	public List<AbstractComment> parse(String pageSource) {
+	public CommentsContainer parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
 		Element element = document.select("div#comments").first();
 
@@ -35,7 +36,15 @@ public class CommentTreeParser extends AbstractParser {
 		}
 
 		try {
-			return parseList(element, 0);
+			CommentsContainer container = new CommentsContainer();
+
+			List<AbstractComment> comments = parseList(element, 0);
+			container.setComments(comments);
+
+			Element commentForm = document.select("form#commentform").first();
+			container.setCanAddNewComment(commentForm != null);
+
+			return container;
 		} catch (Exception e) {
 			String message = "Can't parse comments tree";
 			L.error(message, e);
@@ -91,6 +100,9 @@ public class CommentTreeParser extends AbstractParser {
 		level++;
 		comment.setChildren(parseList(element, level));
 
+		Element commentFormElement = element.select("#comment-form-reply-" + comment.getId()).first();
+		comment.setCanReply(commentFormElement != null);
+
 		return comment;
 	}
 
@@ -111,6 +123,8 @@ public class CommentTreeParser extends AbstractParser {
 
 		level++;
 		comment.setChildren(parseList(element, level));
+
+		comment.setCanReply(false);
 
 		return comment;
 	}
