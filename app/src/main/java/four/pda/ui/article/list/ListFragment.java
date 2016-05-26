@@ -37,7 +37,6 @@ import four.pda.ui.SupportView;
 public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int LOADER_ID = 0;
-	static final String FORCE = "force";
 
 	@FragmentArg CategoryType category;
 
@@ -54,8 +53,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 	@Inject FourPdaClient client;
 
 	int page = 1;
-
 	ArticlesAdapter adapter;
+
 	private GridLayoutManager layoutManager;
 
 	@AfterViews
@@ -118,13 +117,17 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		}
 
 		Bundle bundle = new Bundle();
-		bundle.putBoolean(FORCE, force);
-		getLoaderManager().restartLoader(LOADER_ID, bundle, new Callbacks(this)).forceLoad();
+		bundle.putBoolean(ListCallbacks.FORCE_BUNDLE_ARG, force);
+		getLoaderManager().restartLoader(LOADER_ID, bundle, new ListCallbacks(this)).forceLoad();
 	}
 
 	@Override
 	public void onRefresh() {
 		loadData(true);
+	}
+
+	public CategoryType getCategory() {
+		return category;
 	}
 
 }

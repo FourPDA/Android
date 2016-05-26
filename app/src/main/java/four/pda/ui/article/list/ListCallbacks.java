@@ -18,16 +18,18 @@ import four.pda.client.model.ListArticle;
 import four.pda.ui.LoadResult;
 
 /**
- * Created by asavinova on 12/05/16.
+ * Created by asavinova on 24/05/16.
  */
-public class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
+public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
 
-	private static final Logger L = LoggerFactory.getLogger(Callbacks.class);
+	private static final Logger L = LoggerFactory.getLogger(ListCallbacks.class);
+
+	static final String FORCE_BUNDLE_ARG = "force";
 
 	private boolean force;
 	private ListFragment fragment;
 
-	public Callbacks(ListFragment fragment) {
+	public ListCallbacks(ListFragment fragment) {
 		this.fragment = fragment;
 	}
 
@@ -37,7 +39,7 @@ public class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<Curso
 
 			@Override
 			public LoadResult<Cursor> loadInBackground() {
-				force = args.getBoolean(fragment.FORCE);
+				force = args.getBoolean(FORCE_BUNDLE_ARG);
 				if (force) {
 					fragment.page = 1;
 				}

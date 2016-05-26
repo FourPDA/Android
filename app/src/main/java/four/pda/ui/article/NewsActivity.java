@@ -2,6 +2,7 @@ package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,6 +31,7 @@ import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.list.ListFragment_;
 import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleFragment_;
+import four.pda.ui.article.search.SearchFragment;
 import four.pda.ui.article.search.SearchFragment_;
 
 /**
@@ -68,6 +70,24 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 					.commit();
 		}
 
+		getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+			@Override
+			public void onBackStackChanged() {
+				Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_container);
+
+				if (fragment == null) {
+					return;
+				}
+
+				if (fragment instanceof SearchFragment) {
+					category = CategoryType.SEARCH;
+				} else {
+					category = ((ListFragment) fragment).getCategory();
+				}
+
+				drawer.setCategorySelected(category);
+			}
+		});
 	}
 
 	@AfterViews
