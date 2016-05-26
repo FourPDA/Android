@@ -3,9 +3,26 @@
 
 <head>
     <link rel="stylesheet" href="http://s.4pda.to/css/site.min.css?_=1429170453"/>
-    <style>
+    <meta charset="UTF-8">
+    <style type="text/css">
+        body {
+            background: white;
+            padding: 4mm;
+        }
+        .container {
+            padding: 0;
+            background: none;
+            border: none;
+        }
+        .content {
+            padding: 0 !important;
+        }
         .content-box {
             font-size: 110% !important;
+        }
+        a {
+            text-decoration: underline;
+            color: #0072bc;
         }
     </style>
 </head>
@@ -15,7 +32,7 @@
 <div class="container" itemscope="" itemtype="http://schema.org/Article">
     <div class="content">
         <div class="content-box" itemprop="description">
-            {{content}}
+            {{{content}}}
         </div>
     </div>
 </div>

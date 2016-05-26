@@ -9,7 +9,9 @@ mainClassName = 'four.pda.templates.exporter.Exporter'
 dependencies {
 
 	compile project(':html_templates')
-    compile 'org.slf4j:slf4j-api:1.7.12'
+	compile project(':client')
+
+    compile 'org.slf4j:slf4j-simple:1.7.12'
 	compile 'commons-io:commons-io:2.4'
 
 }
