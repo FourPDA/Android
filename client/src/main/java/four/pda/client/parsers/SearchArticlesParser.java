@@ -37,7 +37,13 @@ public class SearchArticlesParser extends AbstractParser {
 
 		Element countElement = searchBoxElement.select(".content > .s-count").first();
 		String countString = countElement.select("dd").first().text();
-		container.setCount(Integer.parseInt(countString));
+		container.setAllArticlesCount(Integer.parseInt(countString));
+
+		Element activePageElement = document.select(".page-nav > li.active > a").first();
+		if (activePageElement != null) {
+			String currentPage = activePageElement.text();
+			container.setCurrentPage(Integer.parseInt(currentPage));
+		}
 
 		Elements elements = document.select(".search-list > li");
 		List<ListArticle> articles = new ArrayList<>();
