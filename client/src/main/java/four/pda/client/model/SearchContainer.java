@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class SearchContainer {
 
-	private static final int ARTICLES_PER_PAGE = 30;
+	public static final int ARTICLES_PER_PAGE = 30;
 
 	private int allArticlesCount;
 	private int currentPage;

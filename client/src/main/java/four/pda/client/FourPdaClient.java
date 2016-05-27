@@ -13,6 +13,7 @@ import four.pda.client.model.Captcha;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
+import four.pda.client.model.SearchContainer;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
 import four.pda.client.parsers.CaptchaParser;
@@ -20,6 +21,7 @@ import four.pda.client.parsers.CommentTreeParser;
 import four.pda.client.parsers.LoginParser;
 import four.pda.client.parsers.ProfileParser;
 import four.pda.client.parsers.ReviewListParser;
+import four.pda.client.parsers.SearchArticlesParser;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -219,9 +221,23 @@ public class FourPdaClient {
 		return getArticleUrl(articleDate, articleId) + "/#comment" + commentId;
 	}
 
-	public List<ListArticle> searchArticles(String search, int page) throws IOException {
-		//TODO Подставить настоящую реализацию
-		return getArticles(CategoryType.ALL, page);
+	public SearchContainer searchArticles(String search, int page) throws IOException {
+		String url = String.format(BASE_URL + "page/%s/?s=%s", page, search);
+		url = addRandomToUrl(url);
+
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String body = response.body().string();
+
+		try {
+			return new SearchArticlesParser().parse(body, page);
+		} catch (RuntimeException e) {
+			L.error(String.format("Can't parse search page at %s", url), e);
+			throw e;
+		}
 	}
 
 }

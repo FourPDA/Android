@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import four.pda.client.exceptions.ParseException;
@@ -21,7 +23,7 @@ public class SearchArticlesParser extends AbstractParser {
 
 	private static final Logger L = LoggerFactory.getLogger(SearchArticlesParser.class);
 
-	public SearchContainer parse(String pageSource) {
+	public SearchContainer parse(String pageSource, int page) {
 
 		Document document = Jsoup.parse(pageSource);
 
@@ -48,11 +50,12 @@ public class SearchArticlesParser extends AbstractParser {
 		Elements elements = document.select(".search-list > li");
 		List<ListArticle> articles = new ArrayList<>();
 
+		int position = 0;
 		for (Element element : elements) {
 
 			ListArticle article;
 			try {
-				article = parseListItem(element);
+				article = parseListItem(element, page, position);
 			} catch (Exception e) {
 				String message = "Can't parse search articles list";
 				L.error(message, e);
@@ -63,6 +66,8 @@ public class SearchArticlesParser extends AbstractParser {
 				continue;
 			}
 			articles.add(article);
+
+			position++;
 		}
 
 		container.setArticles(articles);
@@ -70,7 +75,7 @@ public class SearchArticlesParser extends AbstractParser {
 		return container;
 	}
 
-	private ListArticle parseListItem(Element element) {
+	private ListArticle parseListItem(Element element, int page, int position) {
 
 		ListArticle article = new ListArticle();
 
@@ -92,6 +97,12 @@ public class SearchArticlesParser extends AbstractParser {
 		IdAndDate idAndDate = getIdAndDateFromUrl(url);
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
+
+		// Устанавливаем фиктивную дату публикации для дальнейшей сортировки в базе
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(idAndDate.date);
+		calendar.set(Calendar.MILLISECOND, 10000 - page * SearchContainer.ARTICLES_PER_PAGE - position);
+		article.setPublishedDate(calendar.getTime());
 
 		article.setTitle(titleElement.text());
 		article.setDescription(element.select(".content > p > a").first().text());

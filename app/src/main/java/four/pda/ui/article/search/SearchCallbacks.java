@@ -11,17 +11,15 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import four.pda.R;
 import four.pda.client.CategoryType;
-import four.pda.client.model.ListArticle;
+import four.pda.client.model.SearchContainer;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 07/05/16.
  */
-public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
+public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<SearchContainer>> {
 
 	private static final Logger L = LoggerFactory.getLogger(SearchCallbacks.class);
 
@@ -32,18 +30,18 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 	}
 
 	@Override
-	public Loader<LoadResult<Cursor>> onCreateLoader(int id, final Bundle args) {
-		return new AsyncTaskLoader<LoadResult<Cursor>>(fragment.getActivity()) {
+	public Loader<LoadResult<SearchContainer>> onCreateLoader(int id, final Bundle args) {
+		return new AsyncTaskLoader<LoadResult<SearchContainer>>(fragment.getActivity()) {
 
 			@Override
-			public LoadResult<Cursor> loadInBackground() {
+			public LoadResult<SearchContainer> loadInBackground() {
 
 				try {
-					List<ListArticle> articles = fragment.client.searchArticles(fragment.search, fragment.page);
-					boolean needClearData = fragment.page == 1;
-					fragment.dao.setArticles(articles, CategoryType.SEARCH, needClearData);
+					SearchContainer container = fragment.client.searchArticles(fragment.search, fragment.nextPage);
+					boolean needClearData = fragment.nextPage == 1;
+					fragment.dao.setArticles(container.getArticles(), CategoryType.SEARCH, needClearData);
 
-					return new LoadResult<>(fragment.dao.getArticleCursor(CategoryType.SEARCH));
+					return new LoadResult<>(container);
 				} catch (Exception e) {
 					L.error("Search articles request error", e);
 					return new LoadResult<>(e);
@@ -54,13 +52,16 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoadResult<Cursor>> loader, LoadResult<Cursor> result) {
+	public void onLoadFinished(Loader<LoadResult<SearchContainer>> loader, LoadResult<SearchContainer> result) {
 		fragment.supportView.hide();
 
 		if (result.getException() == null) {
-			fragment.page++;
+			SearchContainer container = result.getData();
+			fragment.nextPage = container.getCurrentPage() + 1;
+			fragment.hasNextPage = container.hasNextPage();
 
-			fragment.adapter.swapCursor(result.getData());
+			Cursor cursor = fragment.dao.getArticleCursor(CategoryType.SEARCH);
+			fragment.adapter.swapCursor(cursor);
 			fragment.adapter.notifyDataSetChanged();
 
 			fragment.supportView.hide();
@@ -91,7 +92,7 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoadResult<Cursor>> loader) {
+	public void onLoaderReset(Loader<LoadResult<SearchContainer>> loader) {
 	}
 
 }
