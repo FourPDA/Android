@@ -15,6 +15,7 @@ import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
+import four.pda.client.model.SearchContainer;
 import okhttp3.OkHttpClient;
 
 /**
@@ -183,8 +184,14 @@ public class DummyFourPdaClient extends FourPdaClient {
 	}
 
 	@Override
-	public List<ListArticle> searchArticles(String search, int page) throws IOException {
-		return articles;
+	public SearchContainer searchArticles(String search, int page) throws IOException {
+		SearchContainer container = new SearchContainer();
+
+		container.setCurrentPage(page);
+		container.setAllArticlesCount(articles.size());
+		container.setArticles(articles);
+
+		return container;
 	}
 
 }

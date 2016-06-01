@@ -41,7 +41,8 @@ public class SearchFragment extends BaseFragment {
 
 	@Inject FourPdaClient client;
 
-	int page = 1;
+	int nextPage = 1;
+	boolean hasNextPage;
 	String search;
 	SearchAdapter adapter;
 
@@ -67,7 +68,7 @@ public class SearchFragment extends BaseFragment {
 				int totalItemCount = layoutManager.getItemCount();
 				int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-				if (!supportView.isLoading()
+				if (!supportView.isLoading() && hasNextPage
 						&& (totalItemCount - visibleItemCount) <= firstVisibleItemPosition) {
 					loadData();
 				}
@@ -94,7 +95,7 @@ public class SearchFragment extends BaseFragment {
 	}
 
 	public void onEvent(SearchArticlesEvent event) {
-		page = 1;
+		nextPage = 1;
 		search = event.getSearch();
 		adapter.swapCursor(null);
 		loadData();
