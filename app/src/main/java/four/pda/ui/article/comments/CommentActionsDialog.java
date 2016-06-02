@@ -32,6 +32,7 @@ public class CommentActionsDialog extends DialogFragment {
 	@ViewById Toolbar toolbar;
 	@ViewById TextView nickView;
 	@ViewById TextView dateView;
+	@ViewById TextView likesView;
 	@ViewById TextView contentView;
 	@ViewById TextView replyButton;
 
@@ -53,6 +54,9 @@ public class CommentActionsDialog extends DialogFragment {
 
 		String verboseDate = DATE_FORMAT.format(comment.getDate());
 		dateView.setText(verboseDate);
+
+		int likes = comment.getKarma().getLikes();
+		likesView.setText(String.valueOf(likes));
 
 		contentView.setText(Html.fromHtml(comment.getContent()));
 

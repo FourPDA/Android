@@ -28,7 +28,7 @@ public class CommentTreeParser extends AbstractParser {
 	private static final Logger L = LoggerFactory.getLogger(CommentTreeParser.class);
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy | HH:ss");
-	private static final Pattern KARMA_PATTERN = Pattern.compile("\"(?<id>\\d+)\":\\[(?<unk1>\\d+),(?<unk2>\\d+),(?<unk3>\\d+),(?<likes>\\d+)\\]");
+	private static final Pattern KARMA_PATTERN = Pattern.compile("\"(\\d+)\":\\[(\\d+),(\\d+),(\\d+),(\\d+)\\]");
 
 	private Map<Long, Comment.Karma> karmaMap;
 
@@ -76,12 +76,12 @@ public class CommentTreeParser extends AbstractParser {
 		Map<Long, Comment.Karma> map = new HashMap<>();
 
 		while (matcher.find()) {
-			long commentId = Long.parseLong(matcher.group("id"));
+			long commentId = Long.parseLong(matcher.group(1));
 			Comment.Karma karma = new Comment.Karma();
-			karma.setUnknown1(Integer.parseInt(matcher.group("unk1")));
-			karma.setUnknown2(Integer.parseInt(matcher.group("unk2")));
-			karma.setUnknown3(Integer.parseInt(matcher.group("unk3")));
-			karma.setLikes(Integer.parseInt(matcher.group("likes")));
+			karma.setUnknown1(Integer.parseInt(matcher.group(2)));
+			karma.setUnknown2(Integer.parseInt(matcher.group(3)));
+			karma.setUnknown3(Integer.parseInt(matcher.group(4)));
+			karma.setLikes(Integer.parseInt(matcher.group(5)));
 			map.put(commentId, karma);
 		}
 

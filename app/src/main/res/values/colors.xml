@@ -6,7 +6,7 @@
 	<color name="accent">#4ebaf6</color>
 	<color name="error">#bc0000</color>
 	<color name="background">@android:color/white</color>
-	<color name="delimeter">#999</color>
+	<color name="delimiter">#999</color>
 
 	<color name="white">@android:color/white</color>
 
