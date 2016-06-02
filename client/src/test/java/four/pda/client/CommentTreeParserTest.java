@@ -152,7 +152,7 @@ public class CommentTreeParserTest extends AbstractTest {
 	}
 
 	@Test
-	public void likes() throws IOException {
+	public void articleLikesParsed() throws IOException {
 
 		String pageSource = getHtmlSource("/2013/12/20/130961/");
 		CommentsContainer container = new CommentTreeParser().parse(pageSource);

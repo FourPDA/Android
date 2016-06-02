@@ -135,8 +135,7 @@ public class CommentTreeParser extends AbstractParser {
 
 		comment.setKarma(karmaMap.get(comment.getId()));
 
-		level++;
-		comment.setChildren(parseList(element, level));
+		comment.setChildren(parseList(element, level + 1));
 
 		Element commentFormElement = element.select("#comment-form-reply-" + comment.getId()).first();
 		comment.setCanReply(commentFormElement != null);
