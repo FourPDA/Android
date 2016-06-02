@@ -1,17 +1,13 @@
 package four.pda.ui.article.search;
 
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import four.pda.R;
 import four.pda.client.CategoryType;
 import four.pda.client.model.SearchContainer;
 import four.pda.ui.LoadResult;
@@ -22,6 +18,9 @@ import four.pda.ui.LoadResult;
 public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<SearchContainer>> {
 
 	private static final Logger L = LoggerFactory.getLogger(SearchCallbacks.class);
+
+	private static final String SEARCH_CRITERIA_BUNDLE_ARG = "search";
+	private static final String CURRENT_PAGE_BUNDLE_ARG = "page";
 
 	private SearchFragment fragment;
 
@@ -36,9 +35,12 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 			@Override
 			public LoadResult<SearchContainer> loadInBackground() {
 
+				String searchCriteria = args.getString(SEARCH_CRITERIA_BUNDLE_ARG);
+				int currentPage = args.getInt(CURRENT_PAGE_BUNDLE_ARG);
+
 				try {
-					SearchContainer container = fragment.client.searchArticles(fragment.search, fragment.nextPage);
-					boolean needClearData = fragment.nextPage == 1;
+					SearchContainer container = fragment.client.searchArticles(searchCriteria, currentPage + 1);
+					boolean needClearData = currentPage == 0;
 					fragment.dao.setArticles(container.getArticles(), CategoryType.SEARCH, needClearData);
 
 					return new LoadResult<>(container);
@@ -56,43 +58,22 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 		fragment.supportView.hide();
 
 		if (result.getException() == null) {
-			SearchContainer container = result.getData();
-			fragment.nextPage = container.getCurrentPage() + 1;
-			fragment.hasNextPage = container.hasNextPage();
-
-			Cursor cursor = fragment.dao.getArticleCursor(CategoryType.SEARCH);
-			fragment.adapter.swapCursor(cursor);
-			fragment.adapter.notifyDataSetChanged();
-
-			fragment.supportView.hide();
-			fragment.upButton.setVisibility(View.VISIBLE);
-
+			fragment.updateData(result.getData());
 			return;
 		}
 
-		int itemCount = fragment.adapter.getItemCount();
-
-		View.OnClickListener retryListener = new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				fragment.loadData();
-			}
-		};
-
-		if (itemCount == 1) {
-			fragment.upButton.setVisibility(View.GONE);
-			fragment.supportView.showError(fragment.getString(R.string.article_list_network_error), retryListener);
-			return;
-		}
-
-		Snackbar
-				.make(fragment.layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
-				.setAction(R.string.retry_button, retryListener)
-				.show();
+		fragment.showError();
 	}
 
 	@Override
 	public void onLoaderReset(Loader<LoadResult<SearchContainer>> loader) {
+	}
+
+	public static Bundle createBundle(String searchText, int currentPage) {
+		Bundle bundle = new Bundle();
+		bundle.putString(SEARCH_CRITERIA_BUNDLE_ARG, searchText);
+		bundle.putInt(CURRENT_PAGE_BUNDLE_ARG, currentPage);
+		return bundle;
 	}
 
 }

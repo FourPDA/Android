@@ -7,10 +7,8 @@ import java.util.List;
  */
 public class SearchContainer {
 
-	public static final int ARTICLES_PER_PAGE = 30;
-
 	private int allArticlesCount;
-	private int currentPage;
+	private boolean hasNextPage;
 	private List<ListArticle> articles;
 
 	public int getAllArticlesCount() {
@@ -21,12 +19,12 @@ public class SearchContainer {
 		this.allArticlesCount = allArticlesCount;
 	}
 
-	public int getCurrentPage() {
-		return currentPage;
+	public boolean hasNextPage() {
+		return hasNextPage;
 	}
 
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
+	public void setHasNextPage(boolean hasNextPage) {
+		this.hasNextPage = hasNextPage;
 	}
 
 	public List<ListArticle> getArticles() {
@@ -35,10 +33,6 @@ public class SearchContainer {
 
 	public void setArticles(List<ListArticle> articles) {
 		this.articles = articles;
-	}
-
-	public boolean hasNextPage() {
-		return currentPage * ARTICLES_PER_PAGE < allArticlesCount;
 	}
 
 }

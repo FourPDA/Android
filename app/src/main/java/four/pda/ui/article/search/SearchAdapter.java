@@ -65,4 +65,9 @@ public class SearchAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHo
 	public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
 		((ItemViewHolder) viewHolder).setCursor(cursor);
 	}
+
+	public boolean isEmpty() {
+		return getItemCount() == 1;
+	}
+
 }

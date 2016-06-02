@@ -1,5 +1,7 @@
 package four.pda.ui.article.search;
 
+import android.database.Cursor;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +20,9 @@ import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
+import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.SearchContainer;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
 
@@ -41,11 +45,10 @@ public class SearchFragment extends BaseFragment {
 
 	@Inject FourPdaClient client;
 
-	int nextPage = 1;
-	boolean hasNextPage;
-	String search;
-	SearchAdapter adapter;
-
+	private int currentPage = 0;
+	private boolean hasNextPage;
+	private String searchCriteria;
+	private SearchAdapter adapter;
 	private LinearLayoutManager layoutManager;
 
 	@AfterViews
@@ -95,19 +98,52 @@ public class SearchFragment extends BaseFragment {
 	}
 
 	public void onEvent(SearchArticlesEvent event) {
-		nextPage = 1;
-		search = event.getSearch();
+		currentPage = 0;
+		searchCriteria = event.getSearchCriteria();
 		adapter.swapCursor(null);
 		loadData();
 	}
 
 	void loadData() {
-		int itemCount = adapter.getItemCount();
-		if (itemCount == 1) {
+		if (adapter.isEmpty()) {
 			supportView.showProgress();
 		}
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new SearchCallbacks(this)).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, SearchCallbacks.createBundle(searchCriteria, currentPage), new SearchCallbacks(this)).forceLoad();
+	}
+
+	void updateData(SearchContainer container) {
+		currentPage++;
+		hasNextPage = container.hasNextPage();
+
+		Cursor cursor = dao.getArticleCursor(CategoryType.SEARCH);
+		adapter.swapCursor(cursor);
+		adapter.notifyDataSetChanged();
+
+		supportView.hide();
+		upButton.setVisibility(View.VISIBLE);
+	}
+
+	void showError() {
+
+		View.OnClickListener retryListener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				loadData();
+			}
+		};
+
+		if (adapter.isEmpty()) {
+			upButton.setVisibility(View.GONE);
+			supportView.showError(getString(R.string.article_list_network_error), retryListener);
+			return;
+		}
+
+		Snackbar
+				.make(layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
+				.setAction(R.string.retry_button, retryListener)
+				.show();
+
 	}
 
 }

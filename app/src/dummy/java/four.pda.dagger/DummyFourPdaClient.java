@@ -187,8 +187,8 @@ public class DummyFourPdaClient extends FourPdaClient {
 	public SearchContainer searchArticles(String search, int page) throws IOException {
 		SearchContainer container = new SearchContainer();
 
-		container.setCurrentPage(page);
 		container.setAllArticlesCount(articles.size());
+		container.setHasNextPage(false);
 		container.setArticles(articles);
 
 		return container;

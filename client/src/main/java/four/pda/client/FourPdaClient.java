@@ -221,8 +221,8 @@ public class FourPdaClient {
 		return getArticleUrl(articleDate, articleId) + "/#comment" + commentId;
 	}
 
-	public SearchContainer searchArticles(String search, int page) throws IOException {
-		String url = String.format(BASE_URL + "page/%s/?s=%s", page, search);
+	public SearchContainer searchArticles(String searchCriteria, int page) throws IOException {
+		String url = String.format(BASE_URL + "page/%s/?s=%s", page, searchCriteria);
 		url = addRandomToUrl(url);
 
 		Request request = new Request.Builder()
