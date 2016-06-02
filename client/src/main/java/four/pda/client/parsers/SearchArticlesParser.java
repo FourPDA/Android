@@ -23,6 +23,8 @@ public class SearchArticlesParser extends AbstractParser {
 
 	private static final Logger L = LoggerFactory.getLogger(SearchArticlesParser.class);
 
+	private static final int ARTICLES_PER_PAGE = 30;
+
 	public SearchContainer parse(String pageSource, int page) {
 
 		Document document = Jsoup.parse(pageSource);
@@ -41,11 +43,8 @@ public class SearchArticlesParser extends AbstractParser {
 		String countString = countElement.select("dd").first().text();
 		container.setAllArticlesCount(Integer.parseInt(countString));
 
-		Element activePageElement = document.select(".page-nav > li.active > a").first();
-		if (activePageElement != null) {
-			String currentPage = activePageElement.text();
-			container.setCurrentPage(Integer.parseInt(currentPage));
-		}
+		Element nextPageElement = document.select(".page-nav > li > a > .icon-right-small").first();
+		container.setHasNextPage(nextPageElement != null);
 
 		Elements elements = document.select(".search-list > li");
 		List<ListArticle> articles = new ArrayList<>();
@@ -101,7 +100,7 @@ public class SearchArticlesParser extends AbstractParser {
 		// Устанавливаем фиктивную дату публикации для дальнейшей сортировки в базе
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(idAndDate.date);
-		calendar.set(Calendar.MILLISECOND, 10000 - page * SearchContainer.ARTICLES_PER_PAGE - position);
+		calendar.set(Calendar.MILLISECOND, 10000 - page * ARTICLES_PER_PAGE - position);
 		article.setPublishedDate(calendar.getTime());
 
 		article.setTitle(titleElement.text());

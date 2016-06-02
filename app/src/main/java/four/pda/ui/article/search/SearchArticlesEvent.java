@@ -5,14 +5,14 @@ package four.pda.ui.article.search;
  */
 public class SearchArticlesEvent {
 
-	private String search;
+	private String searchCriteria;
 
-	public SearchArticlesEvent(String search) {
-		this.search = search;
+	public SearchArticlesEvent(String searchCriteria) {
+		this.searchCriteria = searchCriteria;
 	}
 
-	public String getSearch() {
-		return search;
+	public String getSearchCriteria() {
+		return searchCriteria;
 	}
 
 }

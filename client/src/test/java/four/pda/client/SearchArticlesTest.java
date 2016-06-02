@@ -21,7 +21,6 @@ public class SearchArticlesTest extends AbstractTest {
 		String pageSource = getHtmlSource("/?s=android");
 		SearchContainer container = new SearchArticlesParser().parse(pageSource, 1);
 		Assert.assertTrue("Wrong search 'android' result", container.getAllArticlesCount() > 0);
-		Assert.assertTrue("Wrong current page for search 'android' result", container.getCurrentPage() == 1);
 		Assert.assertTrue("Wrong next page for search 'android' result", container.hasNextPage());
 	}
 
@@ -30,7 +29,6 @@ public class SearchArticlesTest extends AbstractTest {
 		String pageSource = getHtmlSource("/page/2/?s=android");
 		SearchContainer container = new SearchArticlesParser().parse(pageSource, 2);
 		Assert.assertTrue("Wrong search 'android' result from second page", container.getAllArticlesCount() > 0);
-		Assert.assertTrue("Wrong current page for search 'android' result", container.getCurrentPage() == 2);
 		Assert.assertTrue("Wrong next page for search 'android' result", container.hasNextPage());
 	}
 
@@ -39,7 +37,6 @@ public class SearchArticlesTest extends AbstractTest {
 		String pageSource = getHtmlSource("/page/334/?s=android");
 		SearchContainer container = new SearchArticlesParser().parse(pageSource, 334);
 		Assert.assertFalse("Wrong next page for search 'android' result", container.hasNextPage());
-		Assert.assertTrue("Wrong current page for search 'android' result", container.getCurrentPage() == 334);
 	}
 
 	@Test
@@ -48,7 +45,6 @@ public class SearchArticlesTest extends AbstractTest {
 		SearchContainer container = new SearchArticlesParser().parse(pageSource, 1);
 		Assert.assertTrue("Wrong search 'qweasdzxc' result", container.getAllArticlesCount() == 0);
 		Assert.assertFalse("Wrong next page for search 'qweasdzxc' result", container.hasNextPage());
-		Assert.assertTrue("Wrong current page for search 'qweasdzxc' result", container.getCurrentPage() == 0);
 	}
 
 	@Test
