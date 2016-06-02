@@ -30,17 +30,26 @@
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:gravity="end"
+				android:gravity="center_vertical"
 				android:orientation="horizontal"
 				android:paddingEnd="@dimen/offset_small"
 				android:paddingLeft="@dimen/offset_small"
 				android:paddingRight="@dimen/offset_small"
 				android:paddingStart="@dimen/offset_small">
 
+				<ImageView
+					android:id="@+id/share_button"
+					style="@style/MaterialFlatButton"
+					android:src="@drawable/ic_share_blue_18dp" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1" />
+
 				<TextView
 					android:id="@+id/reply_button"
 					style="@style/MaterialFlatButton"
-					android:layout_gravity="end"
 					android:text="@string/reply" />
 
 			</LinearLayout>

@@ -2,6 +2,7 @@ package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -67,6 +68,19 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 					.commit();
 		}
 
+		getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+			@Override
+			public void onBackStackChanged() {
+				ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_container);
+
+				if (listFragment == null) {
+					return;
+				}
+
+				category = listFragment.getCategory();
+				drawer.setCategorySelected(category);
+			}
+		});
 	}
 
 	@AfterViews
@@ -149,11 +163,12 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 				.commit();
 	}
 
-	public void onEvent(ShowCommentsEvent event) {
-		L.debug("Show comments for article with id {}", event.getId());
+	public void onEvent(ShowArticleCommentsEvent event) {
+		L.debug("Show comments for article with id {}", event.getArticleId());
 
 		CommentsFragment fragment = CommentsFragment_.builder()
-				.id(event.getId())
+				.articleId(event.getArticleId())
+				.articleDate(event.getArticleDate())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()

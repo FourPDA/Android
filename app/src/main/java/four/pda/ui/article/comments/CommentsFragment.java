@@ -22,6 +22,8 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import four.pda.App;
@@ -30,6 +32,7 @@ import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
 import four.pda.ui.UpdateProfileEvent;
@@ -44,7 +47,8 @@ public class CommentsFragment extends BaseFragment {
 	private static final int LOADER_ID = 0;
 	private static final int LOGIN_REQUEST_CODE = 0;
 
-	@FragmentArg long id;
+	@FragmentArg long articleId;
+	@FragmentArg Date articleDate;
 
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
@@ -55,8 +59,11 @@ public class CommentsFragment extends BaseFragment {
 	@Bean EventBus eventBus;
 
 	@Inject FourPdaClient client;
+
 	@Pref Preferences_ preferences;
+
 	CommentsAdapter adapter;
+
 	private AddCommentEvent addCommentEvent;
 
 	@AfterViews
@@ -125,8 +132,10 @@ public class CommentsFragment extends BaseFragment {
 	}
 
 	public void onEvent(CommentActionsEvent event) {
+		Comment comment = event.getComment();
+		CommentActionsDialog.Params params = CommentActionsDialog.Params.create(comment, articleId, articleDate);
 		CommentActionsDialog_.builder()
-				.comment(event.getComment())
+				.params(params)
 				.build()
 				.show(getChildFragmentManager(), "show_comment");
 	}
@@ -175,7 +184,7 @@ public class CommentsFragment extends BaseFragment {
 		}
 
 		AddCommentDialog_.builder()
-				.postId(id)
+				.postId(articleId)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
 				.build()

@@ -27,42 +27,53 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 	}
 
 	@Override
-	public Loader<LoadResult<CommentsContainer>> onCreateLoader(int id, Bundle args) {
-		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
-			@Override
-			public LoadResult<CommentsContainer> loadInBackground() {
-				try {
-					String message = fragment.messageEditText.getText().toString();
-					return new LoadResult<>(fragment.client.addComment(fragment.postId,
-							fragment.replyId,
-							message));
-				} catch (Exception e) {
-					L.error("Add comment request error", e);
-					return new LoadResult<>(e);
-				}
-			}
-		};
+	public AddCommentLoader onCreateLoader(int id, Bundle args) {
+		return new AddCommentLoader();
 	}
 
 	@Override
 	public void onLoadFinished(Loader<LoadResult<CommentsContainer>> loader, LoadResult<CommentsContainer> result) {
 		fragment.supportView.hide();
 
-		if (result.getException() == null) {
-			fragment.updateComments(result.getData());
+		if (result.getException() != null) {
+			fragment.supportView.showError(fragment.getString(R.string.add_comment_network_error), new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					fragment.addComment();
+				}
+			});
 			return;
 		}
 
-		fragment.supportView.showError(fragment.getString(R.string.add_comment_network_error), new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				fragment.addComment();
-			}
-		});
+		fragment.updateComments(result.getData());
 	}
 
 	@Override
 	public void onLoaderReset(Loader<LoadResult<CommentsContainer>> loader) {
+	}
+
+	private class AddCommentLoader extends AsyncTaskLoader<LoadResult<CommentsContainer>> {
+
+		public AddCommentLoader() {
+			super(AddCommentCallbacks.this.fragment.getActivity());
+		}
+
+		@Override
+        public LoadResult<CommentsContainer> loadInBackground() {
+            try {
+                String message = fragment.messageEditText.getText().toString();
+                CommentsContainer container = fragment.client.addComment(
+						fragment.postId,
+                        fragment.replyId,
+                        message
+				);
+                return new LoadResult<>(container);
+            } catch (Exception e) {
+                L.error("Add comment request error", e);
+                return new LoadResult<>(e);
+            }
+        }
+
 	}
 
 }
