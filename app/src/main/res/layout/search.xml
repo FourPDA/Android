@@ -13,14 +13,13 @@
 		android:gravity="center_vertical"
 		android:orientation="horizontal"
 		android:paddingEnd="@dimen/offset_normal"
-		android:paddingStart="@dimen/offset_normal">
+		android:paddingRight="@dimen/offset_normal">
 
 		<ImageView
 			android:id="@+id/arrow_back_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginEnd="@dimen/offset_small"
-			android:layout_marginRight="@dimen/offset_small"
+			android:layout_width="@dimen/icon_size"
+			android:layout_height="@dimen/icon_size"
+			android:scaleType="center"
 			android:src="@drawable/ic_arrow_back_white_24dp" />
 
 		<LinearLayout
