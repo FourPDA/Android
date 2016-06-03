@@ -9,7 +9,6 @@
 	<string name="category_reviews">Обзоры</string>
 	<string name="category_software">Программы</string>
 	<string name="category_games">Игры</string>
-	<string name="category_search">Поиск</string>
 
 	<string name="about">О программе</string>
 	<string name="chooser_title">Что использовать?</string>
@@ -79,6 +78,7 @@
 
 	<string name="first_comment_dialog_ok">Все понял</string>
 
+	<string name="search">Поиск</string>
 	<string name="search_articles_count">Найдено: %s</string>
 
 </resources>
