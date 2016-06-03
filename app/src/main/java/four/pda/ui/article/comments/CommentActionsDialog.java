@@ -41,6 +41,7 @@ public class CommentActionsDialog extends DialogFragment {
 	@ViewById Toolbar toolbar;
 	@ViewById TextView nickView;
 	@ViewById TextView dateView;
+	@ViewById TextView likesView;
 	@ViewById TextView contentView;
 	@ViewById TextView replyButton;
 
@@ -66,6 +67,8 @@ public class CommentActionsDialog extends DialogFragment {
 
 		String verboseDate = DATE_FORMAT.format(params.date());
 		dateView.setText(verboseDate);
+
+		likesView.setText(String.valueOf(params.likes()));
 
 		contentView.setText(Html.fromHtml(params.content()));
 
@@ -94,6 +97,7 @@ public class CommentActionsDialog extends DialogFragment {
 		abstract long id();
 		abstract String nickname();
 		abstract Date date();
+		abstract int likes();
 		abstract String content();
 		abstract boolean canReply();
 
@@ -105,6 +109,7 @@ public class CommentActionsDialog extends DialogFragment {
 					comment.getId(),
 					comment.getNickname(),
 					comment.getDate(),
+					comment.getKarma().getLikes(),
 					comment.getContent(),
 					comment.canReply(),
 					articleId,

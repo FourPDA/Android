@@ -21,9 +21,10 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
 	@Bind(R.id.author_info_view) View authorInfoView;
-	@Bind(R.id.delimeter_view) View delimeterView;
+	@Bind(R.id.delimiter_view) View delimiterView;
 	@Bind(R.id.nick_view) TextView nickView;
 	@Bind(R.id.date_view) TextView dateView;
+	@Bind(R.id.likes_view) TextView likesView;
 	@Bind(R.id.content_view) TextView contentView;
 
 	public CommentViewHolder(final View view) {
@@ -37,6 +38,9 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
 		String verboseDate = DATE_FORMAT.format(comment.getDate());
 		dateView.setText(verboseDate);
+
+		int likes = comment.getKarma().getLikes();
+		likesView.setText(String.valueOf(likes));
 
 		contentView.setText(Html.fromHtml(comment.getContent()));
 
