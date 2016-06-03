@@ -55,7 +55,6 @@ public class DrawerFragment extends Fragment {
 	@ViewById View articlesCategoryView;
 	@ViewById View softwareCategoryView;
 	@ViewById View gamesCategoryView;
-	@ViewById View searchView;
 	@ViewById View loginView;
 	@ViewById View logoutView;
 	@ViewById View logoView;
@@ -89,7 +88,6 @@ public class DrawerFragment extends Fragment {
         map.put(reviewsCategoryView, CategoryType.REVIEWS);
         map.put(articlesCategoryView, CategoryType.ARTICLES);
         map.put(softwareCategoryView, CategoryType.SOFTWARE);
-        map.put(searchView, CategoryType.SEARCH);
 
         for (View view : map.keySet()) {
             view.setOnClickListener(new View.OnClickListener() {

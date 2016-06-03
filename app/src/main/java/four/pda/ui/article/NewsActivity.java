@@ -31,8 +31,6 @@ import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.list.ListFragment_;
 import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleFragment_;
-import four.pda.ui.article.search.SearchFragment;
-import four.pda.ui.article.search.SearchFragment_;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -79,12 +77,7 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 					return;
 				}
 
-				if (fragment instanceof SearchFragment) {
-					category = CategoryType.SEARCH;
-				} else {
-					category = ((ListFragment) fragment).getCategory();
-				}
-
+				category = ((ListFragment) fragment).getCategory();
 				drawer.setCategorySelected(category);
 			}
 		});
@@ -136,20 +129,12 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 			return;
 		}
 
-		Fragment fragment;
-
-		if (CategoryType.SEARCH.equals(newCategory)) {
-			fragment = SearchFragment_.builder()
-					.build();
-		} else {
-			fragment = ListFragment_.builder()
-					.category(newCategory)
-					.build();
-		}
-
+		ListFragment listFragment = ListFragment_.builder()
+				.category(newCategory)
+				.build();
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
-				.replace(R.id.list_container, fragment);
+				.replace(R.id.list_container, listFragment);
 
 		if (itemFragment != null) {
 			transaction.remove(itemFragment);

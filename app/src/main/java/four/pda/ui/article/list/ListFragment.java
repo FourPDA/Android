@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import four.pda.client.FourPdaClient;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.SearchActivity_;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -63,6 +65,15 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
+
+		toolbar.inflateMenu(R.menu.list);
+		toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				SearchActivity_.intent(getActivity()).start();
+				return true;
+			}
+		});
 
 		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override

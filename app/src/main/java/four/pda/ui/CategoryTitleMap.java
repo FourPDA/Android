@@ -22,7 +22,6 @@ public class CategoryTitleMap {
 		map.put(CategoryType.REVIEWS, R.string.category_reviews);
 		map.put(CategoryType.SOFTWARE, R.string.category_software);
 		map.put(CategoryType.GAMES, R.string.category_games);
-		map.put(CategoryType.SEARCH, R.string.category_search);
 	}
 
 	@StringRes

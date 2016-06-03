@@ -4,9 +4,10 @@ import android.database.Cursor;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -35,7 +36,8 @@ public class SearchFragment extends BaseFragment {
 	private static final int LOADER_ID = 0;
 
 	@ViewById LinearLayout layout;
-	@ViewById Toolbar toolbar;
+	@ViewById SearchView searchView;
+	@ViewById TextView allArticlesCountView;
 	@ViewById RecyclerView recyclerView;
 	@ViewById View upButton;
 	@ViewById SupportView supportView;
@@ -55,8 +57,23 @@ public class SearchFragment extends BaseFragment {
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
-		toolbar.setTitle(R.string.category_search);
-		showMenuIcon();
+		searchView.onActionViewExpanded();
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				currentPage = 0;
+				searchCriteria = query;
+				adapter.swapCursor(null);
+				loadData();
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				allArticlesCountView.setVisibility(View.GONE);
+				return false;
+			}
+		});
 
 		layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(layoutManager);
@@ -80,28 +97,14 @@ public class SearchFragment extends BaseFragment {
 
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		eventBus.register(this);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		eventBus.unregister(this);
-	}
-
 	@Click
 	void upButton() {
 		layoutManager.scrollToPosition(0);
 	}
 
-	public void onEvent(SearchArticlesEvent event) {
-		currentPage = 0;
-		searchCriteria = event.getSearchCriteria();
-		adapter.swapCursor(null);
-		loadData();
+	@Click
+	void arrowBackButton() {
+		getActivity().finish();
 	}
 
 	void loadData() {
@@ -115,6 +118,9 @@ public class SearchFragment extends BaseFragment {
 	void updateData(SearchContainer container) {
 		currentPage++;
 		hasNextPage = container.hasNextPage();
+
+		allArticlesCountView.setText(getString(R.string.search_articles_count, container.getAllArticlesCount()));
+		allArticlesCountView.setVisibility(View.VISIBLE);
 
 		Cursor cursor = dao.getArticleCursor(CategoryType.SEARCH);
 		adapter.swapCursor(cursor);

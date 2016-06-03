@@ -5,9 +5,55 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/toolbar"
-		style="@style/Toolbar" />
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/primary"
+		android:elevation="4dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingEnd="@dimen/offset_normal"
+		android:paddingStart="@dimen/offset_normal">
+
+		<ImageView
+			android:id="@+id/arrow_back_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/offset_small"
+			android:layout_marginRight="@dimen/offset_small"
+			android:src="@drawable/ic_arrow_back_white_24dp" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="?android:attr/actionBarSize">
+
+				<android.support.v7.widget.SearchView
+					android:id="@+id/search_view"
+					style="@style/SearchView"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical" />
+
+			</FrameLayout>
+
+			<TextView
+				android:id="@+id/all_articles_count_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/offset_small"
+				android:layout_marginLeft="@dimen/offset_small"
+				android:layout_marginStart="@dimen/offset_small"
+				android:textColor="@color/white"
+				android:visibility="gone" />
+
+		</LinearLayout>
+
+	</LinearLayout>
 
 	<FrameLayout
 		android:layout_width="match_parent"
