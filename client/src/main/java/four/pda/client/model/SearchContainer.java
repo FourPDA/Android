@@ -9,7 +9,7 @@ public class SearchContainer {
 
 	private int allArticlesCount;
 	private boolean hasNextPage;
-	private List<ListArticle> articles;
+	private List<SearchListArticle> articles;
 
 	public int getAllArticlesCount() {
 		return allArticlesCount;
@@ -27,11 +27,11 @@ public class SearchContainer {
 		this.hasNextPage = hasNextPage;
 	}
 
-	public List<ListArticle> getArticles() {
+	public List<SearchListArticle> getArticles() {
 		return articles;
 	}
 
-	public void setArticles(List<ListArticle> articles) {
+	public void setArticles(List<SearchListArticle> articles) {
 		this.articles = articles;
 	}
 

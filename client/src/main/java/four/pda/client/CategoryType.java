@@ -10,7 +10,6 @@ public enum CategoryType {
 	ARTICLES,
 	REVIEWS,
 	SOFTWARE,
-	GAMES,
-	SEARCH;
+	GAMES
 
 }

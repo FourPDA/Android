@@ -8,7 +8,6 @@ import android.support.v4.content.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import four.pda.client.CategoryType;
 import four.pda.client.model.SearchContainer;
 import four.pda.ui.LoadResult;
 
@@ -28,6 +27,13 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 		this.fragment = fragment;
 	}
 
+	public static Bundle createBundle(String searchText, int currentPage) {
+		Bundle bundle = new Bundle();
+		bundle.putString(SEARCH_CRITERIA_BUNDLE_ARG, searchText);
+		bundle.putInt(CURRENT_PAGE_BUNDLE_ARG, currentPage);
+		return bundle;
+	}
+
 	@Override
 	public Loader<LoadResult<SearchContainer>> onCreateLoader(int id, final Bundle args) {
 		return new AsyncTaskLoader<LoadResult<SearchContainer>>(fragment.getActivity()) {
@@ -41,7 +47,7 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 				try {
 					SearchContainer container = fragment.client.searchArticles(searchCriteria, currentPage + 1);
 					boolean needClearData = currentPage == 0;
-					fragment.dao.setArticles(container.getArticles(), CategoryType.SEARCH, needClearData);
+					fragment.dao.setSearchArticles(container.getArticles(), needClearData);
 
 					return new LoadResult<>(container);
 				} catch (Exception e) {
@@ -67,13 +73,6 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 
 	@Override
 	public void onLoaderReset(Loader<LoadResult<SearchContainer>> loader) {
-	}
-
-	public static Bundle createBundle(String searchText, int currentPage) {
-		Bundle bundle = new Bundle();
-		bundle.putString(SEARCH_CRITERIA_BUNDLE_ARG, searchText);
-		bundle.putInt(CURRENT_PAGE_BUNDLE_ARG, currentPage);
-		return bundle;
 	}
 
 }
