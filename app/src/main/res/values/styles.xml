@@ -154,4 +154,8 @@
 		<item name="android:shadowRadius">1</item>
 	</style>
 
+	<style name="SearchView" parent="Widget.AppCompat.SearchView">
+		<item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+	</style>
+
 </resources>

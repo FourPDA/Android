@@ -79,4 +79,6 @@
 
 	<string name="first_comment_dialog_ok">Все понял</string>
 
+	<string name="search_articles_count">Найдено: %s</string>
+
 </resources>
