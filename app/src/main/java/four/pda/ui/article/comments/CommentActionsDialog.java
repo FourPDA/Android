@@ -6,6 +6,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.auto.value.AutoValue;
@@ -39,11 +40,17 @@ public class CommentActionsDialog extends DialogFragment {
 	@FragmentArg Params params;
 
 	@ViewById Toolbar toolbar;
+
 	@ViewById TextView nickView;
 	@ViewById TextView dateView;
-	@ViewById TextView likesView;
+
+	@ViewById View likesCheckView;
+	@ViewById TextView likesCountView;
+
 	@ViewById TextView contentView;
+
 	@ViewById TextView replyButton;
+	@ViewById ImageView likeButton;
 
 	@Bean EventBus eventBus;
 
@@ -68,7 +75,14 @@ public class CommentActionsDialog extends DialogFragment {
 		String verboseDate = DATE_FORMAT.format(params.date());
 		dateView.setText(verboseDate);
 
-		likesView.setText(String.valueOf(params.likes()));
+		likesCountView.setText(String.valueOf(params.likeCount()));
+
+		likesCheckView.setVisibility(
+				params.canLike() == Comment.CanLike.ALREADY_LIKED ?
+				View.VISIBLE : View.GONE
+		);
+
+		likeButton.setVisibility(params.canLike() == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
 
 		contentView.setText(Html.fromHtml(params.content()));
 
@@ -97,7 +111,14 @@ public class CommentActionsDialog extends DialogFragment {
 		abstract long id();
 		abstract String nickname();
 		abstract Date date();
-		abstract int likes();
+
+		/**
+		 * @see four.pda.client.model.Comment.CanLike#fromServerValue(int)
+		 * @return {@link four.pda.client.model.Comment.CanLike#serverValue}
+         */
+		abstract Comment.CanLike canLike();
+
+		abstract int likeCount();
 		abstract String content();
 		abstract boolean canReply();
 
@@ -109,7 +130,8 @@ public class CommentActionsDialog extends DialogFragment {
 					comment.getId(),
 					comment.getNickname(),
 					comment.getDate(),
-					comment.getKarma().getLikes(),
+					comment.getKarma().getCanLike(),
+					comment.getKarma().getLikesCount(),
 					comment.getContent(),
 					comment.canReply(),
 					articleId,
