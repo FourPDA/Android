@@ -82,23 +82,23 @@ public class Comment extends AbstractComment {
 		ALREADY_LIKED(1),
 		CANT(2);
 
-		private int jsValue;
+		private int serverValue;
 
-		CanLike(int jsValue) {
-			this.jsValue = jsValue;
+		CanLike(int serverValue) {
+			this.serverValue = serverValue;
 		}
 
-		public static CanLike fromJsValue(int value) {
+		public static CanLike fromServerValue(int value) {
 			for (CanLike availability : values()) {
-				if (availability.jsValue == value) {
+				if (availability.serverValue == value) {
 					return availability;
 				}
 			}
-			throw new IllegalArgumentException("Can't find like availability for jsValue " + value);
+			throw new IllegalArgumentException("Can't find like availability for serverValue " + value);
 		}
 
-		public int jsValue() {
-			return jsValue;
+		public int serverValue() {
+			return serverValue;
 		}
 
 	}

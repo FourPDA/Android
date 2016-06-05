@@ -77,14 +77,12 @@ public class CommentActionsDialog extends DialogFragment {
 
 		likesCountView.setText(String.valueOf(params.likeCount()));
 
-		Comment.CanLike canLike = Comment.CanLike.fromJsValue(params.canLike());
-
 		likesCheckView.setVisibility(
-				canLike == Comment.CanLike.ALREADY_LIKED ?
+				params.canLike() == Comment.CanLike.ALREADY_LIKED ?
 				View.VISIBLE : View.GONE
 		);
 
-		likeButton.setVisibility(canLike == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
+		likeButton.setVisibility(params.canLike() == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
 
 		contentView.setText(Html.fromHtml(params.content()));
 
@@ -115,10 +113,10 @@ public class CommentActionsDialog extends DialogFragment {
 		abstract Date date();
 
 		/**
-		 * @see four.pda.client.model.Comment.CanLike#fromJsValue(int)
-		 * @return {@link four.pda.client.model.Comment.CanLike#jsValue}
+		 * @see four.pda.client.model.Comment.CanLike#fromServerValue(int)
+		 * @return {@link four.pda.client.model.Comment.CanLike#serverValue}
          */
-		abstract int canLike();
+		abstract Comment.CanLike canLike();
 
 		abstract int likeCount();
 		abstract String content();
@@ -132,7 +130,7 @@ public class CommentActionsDialog extends DialogFragment {
 					comment.getId(),
 					comment.getNickname(),
 					comment.getDate(),
-					comment.getKarma().getCanLike().jsValue(),
+					comment.getKarma().getCanLike(),
 					comment.getKarma().getLikesCount(),
 					comment.getContent(),
 					comment.canReply(),

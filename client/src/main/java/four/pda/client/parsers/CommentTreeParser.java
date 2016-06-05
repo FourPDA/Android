@@ -79,7 +79,7 @@ public class CommentTreeParser extends AbstractParser {
 			long commentId = Long.parseLong(matcher.group(1));
 			Comment.Karma karma = new Comment.Karma();
 			int canLike = Integer.parseInt(matcher.group(2));
-			karma.setCanLike(Comment.CanLike.fromJsValue(canLike));
+			karma.setCanLike(Comment.CanLike.fromServerValue(canLike));
 			karma.setUnknown2(Integer.parseInt(matcher.group(3)));
 			karma.setUnknown3(Integer.parseInt(matcher.group(4)));
 			karma.setLikesCount(Integer.parseInt(matcher.group(5)));

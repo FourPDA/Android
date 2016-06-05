@@ -1,7 +1,6 @@
 package four.pda.client;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -183,7 +182,6 @@ public class CommentTreeParserTest extends AbstractTest {
 	}
 
 	@Test
-	@Ignore("Logic not completed")
 	public void unknownKarmaParamsStillZero() throws IOException {
 
 		String pageSource = getHtmlSource("/2013/12/20/130961/");
@@ -202,13 +200,6 @@ public class CommentTreeParserTest extends AbstractTest {
 
 			Comment.Karma karma = comment.getKarma();
 			long id = comment.getId();
-
-			//TODO Решить что делать с первым параметром
-			// Тест показывает, что первый параметр может быть 2. Надо понять как тестировать.
-			Assert.assertEquals(
-					"Unknown karma param 1 of comment " + id + " is not zero",
-					0, karma.getCanLike().jsValue()
-			);
 
 			Assert.assertEquals(
 					"Unknown karma param 2 of comment " + id + " is not zero",
