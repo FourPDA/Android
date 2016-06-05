@@ -24,7 +24,10 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.delimiter_view) View delimiterView;
 	@Bind(R.id.nick_view) TextView nickView;
 	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.likes_view) TextView likesView;
+
+	@Bind(R.id.likes_check_view) View likesCheckView;
+	@Bind(R.id.likes_count_view) TextView likesView;
+
 	@Bind(R.id.content_view) TextView contentView;
 
 	public CommentViewHolder(final View view) {
@@ -39,8 +42,11 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 		String verboseDate = DATE_FORMAT.format(comment.getDate());
 		dateView.setText(verboseDate);
 
-		int likes = comment.getKarma().getLikes();
+		int likes = comment.getKarma().getLikesCount();
 		likesView.setText(String.valueOf(likes));
+
+		boolean alreadyLiked = comment.getKarma().getCanLike() == Comment.CanLike.ALREADY_LIKED;
+		likesCheckView.setVisibility(alreadyLiked ? View.VISIBLE : View.GONE);
 
 		contentView.setText(Html.fromHtml(comment.getContent()));
 

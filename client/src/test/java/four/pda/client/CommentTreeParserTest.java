@@ -178,7 +178,7 @@ public class CommentTreeParserTest extends AbstractTest {
 
 	private void expectIdAndLikes(Comment comment, int expectedId, int expectedLikes) {
 		if (comment.getId() == expectedId) {
-			Assert.assertEquals("Comment likes not expected", expectedLikes, comment.getKarma().getLikes());
+			Assert.assertEquals("Comment likes not expected", expectedLikes, comment.getKarma().getLikesCount());
 		}
 	}
 
@@ -207,7 +207,7 @@ public class CommentTreeParserTest extends AbstractTest {
 			// Тест показывает, что первый параметр может быть 2. Надо понять как тестировать.
 			Assert.assertEquals(
 					"Unknown karma param 1 of comment " + id + " is not zero",
-					0, karma.getUnknown1()
+					0, karma.getCanLike().jsValue()
 			);
 
 			Assert.assertEquals(

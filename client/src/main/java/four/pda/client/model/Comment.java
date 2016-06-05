@@ -37,25 +37,17 @@ public class Comment extends AbstractComment {
 
 	public static class Karma {
 
-		private int likes;
-		private int unknown1;
+		private CanLike canLike;
 		private int unknown2;
 		private int unknown3;
+		private int likesCount;
 
-		public int getLikes() {
-			return likes;
+		public CanLike getCanLike() {
+			return canLike;
 		}
 
-		public void setLikes(int likes) {
-			this.likes = likes;
-		}
-
-		public int getUnknown1() {
-			return unknown1;
-		}
-
-		public void setUnknown1(int unknown1) {
-			this.unknown1 = unknown1;
+		public void setCanLike(CanLike canLike) {
+			this.canLike = canLike;
 		}
 
 		public int getUnknown2() {
@@ -72,6 +64,41 @@ public class Comment extends AbstractComment {
 
 		public void setUnknown3(int unknown3) {
 			this.unknown3 = unknown3;
+		}
+
+		public int getLikesCount() {
+			return likesCount;
+		}
+
+		public void setLikesCount(int likesCount) {
+			this.likesCount = likesCount;
+		}
+
+	}
+
+	public enum CanLike {
+
+		CAN(0),
+		ALREADY_LIKED(1),
+		CANT(2);
+
+		private int jsValue;
+
+		CanLike(int jsValue) {
+			this.jsValue = jsValue;
+		}
+
+		public static CanLike fromJsValue(int value) {
+			for (CanLike availability : values()) {
+				if (availability.jsValue == value) {
+					return availability;
+				}
+			}
+			throw new IllegalArgumentException("Can't find like availability for jsValue " + value);
+		}
+
+		public int jsValue() {
+			return jsValue;
 		}
 
 	}

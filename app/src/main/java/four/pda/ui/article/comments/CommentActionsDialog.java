@@ -6,6 +6,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.auto.value.AutoValue;
@@ -39,11 +40,17 @@ public class CommentActionsDialog extends DialogFragment {
 	@FragmentArg Params params;
 
 	@ViewById Toolbar toolbar;
+
 	@ViewById TextView nickView;
 	@ViewById TextView dateView;
-	@ViewById TextView likesView;
+
+	@ViewById View likesCheckView;
+	@ViewById TextView likesCountView;
+
 	@ViewById TextView contentView;
+
 	@ViewById TextView replyButton;
+	@ViewById ImageView likeButton;
 
 	@Bean EventBus eventBus;
 
@@ -68,7 +75,16 @@ public class CommentActionsDialog extends DialogFragment {
 		String verboseDate = DATE_FORMAT.format(params.date());
 		dateView.setText(verboseDate);
 
-		likesView.setText(String.valueOf(params.likes()));
+		likesCountView.setText(String.valueOf(params.likeCount()));
+
+		Comment.CanLike canLike = Comment.CanLike.fromJsValue(params.canLike());
+
+		likesCheckView.setVisibility(
+				canLike == Comment.CanLike.ALREADY_LIKED ?
+				View.VISIBLE : View.GONE
+		);
+
+		likeButton.setVisibility(canLike == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
 
 		contentView.setText(Html.fromHtml(params.content()));
 
@@ -97,7 +113,14 @@ public class CommentActionsDialog extends DialogFragment {
 		abstract long id();
 		abstract String nickname();
 		abstract Date date();
-		abstract int likes();
+
+		/**
+		 * @see four.pda.client.model.Comment.CanLike#fromJsValue(int)
+		 * @return {@link four.pda.client.model.Comment.CanLike#jsValue}
+         */
+		abstract int canLike();
+
+		abstract int likeCount();
 		abstract String content();
 		abstract boolean canReply();
 
@@ -109,7 +132,8 @@ public class CommentActionsDialog extends DialogFragment {
 					comment.getId(),
 					comment.getNickname(),
 					comment.getDate(),
-					comment.getKarma().getLikes(),
+					comment.getKarma().getCanLike().jsValue(),
+					comment.getKarma().getLikesCount(),
 					comment.getContent(),
 					comment.canReply(),
 					articleId,
