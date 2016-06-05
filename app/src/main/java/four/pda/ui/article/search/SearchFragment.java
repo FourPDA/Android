@@ -1,6 +1,5 @@
 package four.pda.ui.article.search;
 
-import android.database.Cursor;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,6 @@ import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
-import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.SearchContainer;
 import four.pda.ui.BaseFragment;
@@ -122,8 +120,7 @@ public class SearchFragment extends BaseFragment {
 		allArticlesCountView.setText(getString(R.string.search_articles_count, container.getAllArticlesCount()));
 		allArticlesCountView.setVisibility(View.VISIBLE);
 
-		Cursor cursor = dao.getArticleCursor(CategoryType.SEARCH);
-		adapter.swapCursor(cursor);
+		adapter.swapCursor(dao.getSearchArticleCursor());
 		adapter.notifyDataSetChanged();
 
 		supportView.hide();

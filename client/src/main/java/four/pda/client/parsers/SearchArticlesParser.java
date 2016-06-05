@@ -8,12 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import four.pda.client.exceptions.ParseException;
-import four.pda.client.model.ListArticle;
+import four.pda.client.model.SearchListArticle;
 import four.pda.client.model.SearchContainer;
 
 /**
@@ -47,12 +45,12 @@ public class SearchArticlesParser extends AbstractParser {
 		container.setHasNextPage(nextPageElement != null);
 
 		Elements elements = document.select(".search-list > li");
-		List<ListArticle> articles = new ArrayList<>();
+		List<SearchListArticle> articles = new ArrayList<>();
 
 		int position = 0;
 		for (Element element : elements) {
 
-			ListArticle article;
+			SearchListArticle article;
 			try {
 				article = parseListItem(element, page, position);
 			} catch (Exception e) {
@@ -74,9 +72,9 @@ public class SearchArticlesParser extends AbstractParser {
 		return container;
 	}
 
-	private ListArticle parseListItem(Element element, int page, int position) {
+	private SearchListArticle parseListItem(Element element, int page, int position) {
 
-		ListArticle article = new ListArticle();
+		SearchListArticle article = new SearchListArticle();
 
 		Element titleElement = element.select(".content > h1 > a").first();
 		String url = titleElement.attr("href");
@@ -97,11 +95,7 @@ public class SearchArticlesParser extends AbstractParser {
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
 
-		// Устанавливаем фиктивную дату публикации для дальнейшей сортировки в базе
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(idAndDate.date);
-		calendar.set(Calendar.MILLISECOND, 10000 - page * ARTICLES_PER_PAGE - position);
-		article.setPublishedDate(calendar.getTime());
+		article.setPosition(page + ((double) position) / ARTICLES_PER_PAGE);
 
 		article.setTitle(titleElement.text());
 		article.setDescription(element.select(".content > p > a").first().text());

@@ -3,7 +3,6 @@ package four.pda.ui.article;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.slf4j.Logger;
@@ -38,10 +37,6 @@ public class SearchActivity extends AppCompatActivity {
 					.add(R.id.list_container, fragment)
 					.commit();
 		}
-	}
-
-	@AfterViews
-	void afterViews() {
 	}
 
 	@Override

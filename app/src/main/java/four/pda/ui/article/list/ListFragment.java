@@ -66,7 +66,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
 
-		toolbar.inflateMenu(R.menu.list);
+		toolbar.inflateMenu(R.menu.articles_list);
 		toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {

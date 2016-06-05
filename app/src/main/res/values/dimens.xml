@@ -16,4 +16,6 @@
 
 	<dimen name="profile_photo_size">100dp</dimen>
 
+	<dimen name="icon_size">48dp</dimen>
+
 </resources>

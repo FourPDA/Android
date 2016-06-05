@@ -16,6 +16,7 @@ import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
 import four.pda.client.model.SearchContainer;
+import four.pda.client.model.SearchListArticle;
 import okhttp3.OkHttpClient;
 
 /**
@@ -189,7 +190,22 @@ public class DummyFourPdaClient extends FourPdaClient {
 
 		container.setAllArticlesCount(articles.size());
 		container.setHasNextPage(false);
-		container.setArticles(articles);
+
+		List<SearchListArticle> searchArticles = new ArrayList<>();
+		double position = 0;
+		for (ListArticle article : articles) {
+			SearchListArticle searchArticle = new SearchListArticle();
+			searchArticle.setId(article.getId());
+			searchArticle.setDate(article.getDate());
+			searchArticle.setTitle(article.getTitle());
+			searchArticle.setDescription(article.getDescription());
+			searchArticle.setImage(article.getImage());
+			searchArticle.setPosition(position);
+			searchArticles.add(searchArticle);
+			position++;
+		}
+
+		container.setArticles(searchArticles);
 
 		return container;
 	}
