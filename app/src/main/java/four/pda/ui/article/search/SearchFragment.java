@@ -12,6 +12,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.SearchContainer;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.Keyboard;
 import four.pda.ui.SupportView;
 
 /**
@@ -44,10 +46,13 @@ public class SearchFragment extends BaseFragment {
 	@Bean EventBus eventBus;
 
 	@Inject FourPdaClient client;
+	@Inject Keyboard keyboard;
 
-	private int currentPage = 0;
-	private boolean hasNextPage;
-	private String searchCriteria;
+	@InstanceState int currentPage;
+	@InstanceState String searchCriteria;
+	@InstanceState boolean hasNextPage;
+	@InstanceState int allArticlesCount;
+
 	private SearchAdapter adapter;
 	private LinearLayoutManager layoutManager;
 
@@ -68,7 +73,9 @@ public class SearchFragment extends BaseFragment {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				allArticlesCountView.setVisibility(View.GONE);
+				if (searchCriteria == null || !searchCriteria.equals(newText)) {
+					allArticlesCountView.setVisibility(View.GONE);
+				}
 				return false;
 			}
 		});
@@ -93,6 +100,11 @@ public class SearchFragment extends BaseFragment {
 			}
 		});
 
+		if (currentPage == 0) {
+			keyboard.toggle(searchView);
+		} else {
+			updateViews();
+		}
 	}
 
 	@Click
@@ -116,8 +128,13 @@ public class SearchFragment extends BaseFragment {
 	void updateData(SearchContainer container) {
 		currentPage++;
 		hasNextPage = container.hasNextPage();
+		allArticlesCount = container.getAllArticlesCount();
 
-		allArticlesCountView.setText(getString(R.string.search_articles_count, container.getAllArticlesCount()));
+		updateViews();
+	}
+
+	private void updateViews() {
+		allArticlesCountView.setText(getString(R.string.search_articles_count, allArticlesCount));
 		allArticlesCountView.setVisibility(View.VISIBLE);
 
 		adapter.swapCursor(dao.getSearchArticleCursor());
