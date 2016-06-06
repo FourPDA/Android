@@ -233,6 +233,8 @@ public class CommentActionsDialog extends DialogFragment {
 
 			updateLikes();
 
+			eventBus.post(new UserLikesSomebodyCommentEvent(params.id(), params.likeCount()));
+
         }
 
         @Override

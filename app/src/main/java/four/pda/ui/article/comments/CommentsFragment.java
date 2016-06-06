@@ -151,6 +151,10 @@ public class CommentsFragment extends BaseFragment {
 		}
 	}
 
+	public void onEvent(UserLikesSomebodyCommentEvent event) {
+		adapter.likeChanged(event.getCommentId(), event.getLikesCount());
+	}
+
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (Activity.RESULT_OK == resultCode) {

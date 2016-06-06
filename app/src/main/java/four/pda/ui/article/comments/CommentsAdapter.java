@@ -98,6 +98,29 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		addComments(container.getComments());
 	}
 
+	public void likeChanged(long commentId, int likesCount) {
+
+		for (int i = 0; i < comments.size(); i++) {
+
+			AbstractComment abstractComment = comments.get(i);
+
+			if (!(abstractComment instanceof Comment)) {
+				continue;
+			}
+
+			Comment comment = (Comment) abstractComment;
+
+			if (comment.getId() == commentId) {
+				comment.getKarma().setCanLike(Comment.CanLike.ALREADY_LIKED);
+				comment.getKarma().setLikesCount(likesCount);
+				notifyItemChanged(i);
+				break;
+			}
+
+		}
+
+	}
+
 	private void addComments(List<AbstractComment> tree) {
 
 		if (tree == null) return;
