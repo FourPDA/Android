@@ -31,7 +31,8 @@
 			android:theme="@style/Auth_Activity"
 			android:windowSoftInputMode="adjustResize" />
 
-		<activity android:name=".ui.article.SearchActivity_" />
+		<activity android:name=".ui.article.SearchActivity_"
+			android:windowSoftInputMode="stateHidden" />
 
 	    <meta-data
             android:name="io.fabric.ApiKey"

@@ -29,6 +29,15 @@ public class Keyboard {
 		}, 100);
 	}
 
+	public void toggle(View view) {
+		view.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+			}
+		}, 100);
+	}
+
 	public void hide(Activity activity) {
 		inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
 	}
