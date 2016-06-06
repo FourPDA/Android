@@ -106,7 +106,7 @@ public class CommentActionsDialog extends DialogFragment {
 		switch (params.canLike()) {
 
 			case ALREADY_LIKED:
-				Toast.makeText(getContext(), "Уже залайкано", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), R.string.article_comment_like_already, Toast.LENGTH_SHORT).show();
 				break;
 
 			case CAN:
@@ -216,7 +216,7 @@ public class CommentActionsDialog extends DialogFragment {
 			likeProgressView.setVisibility(View.INVISIBLE);
 
 			if (result.isError()) {
-				Toast.makeText(context, "Ошибка лайка", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, R.string.article_comment_like_error, Toast.LENGTH_SHORT).show();
 				return;
 			}
 
