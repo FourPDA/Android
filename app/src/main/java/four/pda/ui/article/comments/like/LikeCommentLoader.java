@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.like;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -9,7 +9,7 @@ import four.pda.ui.LoadResult;
 /**
  * Created by pavel on 06/06/16.
  */
-class LikeCommentLoader extends AsyncTaskLoader<LoadResult<Void>> {
+public class LikeCommentLoader extends AsyncTaskLoader<LoadResult<Void>> {
 
     private FourPdaClient client;
 

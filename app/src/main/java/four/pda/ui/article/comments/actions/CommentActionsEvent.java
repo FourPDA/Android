@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.actions;
 
 import four.pda.client.model.Comment;
 

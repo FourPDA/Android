@@ -14,11 +14,12 @@ import four.pda.client.model.AbstractComment;
 import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
+import four.pda.ui.article.comments.add.AddCommentViewHolder;
 
 /**
  * Created by asavinova on 05/12/15.
  */
-public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	enum Type {
 		REGULAR,

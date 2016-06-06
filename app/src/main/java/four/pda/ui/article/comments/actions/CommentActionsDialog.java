@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.actions;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -34,6 +34,9 @@ import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.LoadResult;
+import four.pda.ui.article.comments.add.AddCommentEvent;
+import four.pda.ui.article.comments.like.LikeCommentLoader;
+import four.pda.ui.article.comments.like.UserLikesSomebodyCommentEvent;
 
 /**
  * Created by asavinova on 25/04/16.
@@ -149,7 +152,7 @@ public class CommentActionsDialog extends DialogFragment {
 	}
 
 	@AutoValue
-	abstract static class Params implements Parcelable {
+	public abstract static class Params implements Parcelable {
 
 		abstract long id();
 

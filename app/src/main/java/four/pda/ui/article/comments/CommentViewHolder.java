@@ -12,11 +12,12 @@ import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.client.model.Comment;
+import four.pda.ui.article.comments.actions.CommentActionsEvent;
 
 /**
  * Created by asavinova on 05/12/15.
  */
-public class CommentViewHolder extends RecyclerView.ViewHolder {
+class CommentViewHolder extends RecyclerView.ViewHolder {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 

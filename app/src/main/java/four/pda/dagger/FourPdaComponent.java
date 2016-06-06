@@ -2,8 +2,8 @@ package four.pda.dagger;
 
 import dagger.Component;
 import four.pda.ui.DrawerFragment;
-import four.pda.ui.article.comments.AddCommentDialog;
-import four.pda.ui.article.comments.CommentActionsDialog;
+import four.pda.ui.article.comments.add.AddCommentDialog;
+import four.pda.ui.article.comments.actions.CommentActionsDialog;
 import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.one.ArticleFragment;
