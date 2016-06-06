@@ -36,12 +36,11 @@ import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
 import four.pda.ui.UpdateProfileEvent;
-import four.pda.ui.article.comments.actions.CommentActionsDialog;
 import four.pda.ui.article.comments.actions.CommentActionsDialog_;
-import four.pda.ui.article.comments.actions.CommentActionsEvent;
+import four.pda.ui.article.comments.actions.DialogParams;
 import four.pda.ui.article.comments.add.AddCommentDialog_;
 import four.pda.ui.article.comments.add.AddCommentEvent;
-import four.pda.ui.article.comments.like.UserLikesSomebodyCommentEvent;
+import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -139,7 +138,7 @@ public class CommentsFragment extends BaseFragment {
 
 	public void onEvent(CommentActionsEvent event) {
 		Comment comment = event.getComment();
-		CommentActionsDialog.Params params = CommentActionsDialog.Params.create(comment, articleId, articleDate);
+		DialogParams params = DialogParams.create(comment, articleId, articleDate);
 		CommentActionsDialog_.builder()
 				.params(params)
 				.build()

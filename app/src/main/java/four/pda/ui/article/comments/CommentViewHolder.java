@@ -12,7 +12,6 @@ import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.client.model.Comment;
-import four.pda.ui.article.comments.actions.CommentActionsEvent;
 
 /**
  * Created by asavinova on 05/12/15.

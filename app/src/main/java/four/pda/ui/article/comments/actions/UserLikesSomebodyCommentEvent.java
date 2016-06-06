@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments.like;
+package four.pda.ui.article.comments.actions;
 
 /**
  * Событие генерируется когда пользователь лайкнул комментарий к статье.

@@ -1,20 +1,13 @@
 package four.pda.ui.article.comments.actions;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.auto.value.AutoValue;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -24,7 +17,6 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -33,10 +25,7 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
-import four.pda.ui.LoadResult;
 import four.pda.ui.article.comments.add.AddCommentEvent;
-import four.pda.ui.article.comments.like.LikeCommentLoader;
-import four.pda.ui.article.comments.like.UserLikesSomebodyCommentEvent;
 
 /**
  * Created by asavinova on 25/04/16.
@@ -46,7 +35,7 @@ public class CommentActionsDialog extends DialogFragment {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
-	@FragmentArg Params params;
+	@FragmentArg DialogParams params;
 
 	@ViewById Toolbar toolbar;
 
@@ -117,11 +106,8 @@ public class CommentActionsDialog extends DialogFragment {
 				likeButton.setVisibility(View.INVISIBLE);
 				likeProgressView.setVisibility(View.VISIBLE);
 
-				Bundle args = new Bundle();
-				args.putLong(LikeCommentLoaderCallbacks.ARTICLE_ID_BUNDLE_LONG_ARG, params.articleId());
-				args.putLong(LikeCommentLoaderCallbacks.COMMENT_ID_BUNDLE_LONG_ARG, params.id());
-				getLoaderManager().initLoader(0, args,
-						new LikeCommentLoaderCallbacks(getContext(), client)).forceLoad();
+				getLoaderManager().initLoader(0, null,
+						new LikeCommentLoaderCallbacks(this, getContext(), client)).forceLoad();
 
 				break;
 
@@ -138,7 +124,7 @@ public class CommentActionsDialog extends DialogFragment {
 		dismiss();
 	}
 
-	private void updateLikes() {
+	void updateLikes() {
 
 		likesCountView.setText(String.valueOf(params.likeCount()));
 
@@ -150,100 +136,5 @@ public class CommentActionsDialog extends DialogFragment {
 		likeButton.setVisibility(params.canLike() == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
 
 	}
-
-	@AutoValue
-	public abstract static class Params implements Parcelable {
-
-		abstract long id();
-
-		abstract String nickname();
-
-		abstract Date date();
-
-		/**
-		 * @return {@link four.pda.client.model.Comment.CanLike#serverValue}
-		 * @see four.pda.client.model.Comment.CanLike#fromServerValue(int)
-		 */
-		abstract Comment.CanLike canLike();
-
-		abstract int likeCount();
-
-		abstract String content();
-
-		abstract boolean canReply();
-
-		abstract long articleId();
-
-		abstract Date articleDate();
-
-		public static Params create(Comment comment, long articleId, Date articleDate) {
-			return new AutoValue_CommentActionsDialog_Params(
-					comment.getId(),
-					comment.getNickname(),
-					comment.getDate(),
-					comment.getKarma().getCanLike(),
-					comment.getKarma().getLikesCount(),
-					comment.getContent(),
-					comment.canReply(),
-					articleId,
-					articleDate
-			);
-		}
-
-	}
-
-	private class LikeCommentLoaderCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Void>> {
-
-        public static final String COMMENT_ID_BUNDLE_LONG_ARG = "commentId";
-        public static final String ARTICLE_ID_BUNDLE_LONG_ARG = "articleId";
-
-        private Context context;
-        private FourPdaClient client;
-
-        public LikeCommentLoaderCallbacks(Context context, FourPdaClient client) {
-            this.context = context;
-            this.client = client;
-        }
-
-        @Override
-        public Loader<LoadResult<Void>> onCreateLoader(int id, Bundle args) {
-            return new LikeCommentLoader(context, client,
-                    args.getLong(ARTICLE_ID_BUNDLE_LONG_ARG),
-					args.getLong(COMMENT_ID_BUNDLE_LONG_ARG));
-        }
-
-        @Override
-        public void onLoadFinished(Loader<LoadResult<Void>> loader, LoadResult<Void> result) {
-
-			likeButton.setVisibility(View.VISIBLE);
-			likeProgressView.setVisibility(View.INVISIBLE);
-
-			if (result.isError()) {
-				Toast.makeText(context, R.string.article_comment_like_error, Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-			params = new AutoValue_CommentActionsDialog_Params(
-					params.id(),
-					params.nickname(),
-					params.date(),
-					Comment.CanLike.ALREADY_LIKED,
-					params.likeCount() + 1,
-					params.content(),
-					params.canReply(),
-					params.articleId(),
-					params.articleDate());
-
-			updateLikes();
-
-			eventBus.post(new UserLikesSomebodyCommentEvent(params.id(), params.likeCount()));
-
-        }
-
-        @Override
-        public void onLoaderReset(Loader<LoadResult<Void>> loader) {
-        }
-
-    }
 
 }
