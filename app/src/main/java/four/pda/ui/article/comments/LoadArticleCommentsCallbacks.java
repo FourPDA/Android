@@ -16,13 +16,13 @@ import four.pda.ui.LoadResult;
 /**
  * Created by asavinova on 11/03/16.
  */
-public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
+class LoadArticleCommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
 
-	private static final Logger L = LoggerFactory.getLogger(CommentsCallbacks.class);
+	private static final Logger L = LoggerFactory.getLogger(LoadArticleCommentsCallbacks.class);
 
 	private CommentsFragment fragment;
 
-	public CommentsCallbacks(CommentsFragment fragment) {
+	public LoadArticleCommentsCallbacks(CommentsFragment fragment) {
 		this.fragment = fragment;
 	}
 

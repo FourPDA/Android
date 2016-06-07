@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.add;
 
 /**
  * Created by asavinova on 11/03/16.
