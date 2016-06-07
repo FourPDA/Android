@@ -26,7 +26,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.description_view) TextView descriptionView;
 
 	private long id;
 	private Date date;
@@ -65,8 +64,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
 
-		String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
-		descriptionView.setText(Html.fromHtml(description));
+		TextView descriptionView = (TextView) itemView.findViewById(R.id.description_view);
+		if (descriptionView != null) {
+			String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
+			descriptionView.setText(Html.fromHtml(description));
+		}
 
 	}
 

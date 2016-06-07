@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_margin="@dimen/offset_small"
 	android:background="@color/white"
 	android:elevation="2dp"
@@ -14,44 +14,57 @@
 		android:layout_height="150dp"
 		android:scaleType="centerCrop" />
 
-	<LinearLayout
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:orientation="vertical"
 		android:padding="8dp">
-
-		<TextView
-			android:id="@+id/title_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="@dimen/list_item_title_size"
-			android:textColor="@color/primary"
-			tools:text="Title" />
 
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:layout_marginTop="@dimen/offset_normal">
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/title_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/primary"
+				android:textSize="@dimen/list_item_title_size"
+				tools:text="Title" />
 
 			<TextView
 				android:id="@+id/description_view"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginTop="@dimen/offset_small"
 				android:ellipsize="end"
-				android:maxLines="3"
+				android:maxLines="5"
 				tools:text="Description" />
 
 		</LinearLayout>
 
-		<TextView
-			android:id="@+id/date_view"
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/offset_normal"
-			android:textSize="12sp"
-			tools:text="12.05.16" />
+			android:layout_gravity="bottom"
+			android:orientation="vertical">
 
-	</LinearLayout>
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="24dp"
+				android:background="@drawable/white_gradient_bg" />
+
+			<TextView
+				android:id="@+id/date_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="12sp"
+				android:paddingTop="4dp"
+				android:background="@color/white"
+				tools:text="12.05.16" />
+
+		</LinearLayout>
+
+	</FrameLayout>
 
 </LinearLayout>
