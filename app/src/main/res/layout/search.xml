@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/layout"
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<LinearLayout
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@color/primary"
 		android:elevation="4dp"
-		android:gravity="center_vertical"
-		android:orientation="horizontal"
-		android:paddingEnd="@dimen/offset_normal"
-		android:paddingRight="@dimen/offset_normal">
+		android:orientation="vertical"
+		android:paddingEnd="@dimen/offset_small"
+		android:paddingRight="@dimen/offset_small">
 
 		<ImageView
 			android:id="@+id/arrow_back_button"
-			android:layout_width="@dimen/icon_size"
-			android:layout_height="@dimen/icon_size"
+			android:layout_width="?android:attr/actionBarSize"
+			android:layout_height="?android:attr/actionBarSize"
 			android:scaleType="center"
 			android:src="@drawable/ic_arrow_back_white_24dp" />
 
-		<LinearLayout
+		<android.support.v7.widget.SearchView
+			android:id="@+id/search_view"
+			style="@style/SearchView"
+			android:layout_width="match_parent"
+			android:layout_height="?android:attr/actionBarSize"
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentRight="true"
+			android:layout_toEndOf="@+id/arrow_back_button"
+			android:layout_toRightOf="@+id/arrow_back_button" />
+
+		<TextView
+			android:id="@+id/all_articles_count_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentRight="true"
+			android:layout_below="@+id/search_view"
+			android:layout_marginBottom="@dimen/offset_small"
+			android:layout_toEndOf="@id/arrow_back_button"
+			android:layout_toRightOf="@id/arrow_back_button"
+			android:paddingEnd="@dimen/offset_normal"
+			android:paddingLeft="@dimen/offset_normal"
+			android:paddingRight="@dimen/offset_normal"
+			android:paddingStart="@dimen/offset_normal"
+			android:textColor="@color/white"
+			android:textSize="@dimen/abc_text_size_caption_material"
+			android:visibility="gone"
+			tools:text="Найдено: 123456"
+			tools:visibility="visible" />
 
-			<FrameLayout
-				android:layout_width="match_parent"
-				android:layout_height="?android:attr/actionBarSize">
-
-				<android.support.v7.widget.SearchView
-					android:id="@+id/search_view"
-					style="@style/SearchView"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center_vertical" />
-
-			</FrameLayout>
-
-			<TextView
-				android:id="@+id/all_articles_count_view"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/offset_small"
-				android:layout_marginLeft="@dimen/offset_small"
-				android:layout_marginStart="@dimen/offset_small"
-				android:textColor="@color/white"
-				android:visibility="gone" />
-
-		</LinearLayout>
-
-	</LinearLayout>
+	</RelativeLayout>
 
 	<FrameLayout
 		android:layout_width="match_parent"
