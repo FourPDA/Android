@@ -77,4 +77,7 @@
 
 	<string name="first_comment_dialog_ok">Все понял</string>
 
+	<string name="article_comment_like_error">Не удалось залайкать</string>
+	<string name="article_comment_like_already">Уже залайкано</string>
+
 </resources>

@@ -1,6 +1,5 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.actions;
 
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.Toolbar;
@@ -8,8 +7,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.auto.value.AutoValue;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -19,7 +17,6 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -28,6 +25,7 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
+import four.pda.ui.article.comments.add.AddCommentEvent;
 
 /**
  * Created by asavinova on 25/04/16.
@@ -37,7 +35,7 @@ public class CommentActionsDialog extends DialogFragment {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
-	@FragmentArg Params params;
+	@FragmentArg DialogParams params;
 
 	@ViewById Toolbar toolbar;
 
@@ -50,7 +48,9 @@ public class CommentActionsDialog extends DialogFragment {
 	@ViewById TextView contentView;
 
 	@ViewById TextView replyButton;
-	@ViewById ImageView likeButton;
+
+	@ViewById View likeProgressView;
+ 	@ViewById ImageView likeButton;
 
 	@Bean EventBus eventBus;
 
@@ -75,18 +75,11 @@ public class CommentActionsDialog extends DialogFragment {
 		String verboseDate = DATE_FORMAT.format(params.date());
 		dateView.setText(verboseDate);
 
-		likesCountView.setText(String.valueOf(params.likeCount()));
-
-		likesCheckView.setVisibility(
-				params.canLike() == Comment.CanLike.ALREADY_LIKED ?
-				View.VISIBLE : View.GONE
-		);
-
-		likeButton.setVisibility(params.canLike() == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
-
 		contentView.setText(Html.fromHtml(params.content()));
 
 		replyButton.setVisibility(params.canReply() ? View.VISIBLE : View.GONE);
+
+		updateLikes();
 
 	}
 
@@ -99,45 +92,48 @@ public class CommentActionsDialog extends DialogFragment {
 		dismiss();
 	}
 
+	@Click(R.id.like_button)
+	void likeButton() {
+
+		switch (params.canLike()) {
+
+			case ALREADY_LIKED:
+				Toast.makeText(getContext(), R.string.article_comment_like_already, Toast.LENGTH_SHORT).show();
+				break;
+
+			case CAN:
+
+				likeButton.setVisibility(View.INVISIBLE);
+				likeProgressView.setVisibility(View.VISIBLE);
+
+				getLoaderManager().initLoader(0, null,
+						new LikeCommentLoaderCallbacks(this, getContext(), client)).forceLoad();
+
+				break;
+
+			default:
+				throw new IllegalStateException("Unexpected CanLike value " + params.canLike().name());
+
+		}
+
+	}
+
 	@Click(R.id.reply_button)
 	void reply() {
 		eventBus.post(new AddCommentEvent(params.id(), params.nickname()));
 		dismiss();
 	}
 
-	@AutoValue
-	abstract static class Params implements Parcelable {
+	void updateLikes() {
 
-		abstract long id();
-		abstract String nickname();
-		abstract Date date();
+		likesCountView.setText(String.valueOf(params.likeCount()));
 
-		/**
-		 * @see four.pda.client.model.Comment.CanLike#fromServerValue(int)
-		 * @return {@link four.pda.client.model.Comment.CanLike#serverValue}
-         */
-		abstract Comment.CanLike canLike();
+		likesCheckView.setVisibility(
+				params.canLike() == Comment.CanLike.ALREADY_LIKED ?
+						View.VISIBLE : View.GONE
+		);
 
-		abstract int likeCount();
-		abstract String content();
-		abstract boolean canReply();
-
-		abstract long articleId();
-		abstract Date articleDate();
-
-		public static Params create(Comment comment, long articleId, Date articleDate) {
-			return new AutoValue_CommentActionsDialog_Params(
-					comment.getId(),
-					comment.getNickname(),
-					comment.getDate(),
-					comment.getKarma().getCanLike(),
-					comment.getKarma().getLikesCount(),
-					comment.getContent(),
-					comment.canReply(),
-					articleId,
-					articleDate
-			);
-		}
+		likeButton.setVisibility(params.canLike() == Comment.CanLike.CANT ? View.INVISIBLE : View.VISIBLE);
 
 	}
 

@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.add;
 
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
@@ -25,6 +25,7 @@ import four.pda.client.FourPdaClient;
 import four.pda.client.model.CommentsContainer;
 import four.pda.ui.Keyboard;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.comments.UpdateCommentsEvent;
 
 /**
  * Created by asavinova on 16/03/16.
