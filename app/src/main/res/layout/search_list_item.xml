@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_margin="@dimen/offset_small"
 	android:background="@color/white"
 	android:elevation="2dp"
 	android:orientation="horizontal">
 
-	<ImageView
+	<four.pda.ui.AspectRatioImageView
 		android:id="@+id/image_view"
-		android:layout_width="200dp"
-		android:layout_height="150dp"
-		android:scaleType="centerCrop" />
+		android:layout_width="@dimen/search_list_item_image_width"
+		android:layout_height="wrap_content"
+		android:scaleType="centerCrop"
+		app:aspectRatio="0.75" />
 
 	<LinearLayout
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="match_parent"
+		android:layout_weight="1"
 		android:orientation="vertical"
 		android:padding="8dp">
 
@@ -24,32 +27,26 @@
 			android:id="@+id/title_view"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/list_item_title_size"
 			android:textColor="@color/primary"
-			tools:text="Title" />
+			android:textSize="@dimen/search_list_item_title_text_size"
+			android:maxLines="2"
+			android:ellipsize="end"
+			tools:text="Google owned Apple with 1$" />
 
-		<LinearLayout
+		<TextView
+			android:id="@+id/description_view"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			android:layout_weight="1"
-			android:layout_marginTop="@dimen/offset_normal">
-
-			<TextView
-				android:id="@+id/description_view"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:ellipsize="end"
-				android:maxLines="3"
-				tools:text="Description" />
-
-		</LinearLayout>
+			android:ellipsize="end"
+			android:textSize="@dimen/search_list_item_description_text_size"
+			tools:text="Description" />
 
 		<TextView
 			android:id="@+id/date_view"
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/offset_normal"
-			android:textSize="12sp"
+			android:textSize="@dimen/abc_text_size_caption_material"
 			tools:text="12.05.16" />
 
 	</LinearLayout>

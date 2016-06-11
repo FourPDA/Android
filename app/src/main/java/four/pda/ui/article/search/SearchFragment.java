@@ -141,7 +141,10 @@ public class SearchFragment extends BaseFragment {
 		adapter.notifyDataSetChanged();
 
 		supportView.hide();
-		upButton.setVisibility(View.VISIBLE);
+
+		if (!adapter.isEmpty()) {
+			upButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	void showError() {

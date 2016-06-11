@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
  */
 public class ViewUtils {
 
-	public static final SimpleDateFormat VERBOSE_DATE_FORMAT = new SimpleDateFormat("dd MMMM yyyy");
+	public static final SimpleDateFormat VERBOSE_DATE_FORMAT = new SimpleDateFormat("d MMMM yyyy");
 
 	public static void loadImage(ImageView view, String url) {
 		Picasso.with(view.getContext())

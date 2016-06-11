@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 
 import butterknife.Bind;
@@ -23,10 +26,13 @@ import four.pda.ui.article.ShowArticleEvent;
  */
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
+	private static final Logger L = LoggerFactory.getLogger(ItemViewHolder.class);
+
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.description_view) TextView descriptionView;
+
+	private final TextView descriptionView;
 
 	private long id;
 	private Date date;
@@ -35,7 +41,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 	private final EventBus eventBus;
 
-	public ItemViewHolder(View view) {
+	public ItemViewHolder(final View view) {
 		super(view);
 		eventBus = EventBus_.getInstance_(view.getContext());
 
@@ -44,11 +50,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (id > 0) {
-					eventBus.post(new ShowArticleEvent(id, date, title, image));
-				}
+				eventBus.post(new ShowArticleEvent(id, date, title, image));
 			}
 		});
+
+		descriptionView = (TextView) itemView.findViewById(R.id.description_view);
+
+		if (descriptionView != null) {
+			descriptionView.addOnLayoutChangeListener(new MaxLinesListener());
+		}
+
 	}
 
 	public void setCursor(Cursor cursor) {
@@ -65,9 +76,37 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
 
-		String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
-		descriptionView.setText(Html.fromHtml(description));
+		if (descriptionView != null) {
+			String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
+			descriptionView.setText(Html.fromHtml(description));
+		}
 
 	}
 
+	private static class MaxLinesListener implements View.OnLayoutChangeListener {
+
+		@Override
+        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+
+            final TextView view = ((TextView) v);
+
+            int viewHeight = view.getMeasuredHeight();
+            int lineHeight = view.getLineHeight();
+
+            int maxLines = (int) (viewHeight / ((double) lineHeight));
+
+            if (view.getMaxLines() != maxLines) {
+
+                view.setMaxLines(maxLines);
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.requestLayout();
+                    }
+                }, 100);
+
+            }
+
+        }
+	}
 }
