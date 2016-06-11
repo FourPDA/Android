@@ -80,5 +80,7 @@
 
 	<string name="search">Поиск</string>
 	<string name="search_articles_count">Найдено: %s</string>
+	<string name="article_comment_like_error">Не удалось залайкать</string>
+	<string name="article_comment_like_already">Уже залайкано</string>
 
 </resources>

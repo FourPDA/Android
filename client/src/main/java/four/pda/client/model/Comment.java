@@ -9,7 +9,7 @@ public class Comment extends AbstractComment {
 
 	private String nickname;
 	private Date date;
-	private int likes;
+	private Karma karma;
 
 	public String getNickname() {
 		return nickname;
@@ -27,12 +27,80 @@ public class Comment extends AbstractComment {
 		this.date = date;
 	}
 
-	public int getLikes() {
-		return likes;
+	public Karma getKarma() {
+		return karma;
 	}
 
-	public void setLikes(int likes) {
-		this.likes = likes;
+	public void setKarma(Karma karma) {
+		this.karma = karma;
+	}
+
+	public static class Karma {
+
+		private CanLike canLike;
+		private int unknown2;
+		private int unknown3;
+		private int likesCount;
+
+		public CanLike getCanLike() {
+			return canLike;
+		}
+
+		public void setCanLike(CanLike canLike) {
+			this.canLike = canLike;
+		}
+
+		public int getUnknown2() {
+			return unknown2;
+		}
+
+		public void setUnknown2(int unknown2) {
+			this.unknown2 = unknown2;
+		}
+
+		public int getUnknown3() {
+			return unknown3;
+		}
+
+		public void setUnknown3(int unknown3) {
+			this.unknown3 = unknown3;
+		}
+
+		public int getLikesCount() {
+			return likesCount;
+		}
+
+		public void setLikesCount(int likesCount) {
+			this.likesCount = likesCount;
+		}
+
+	}
+
+	public enum CanLike {
+
+		CAN(0),
+		ALREADY_LIKED(1),
+		CANT(2);
+
+		private int serverValue;
+
+		CanLike(int serverValue) {
+			this.serverValue = serverValue;
+		}
+
+		public static CanLike fromServerValue(int value) {
+			for (CanLike availability : values()) {
+				if (availability.serverValue == value) {
+					return availability;
+				}
+			}
+			throw new IllegalArgumentException("Can't find like availability for serverValue " + value);
+		}
+
+		public int serverValue() {
+			return serverValue;
+		}
+
 	}
 
 }

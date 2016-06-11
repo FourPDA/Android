@@ -1,4 +1,4 @@
-package four.pda.ui.article.comments;
+package four.pda.ui.article.comments.add;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;

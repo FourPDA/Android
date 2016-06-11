@@ -36,6 +36,11 @@ import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
 import four.pda.ui.UpdateProfileEvent;
+import four.pda.ui.article.comments.actions.CommentActionsDialog_;
+import four.pda.ui.article.comments.actions.DialogParams;
+import four.pda.ui.article.comments.add.AddCommentDialog_;
+import four.pda.ui.article.comments.add.AddCommentEvent;
+import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -116,7 +121,7 @@ public class CommentsFragment extends BaseFragment {
 		refresh.setRefreshing(true);
 		supportView.showProgress();
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new CommentsCallbacks(this)).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new LoadArticleCommentsCallbacks(this)).forceLoad();
 	}
 
 	@Override
@@ -133,7 +138,7 @@ public class CommentsFragment extends BaseFragment {
 
 	public void onEvent(CommentActionsEvent event) {
 		Comment comment = event.getComment();
-		CommentActionsDialog.Params params = CommentActionsDialog.Params.create(comment, articleId, articleDate);
+		DialogParams params = DialogParams.create(comment, articleId, articleDate);
 		CommentActionsDialog_.builder()
 				.params(params)
 				.build()
@@ -149,6 +154,10 @@ public class CommentsFragment extends BaseFragment {
 		} else {
 			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 		}
+	}
+
+	public void onEvent(UserLikesSomebodyCommentEvent event) {
+		adapter.likeChanged(event.getCommentId(), event.getLikesCount());
 	}
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)

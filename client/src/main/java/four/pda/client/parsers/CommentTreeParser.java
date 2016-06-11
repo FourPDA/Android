@@ -8,7 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
@@ -24,6 +28,9 @@ public class CommentTreeParser extends AbstractParser {
 	private static final Logger L = LoggerFactory.getLogger(CommentTreeParser.class);
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy | HH:ss");
+	private static final Pattern KARMA_PATTERN = Pattern.compile("\"(\\d+)\":\\[(\\d+),(\\d+),(\\d+),(\\d+)\\]");
+
+	private Map<Long, Comment.Karma> karmaMap;
 
 	public CommentsContainer parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
@@ -34,6 +41,8 @@ public class CommentTreeParser extends AbstractParser {
 			L.error(message);
 			throw new ParseException(message);
 		}
+
+		karmaMap = parseKarma(document);
 
 		try {
 			CommentsContainer container = new CommentsContainer();
@@ -50,6 +59,34 @@ public class CommentTreeParser extends AbstractParser {
 			L.error(message, e);
 			throw new ParseException(message, e);
 		}
+	}
+
+	private Map<Long, Comment.Karma> parseKarma(Document document) {
+
+		Element karmaScript = document.getElementsByTag("script").last();
+
+		String karmaText = karmaScript.html();
+
+		if (!karmaText.contains("function(){ModKarma(")) {
+			throw new ParseException("Can't find karma script tag");
+		}
+
+		Matcher matcher = KARMA_PATTERN.matcher(karmaText);
+
+		Map<Long, Comment.Karma> map = new HashMap<>();
+
+		while (matcher.find()) {
+			long commentId = Long.parseLong(matcher.group(1));
+			Comment.Karma karma = new Comment.Karma();
+			int canLike = Integer.parseInt(matcher.group(2));
+			karma.setCanLike(Comment.CanLike.fromServerValue(canLike));
+			karma.setUnknown2(Integer.parseInt(matcher.group(3)));
+			karma.setUnknown3(Integer.parseInt(matcher.group(4)));
+			karma.setLikesCount(Integer.parseInt(matcher.group(5)));
+			map.put(commentId, karma);
+		}
+
+		return map;
 	}
 
 	private List<AbstractComment> parseList(Element rootElement, int level) {
@@ -97,8 +134,9 @@ public class CommentTreeParser extends AbstractParser {
 
 		comment.setLevel(level);
 
-		level++;
-		comment.setChildren(parseList(element, level));
+		comment.setKarma(karmaMap.get(comment.getId()));
+
+		comment.setChildren(parseList(element, level + 1));
 
 		Element commentFormElement = element.select("#comment-form-reply-" + comment.getId()).first();
 		comment.setCanReply(commentFormElement != null);

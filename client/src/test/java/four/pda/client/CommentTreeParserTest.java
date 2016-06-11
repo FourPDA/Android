@@ -98,7 +98,7 @@ public class CommentTreeParserTest extends AbstractTest {
 	}
 
 	@Test
-	public void firstArticleCanComment() throws IOException {
+	public void canCommentOnFirstPage() throws IOException {
 		String url = getArticleUrlFromPage(1);
 		String pageSource = getHtmlSource(url);
 		CommentsContainer container = new CommentTreeParser().parse(pageSource);
@@ -106,7 +106,7 @@ public class CommentTreeParserTest extends AbstractTest {
 	}
 
 	@Test
-	public void articleCanComment() throws IOException {
+	public void canCommentOnSecondPage() throws IOException {
 		String url = getArticleUrlFromPage(2);
 		String pageSource = getHtmlSource(url);
 		CommentsContainer container = new CommentTreeParser().parse(pageSource);
@@ -137,7 +137,7 @@ public class CommentTreeParserTest extends AbstractTest {
 	}
 
 	@Test
-	public void oldArticleCantComment() throws IOException {
+	public void cantCommentOnOldArticles() throws IOException {
 		String url = getArticleUrlFromPage(30);
 		String pageSource = getHtmlSource(url);
 		CommentsContainer container = new CommentTreeParser().parse(pageSource);
@@ -150,7 +150,69 @@ public class CommentTreeParserTest extends AbstractTest {
 		}
 	}
 
+	@Test
+	public void articleLikesParsed() throws IOException {
 
+		String pageSource = getHtmlSource("/2013/12/20/130961/");
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
+
+		for (AbstractComment abstractComment : comments) {
+
+			if (!(abstractComment instanceof Comment)) {
+				continue;
+			}
+
+			Comment comment = (Comment) abstractComment;
+
+			Assert.assertNotNull("Karma of comment " + comment.getId() + " not parsed", comment.getKarma());
+
+			expectIdAndLikes(comment, 1341794, 49);
+			expectIdAndLikes(comment, 1341798, 23);
+			expectIdAndLikes(comment, 1341960, 17);
+
+		}
+
+	}
+
+	private void expectIdAndLikes(Comment comment, int expectedId, int expectedLikes) {
+		if (comment.getId() == expectedId) {
+			Assert.assertEquals("Comment likes not expected", expectedLikes, comment.getKarma().getLikesCount());
+		}
+	}
+
+	@Test
+	public void unknownKarmaParamsStillZero() throws IOException {
+
+		String pageSource = getHtmlSource("/2013/12/20/130961/");
+		//TODO Добавить проверку первых нескольких страниц и статей с них
+
+		CommentsContainer container = new CommentTreeParser().parse(pageSource);
+		List<AbstractComment> comments = container.getComments();
+
+		for (AbstractComment abstractComment : comments) {
+
+			if (!(abstractComment instanceof Comment)) {
+				continue;
+			}
+
+			Comment comment = (Comment) abstractComment;
+
+			Comment.Karma karma = comment.getKarma();
+			long id = comment.getId();
+
+			Assert.assertEquals(
+					"Unknown karma param 2 of comment " + id + " is not zero",
+					0, karma.getUnknown2()
+			);
+
+			Assert.assertEquals(
+					"Unknown karma param 3 of comment " + id + " is not zero",
+					0, karma.getUnknown3()
+			);
+
+		}
+	}
 
 	private String getArticleUrlFromPage(int page) throws IOException {
 		String pageSource = getHtmlSource("/page/" + page);
