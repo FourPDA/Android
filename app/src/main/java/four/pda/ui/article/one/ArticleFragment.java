@@ -2,6 +2,7 @@ package four.pda.ui.article.one;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
@@ -32,11 +33,13 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import four.pda.App;
+import four.pda.BuildConfig;
 import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
@@ -73,12 +76,18 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@Inject FourPdaClient client;
 
+	private NewsArticleTemplate articleTemplate = new NewsArticleTemplate();
+
 	@AfterViews
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setTextZoom(preferences.textZoom().get());
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
+			WebView.setWebContentsDebuggingEnabled(true);
+		}
 
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -132,7 +141,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 				backdropImageView.setAspectRatio(k);
 				backdropImageShadowView.setAspectRatio(k * 0.6f);
- 			}
+			}
 		});
 
 		loadData();
@@ -188,22 +197,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	private String getFormattedText(String content) {
-		return "<!DOCTYPE html>\n"
-				+ "<html lang=\"ru-RU\">\n"
-				+ "<head>"
-				+ "<link rel=\"stylesheet\" href=\"http://s.4pda.to/css/site.min.css?_=1429170453\"/>"
-				+ "<style>\n" +
-				"     .content-box {\n" +
-				"       font-size:110%!important;\n" +
-				"     }\n" +
-				"  </style>"
-				+ "</head>\n"
-				+ "\t<body itemscope itemtype=\"http://schema.org/WebPage\">"
-				+ "<div class=\"container\" itemscope=\"\" itemtype=\"http://schema.org/Article\">"
-				+ "<div class=\"content\"><div class=\"content-box\" itemprop=\"description\">"
-				+ content
-				+ "</div></div></div>"
-				+ "</body></html>";
+		return articleTemplate.make(content);
 	}
 
 	public void onEvent(SetTextZoomEvent event) {

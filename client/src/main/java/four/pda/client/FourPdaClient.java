@@ -170,6 +170,23 @@ public class FourPdaClient {
 		}
 	}
 
+	public void likeArticleComment(long articleId, long commentId) throws IOException {
+
+		String url = BASE_URL + "wp-content/plugins/karma/ajax.php?" +
+				"p=" + articleId + "&c=" + commentId + "&v=1";
+
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			throw new IllegalStateException("Comment like was not success");
+		}
+
+	}
+
 	public Captcha getCaptcha() throws IOException {
 		String url = BASE_URL + "forum/index.php?act=login";
 		Request request = new Request.Builder()

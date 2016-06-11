@@ -43,6 +43,30 @@
 					android:src="@drawable/ic_share_blue_18dp" />
 
 				<Space
+					android:layout_width="@dimen/offset_normal"
+					android:layout_height="wrap_content" />
+
+				<FrameLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+
+					<ImageView
+						android:id="@+id/like_button"
+						style="@style/MaterialFlatButton"
+						android:layout_gravity="center"
+						android:src="@drawable/ic_thumb_up_blue_18dp" />
+
+					<ProgressBar
+						android:id="@+id/like_progress_view"
+						android:layout_width="24dp"
+						android:layout_height="24dp"
+						android:layout_gravity="center"
+						android:indeterminate="true"
+						android:visibility="invisible" />
+
+				</FrameLayout>
+
+				<Space
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1" />
