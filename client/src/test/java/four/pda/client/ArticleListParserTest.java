@@ -18,10 +18,10 @@ import four.pda.client.parsers.ArticlePageParser;
 public class ArticleListParserTest extends AbstractTest {
 
 	@Test
-	public void mainPage() throws IOException {
+	public void checkArticlesCountOnMainPage() throws IOException {
 		String pageSource = getHtmlSource("/");
 		List<ListArticle> articles = new ArticleListParser().parse(pageSource);
-		Assert.assertEquals("Wrong articles list size", 30, articles.size());
+		Assert.assertTrue("Wrong articles list size", articles.size() > 1);
 	}
 
 	@Test
