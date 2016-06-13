@@ -21,7 +21,7 @@ public class ArticleListParser extends AbstractParser {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticleListParser.class);
 
-	private static final SimpleDateFormat PUBLISHED_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public static final SimpleDateFormat PUBLISHED_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	public List<ListArticle> parse(String pageSource) {
 
