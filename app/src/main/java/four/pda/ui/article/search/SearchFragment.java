@@ -49,7 +49,7 @@ public class SearchFragment extends BaseFragment {
 	@Inject FourPdaClient client;
 	@Inject Keyboard keyboard;
 
-	@InstanceState String currentSearchQuery;
+	@InstanceState String currentSearchCriteria;
 	@InstanceState int allArticlesCount;
 	@InstanceState int currentPage;
 	@InstanceState boolean hasNextPage;
@@ -74,12 +74,11 @@ public class SearchFragment extends BaseFragment {
 
 			@Override
 			public boolean onQueryTextChange(String newSearchQuery) {
-				if (StringUtils.isNotBlank(currentSearchQuery) && StringUtils.isBlank(newSearchQuery)) {
-					reset();
-					return false;
+				if (!StringUtils.equals(currentSearchCriteria, newSearchQuery)) {
+					resetViews();
 				}
-				currentSearchQuery = newSearchQuery;
-				return true;
+				currentSearchCriteria = newSearchQuery;
+				return false;
 			}
 
 		});
@@ -113,6 +112,7 @@ public class SearchFragment extends BaseFragment {
 		} else {
 			updateViews();
 		}
+
 	}
 
 	@Click
@@ -125,7 +125,7 @@ public class SearchFragment extends BaseFragment {
 		getActivity().finish();
 	}
 
-	private void reset() {
+	private void resetViews() {
 		currentPage = 0;
 		allArticlesCountView.setVisibility(View.GONE);
 		adapter.swapCursor(null);
@@ -138,12 +138,16 @@ public class SearchFragment extends BaseFragment {
 		}
 		getLoaderManager().restartLoader(
 				LOADER_ID,
-				SearchCallbacks.createBundle(currentSearchQuery, currentPage),
+				SearchCallbacks.createBundle(currentSearchCriteria, currentPage),
 				new SearchCallbacks(this)
 		).forceLoad();
 	}
 
-	void updateData(SearchContainer container) {
+	void onNewDataLoaded(SearchContainer container) {
+
+		boolean needClearData = currentPage == 0;
+		dao.setSearchArticles(container.getArticles(), needClearData);
+
 		currentPage++;
 		hasNextPage = container.hasNextPage();
 		allArticlesCount = container.getAllArticlesCount();
