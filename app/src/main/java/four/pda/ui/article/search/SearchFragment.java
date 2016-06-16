@@ -14,6 +14,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 
@@ -48,10 +49,10 @@ public class SearchFragment extends BaseFragment {
 	@Inject FourPdaClient client;
 	@Inject Keyboard keyboard;
 
-	@InstanceState int currentPage;
-	@InstanceState String searchCriteria;
-	@InstanceState boolean hasNextPage;
+	@InstanceState String currentSearchCriteria;
 	@InstanceState int allArticlesCount;
+	@InstanceState int currentPage;
+	@InstanceState boolean hasNextPage;
 
 	private SearchAdapter adapter;
 	private LinearLayoutManager layoutManager;
@@ -62,30 +63,33 @@ public class SearchFragment extends BaseFragment {
 
 		searchView.onActionViewExpanded();
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				currentPage = 0;
-				searchCriteria = query;
-				adapter.swapCursor(null);
+				keyboard.hide(getActivity());
+				searchView.clearFocus();
 				loadData();
-				return false;
+				return true;
 			}
 
 			@Override
-			public boolean onQueryTextChange(String newText) {
-				if (searchCriteria == null || !searchCriteria.equals(newText)) {
-					allArticlesCountView.setVisibility(View.GONE);
+			public boolean onQueryTextChange(String newSearchQuery) {
+				if (!StringUtils.equals(currentSearchCriteria, newSearchQuery)) {
+					resetViews();
 				}
+				currentSearchCriteria = newSearchQuery;
 				return false;
 			}
+
 		});
 
 		layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-		recyclerView.setLayoutManager(layoutManager);
 		adapter = new SearchAdapter(getActivity(), null);
+
+		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
 
-		recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
@@ -93,10 +97,13 @@ public class SearchFragment extends BaseFragment {
 				int totalItemCount = layoutManager.getItemCount();
 				int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-				if (!supportView.isLoading() && hasNextPage
-						&& (totalItemCount - visibleItemCount) <= firstVisibleItemPosition) {
+				boolean isLoadInProgress = supportView.isLoading();
+				int loadLevel = totalItemCount - visibleItemCount * 2;
+				boolean shouldLoadMore = firstVisibleItemPosition >= loadLevel;
+				if (!isLoadInProgress && hasNextPage && shouldLoadMore) {
 					loadData();
 				}
+
 			}
 		});
 
@@ -105,6 +112,7 @@ public class SearchFragment extends BaseFragment {
 		} else {
 			updateViews();
 		}
+
 	}
 
 	@Click
@@ -117,15 +125,29 @@ public class SearchFragment extends BaseFragment {
 		getActivity().finish();
 	}
 
+	private void resetViews() {
+		currentPage = 0;
+		allArticlesCountView.setVisibility(View.GONE);
+		adapter.swapCursor(null);
+		upButton.setVisibility(View.GONE);
+	}
+
 	void loadData() {
 		if (adapter.isEmpty()) {
 			supportView.showProgress();
 		}
-
-		getLoaderManager().restartLoader(LOADER_ID, SearchCallbacks.createBundle(searchCriteria, currentPage), new SearchCallbacks(this)).forceLoad();
+		getLoaderManager().restartLoader(
+				LOADER_ID,
+				SearchCallbacks.createBundle(currentSearchCriteria, currentPage),
+				new SearchCallbacks(this)
+		).forceLoad();
 	}
 
-	void updateData(SearchContainer container) {
+	void onNewDataLoaded(SearchContainer container) {
+
+		boolean needClearData = currentPage == 0;
+		dao.setSearchArticles(container.getArticles(), needClearData);
+
 		currentPage++;
 		hasNextPage = container.hasNextPage();
 		allArticlesCount = container.getAllArticlesCount();
