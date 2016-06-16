@@ -20,13 +20,10 @@ import four.pda.ui.LoadResult;
 /**
  * Created by asavinova on 24/05/16.
  */
-public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Cursor>> {
+public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<List<ListArticle>>> {
 
 	private static final Logger L = LoggerFactory.getLogger(ListCallbacks.class);
 
-	static final String FORCE_BUNDLE_ARG = "force";
-
-	private boolean force;
 	private ListFragment fragment;
 
 	public ListCallbacks(ListFragment fragment) {
@@ -34,71 +31,68 @@ public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<C
 	}
 
 	@Override
-	public Loader<LoadResult<Cursor>> onCreateLoader(int id, final Bundle args) {
-		return new AsyncTaskLoader<LoadResult<Cursor>>(fragment.getActivity()) {
-
+	public AsyncTaskLoader<LoadResult<List<ListArticle>>> onCreateLoader(int id, final Bundle args) {
+		return new AsyncTaskLoader<LoadResult<List<ListArticle>>>(ListCallbacks.this.fragment.getActivity()) {
 			@Override
-			public LoadResult<Cursor> loadInBackground() {
-				force = args.getBoolean(FORCE_BUNDLE_ARG);
-				if (force) {
-					fragment.page = 1;
-				}
-
-				try {
-					List<ListArticle> articles = fragment.client.getArticles(fragment.category, fragment.page);
-
-					boolean needClearData = fragment.page == 1;
-					fragment.dao.setArticles(articles, fragment.category, needClearData);
-
-					return new LoadResult<>(fragment.dao.getArticleCursor(fragment.category));
-				} catch (Exception e) {
-					L.error("Articles page request error", e);
-					return new LoadResult<>(e);
-				}
-			}
-
+            public LoadResult<List<ListArticle>> loadInBackground() {
+                try {
+                    List<ListArticle> articles = fragment.client.getArticles(fragment.category, fragment.page);
+                    return new LoadResult<>(articles);
+                } catch (Exception e) {
+                    L.error("Articles page request error", e);
+                    return new LoadResult<>(e);
+                }
+            }
 		};
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoadResult<Cursor>> loader, LoadResult<Cursor> result) {
+	public void onLoadFinished(Loader<LoadResult<List<ListArticle>>> loader, LoadResult<List<ListArticle>> result) {
+
 		fragment.refresh.setRefreshing(false);
 
-		if (result.getException() == null) {
-			fragment.page++;
+		if (result.isError()) {
 
-			fragment.adapter.swapCursor(result.getData());
-			fragment.adapter.notifyDataSetChanged();
+			View.OnClickListener retryListener = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					fragment.loadData();
+				}
+			};
 
-			fragment.supportView.hide();
-			fragment.upButton.setVisibility(View.VISIBLE);
+			int itemCount = fragment.adapter.getItemCount();
 
-			return;
-		}
-
-		int itemCount = fragment.adapter.getItemCount();
-
-		View.OnClickListener retryListener = new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				fragment.loadData(force);
+			if (itemCount == 0) {
+				fragment.upButton.setVisibility(View.GONE);
+				fragment.supportView.showError(fragment.getString(R.string.article_list_network_error), retryListener);
+				return;
 			}
-		};
 
-		if (itemCount == 0) {
-			fragment.upButton.setVisibility(View.GONE);
-			fragment.supportView.showError(fragment.getString(R.string.article_list_network_error), retryListener);
+			Snackbar
+					.make(fragment.container, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
+					.setAction(R.string.retry_button, retryListener)
+					.show();
+
 			return;
+
 		}
 
-		Snackbar
-				.make(fragment.layout, R.string.article_list_network_error, Snackbar.LENGTH_INDEFINITE)
-				.setAction(R.string.retry_button, retryListener)
-				.show();
+		boolean needClearData = fragment.page == 1;
+		fragment.dao.setArticles(result.getData(), fragment.category, needClearData);
+
+		Cursor cursor = fragment.dao.getArticleCursor(fragment.category);
+		fragment.adapter.swapCursor(cursor);
+		fragment.adapter.notifyDataSetChanged();
+
+		fragment.supportView.hide();
+		fragment.upButton.setVisibility(View.VISIBLE);
+
+		fragment.page++;
+
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoadResult<Cursor>> loader) {
+	public void onLoaderReset(Loader<LoadResult<List<ListArticle>>> loader) {
 	}
 
 }

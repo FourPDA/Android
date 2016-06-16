@@ -1,6 +1,5 @@
 package four.pda.ui.article.list;
 
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +41,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@FragmentArg CategoryType category;
 
-	@ViewById LinearLayout layout;
+	@ViewById LinearLayout container;
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
@@ -75,10 +74,10 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			}
 		});
 
-		layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+		container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
 			public void onGlobalLayout() {
-				int spanCount = (int) (layout.getWidth() / layout.getResources().getDimension(R.dimen.list_item_width));
+				int spanCount = (int) (container.getWidth() / container.getResources().getDimension(R.dimen.list_item_width));
 				if (spanCount > 1) {
 					layoutManager.setSpanCount(spanCount);
 				}
@@ -90,7 +89,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		adapter = new ArticlesAdapter(getActivity(), null);
 		recyclerView.setAdapter(adapter);
 
-		recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
@@ -98,19 +97,22 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 				int totalItemCount = layoutManager.getItemCount();
 				int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-				if (!refresh.isRefreshing()
-						&& (totalItemCount - visibleItemCount) <= firstVisibleItemPosition) {
-					loadData(false);
+				int loadLevel = totalItemCount - visibleItemCount;
+				boolean shouldLoad = firstVisibleItemPosition >= loadLevel;
+
+				if (!refresh.isRefreshing() && shouldLoad) {
+					loadData();
 				}
 			}
 		});
 
 		refresh.setOnRefreshListener(this);
 		refresh.setColorSchemeResources(R.color.primary);
-		refresh.setProgressViewOffset(false, 0,
-				(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
 
-		loadData(false);
+		float progressOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics());
+		refresh.setProgressViewOffset(false, 0, (int) progressOffset);
+
+		loadData();
 	}
 
 	@Click
@@ -119,7 +121,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		layoutManager.scrollToPosition(0);
 	}
 
-	void loadData(boolean force) {
+	void loadData() {
 		refresh.setRefreshing(true);
 
 		int itemCount = adapter.getItemCount();
@@ -127,14 +129,13 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 			supportView.showProgress();
 		}
 
-		Bundle bundle = new Bundle();
-		bundle.putBoolean(ListCallbacks.FORCE_BUNDLE_ARG, force);
-		getLoaderManager().restartLoader(LOADER_ID, bundle, new ListCallbacks(this)).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new ListCallbacks(this)).forceLoad();
 	}
 
 	@Override
 	public void onRefresh() {
-		loadData(true);
+		page = 1;
+		loadData();
 	}
 
 	public CategoryType getCategory() {
