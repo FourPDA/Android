@@ -93,6 +93,9 @@ public class ArticleListParser extends AbstractParser {
 		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
 		article.setImage(imageSrc);
 
+		int commentsCount = Integer.parseInt(element.select("a.v-count").text());
+		article.setCommentsCount(commentsCount);
+
 		String publishedDate = element.select("meta[itemprop=datePublished]").first().attr("content");
 		try {
 			article.setPublishedDate(PUBLISHED_DATE_FORMAT.parse(publishedDate));
