@@ -13,6 +13,7 @@ public class ListArticle {
 	private String description;
 	private String image;
 	private Date publishedDate;
+	private int commentsCount;
 
 	public long getId() {
 		return id;
@@ -60,6 +61,14 @@ public class ListArticle {
 
 	public void setPublishedDate(Date publishedDate) {
 		this.publishedDate = publishedDate;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
 	}
 
 }
