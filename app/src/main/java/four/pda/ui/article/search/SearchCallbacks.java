@@ -36,39 +36,35 @@ public class SearchCallbacks implements LoaderManager.LoaderCallbacks<LoadResult
 
 	@Override
 	public Loader<LoadResult<SearchContainer>> onCreateLoader(int id, final Bundle args) {
-		return new AsyncTaskLoader<LoadResult<SearchContainer>>(fragment.getActivity()) {
 
+		final String searchCriteria = args.getString(SEARCH_CRITERIA_BUNDLE_ARG);
+		final int currentPage = args.getInt(CURRENT_PAGE_BUNDLE_ARG);
+
+		return new AsyncTaskLoader<LoadResult<SearchContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<SearchContainer> loadInBackground() {
-
-				String searchCriteria = args.getString(SEARCH_CRITERIA_BUNDLE_ARG);
-				int currentPage = args.getInt(CURRENT_PAGE_BUNDLE_ARG);
-
 				try {
 					SearchContainer container = fragment.client.searchArticles(searchCriteria, currentPage + 1);
-					boolean needClearData = currentPage == 0;
-					fragment.dao.setSearchArticles(container.getArticles(), needClearData);
-
 					return new LoadResult<>(container);
 				} catch (Exception e) {
 					L.error("Search articles request error", e);
 					return new LoadResult<>(e);
 				}
 			}
-
 		};
 	}
 
 	@Override
 	public void onLoadFinished(Loader<LoadResult<SearchContainer>> loader, LoadResult<SearchContainer> result) {
+
 		fragment.supportView.hide();
 
-		if (result.getException() == null) {
-			fragment.updateData(result.getData());
+		if (result.isError()) {
+			fragment.showError();
 			return;
 		}
 
-		fragment.showError();
+		fragment.onNewDataLoaded(result.getData());
 	}
 
 	@Override
