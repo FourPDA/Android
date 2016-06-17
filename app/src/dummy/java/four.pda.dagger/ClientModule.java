@@ -5,6 +5,7 @@ import android.content.Context;
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
 import dagger.Module;
@@ -23,8 +24,13 @@ public class ClientModule extends BaseModule {
 	}
 
 	@Provides
+	public CookiePersistor cookiePersistor() {
+		return new SharedPrefsCookiePersistor(context);
+	}
+
+	@Provides
 	public FourPdaClient client() {
-		ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
+		ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), cookiePersistor());
 		OkHttpClient httpClient = new OkHttpClient.Builder()
 				.cookieJar(cookieJar)
 				.build();
