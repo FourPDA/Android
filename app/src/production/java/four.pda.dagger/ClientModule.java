@@ -2,6 +2,9 @@ package four.pda.dagger;
 
 import android.content.Context;
 
+import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+
 import dagger.Module;
 import dagger.Provides;
 import four.pda.client.FourPdaClient;
@@ -18,9 +21,14 @@ public class ClientModule extends BaseModule {
 	}
 
 	@Provides
+	public CookiePersistor cookiePersistor() {
+		return new SharedPrefsCookiePersistor(context);
+	}
+
+	@Provides
 	public FourPdaClient client() {
 		OkHttpClient httpClient = new OkHttpClient.Builder()
-				.cookieJar(new ForcePersistCookieJar(context))
+				.cookieJar(new ForcePersistCookieJar(cookiePersistor()))
 				.build();
 		return new FourPdaClient(httpClient);
 	}

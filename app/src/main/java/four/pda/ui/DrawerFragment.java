@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
@@ -66,6 +68,7 @@ public class DrawerFragment extends Fragment {
 	@Pref Preferences_ preferences;
 
 	@Inject FourPdaClient client;
+	@Inject CookiePersistor cookiePersistor;
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
     private Map<View, CategoryType> map = new HashMap<>();
@@ -182,6 +185,8 @@ public class DrawerFragment extends Fragment {
 				preferences.profileId().put(0l);
 				preferences.profileLogin().put(null);
 				preferences.profilePhoto().put(null);
+
+				cookiePersistor.clear();
 
 				updateProfile();
 			} else {
