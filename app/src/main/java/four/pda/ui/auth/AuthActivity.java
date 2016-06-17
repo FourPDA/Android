@@ -1,5 +1,7 @@
 package four.pda.ui.auth;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +28,7 @@ import four.pda.ui.SupportView;
 /**
  * Created by asavinova on 19/02/16.
  */
-@EActivity(R.layout.signin)
+@EActivity
 public class AuthActivity extends AppCompatActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(AuthActivity.class);
@@ -48,6 +50,20 @@ public class AuthActivity extends AppCompatActivity {
 	@Pref Preferences_ preferences;
 
 	Captcha captcha;
+
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		boolean isAuthorized = preferences.profileId().get() != 0;
+		if (isAuthorized) {
+			setResult(RESULT_OK);
+			finish();
+			return;
+		}
+
+		setContentView(R.layout.signin);
+	}
 
 	@AfterViews
 	void afterViews() {

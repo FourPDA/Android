@@ -18,7 +18,6 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
@@ -38,9 +37,9 @@ import four.pda.ui.SupportView;
 import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.actions.CommentActionsDialog_;
 import four.pda.ui.article.comments.actions.DialogParams;
+import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
 import four.pda.ui.article.comments.add.AddCommentDialog_;
 import four.pda.ui.article.comments.add.AddCommentEvent;
-import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -50,7 +49,7 @@ import four.pda.ui.auth.AuthActivity_;
 public class CommentsFragment extends BaseFragment {
 
 	private static final int LOADER_ID = 0;
-	private static final int LOGIN_REQUEST_CODE = 0;
+	private static final int ADD_COMMENT_AUTH_REQUEST_CODE = 0;
 
 	@FragmentArg long articleId;
 	@FragmentArg Date articleDate;
@@ -147,33 +146,21 @@ public class CommentsFragment extends BaseFragment {
 
 	public void onEvent(AddCommentEvent event) {
 		this.addCommentEvent = event;
-		boolean isAuthorized = preferences.profileId().get() != 0;
-
-		if (isAuthorized) {
-			showAddCommentDialog();
-		} else {
-			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
-		}
+		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), ADD_COMMENT_AUTH_REQUEST_CODE);
 	}
 
 	public void onEvent(UserLikesSomebodyCommentEvent event) {
 		adapter.likeChanged(event.getCommentId(), event.getLikesCount());
 	}
 
-	@OnActivityResult(LOGIN_REQUEST_CODE)
+	@OnActivityResult(ADD_COMMENT_AUTH_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (Activity.RESULT_OK == resultCode) {
-			updateProfile();
+			eventBus.post(new UpdateProfileEvent());
 			showAddCommentDialog();
 		}
 	}
 
-	@UiThread
-	void updateProfile() {
-		eventBus.post(new UpdateProfileEvent());
-	}
-
-	@UiThread
 	void showAddCommentDialog() {
 
 		if (!preferences.isAcceptedCommentRules().get()) {
