@@ -1,5 +1,7 @@
 package four.pda.ui.article.comments.actions;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +28,9 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
+import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.add.AddCommentEvent;
+import four.pda.ui.auth.AuthActivity_;
 
 /**
  * Created by asavinova on 25/04/16.
@@ -34,6 +39,7 @@ import four.pda.ui.article.comments.add.AddCommentEvent;
 public class CommentActionsDialog extends DialogFragment {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
+	private static final int LIKE_AUTH_REQUEST_CODE = 0;
 
 	@FragmentArg DialogParams params;
 
@@ -94,6 +100,24 @@ public class CommentActionsDialog extends DialogFragment {
 
 	@Click(R.id.like_button)
 	void likeButton() {
+		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LIKE_AUTH_REQUEST_CODE);
+	}
+
+	@Click(R.id.reply_button)
+	void reply() {
+		eventBus.post(new AddCommentEvent(params.id(), params.nickname()));
+		dismiss();
+	}
+
+	@OnActivityResult(LIKE_AUTH_REQUEST_CODE)
+	void onResult(int resultCode) {
+		if (Activity.RESULT_OK == resultCode) {
+			eventBus.post(new UpdateProfileEvent());
+			like();
+		}
+	}
+
+	void like() {
 
 		switch (params.canLike()) {
 
@@ -116,12 +140,6 @@ public class CommentActionsDialog extends DialogFragment {
 
 		}
 
-	}
-
-	@Click(R.id.reply_button)
-	void reply() {
-		eventBus.post(new AddCommentEvent(params.id(), params.nickname()));
-		dismiss();
 	}
 
 	void updateLikes() {
