@@ -10,7 +10,7 @@ public class FourPdaDaoGenerator {
 
 	public static void main(String[] args) throws Exception {
 
-		Schema schema = new Schema(3, "four.pda.dao");
+		Schema schema = new Schema(4, "four.pda.dao");
 		addArticleEntity(schema);
 
 		String outDir = "dao/src/main/java";
@@ -28,6 +28,7 @@ public class FourPdaDaoGenerator {
 		article.addStringProperty("category");
 		article.addStringProperty("image");
 		article.addDateProperty("publishedDate");
+		article.addIntProperty("commentsCount");
 	}
 
 }
