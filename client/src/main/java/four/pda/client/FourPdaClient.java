@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by asavinova on 09/04/15.
@@ -60,15 +61,18 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
+		ResponseBody body = response.body();
 
 		try {
-			return new LoginParser().parse(response.body().string());
+			return new LoginParser().parse(body.string());
 		} catch (LoginException e) {
 			L.info("Login error", e);
 			throw e;
 		} catch (RuntimeException e) {
 			L.error("Can't parse login result page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -89,13 +93,15 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new ProfileParser().parse(body);
+			return new ProfileParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse profile page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -113,17 +119,19 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
 			if (type == CategoryType.REVIEWS) {
-                return new ReviewListParser().parse(body);
+                return new ReviewListParser().parse(body.string());
             } else {
-                return new ArticleListParser().parse(body);
+                return new ArticleListParser().parse(body.string());
             }
 		} catch (RuntimeException e) {
 			L.error("Can't parse page at " + url);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -139,13 +147,15 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new ArticlePageParser().parse(body);
+			return new ArticlePageParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse page at " + url);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -158,13 +168,15 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CommentTreeParser().parse(body);
+			return new CommentTreeParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error(String.format("Can't parse comments at %s",  url), e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -192,18 +204,16 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CaptchaParser().parse(body);
+			return new CaptchaParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse login page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
-	}
-
-	private String addRandomToUrl(String url) {
-		return url + "?" + Math.random();
 	}
 
 	public CommentsContainer addComment(long postId, Long replyId, String message) throws IOException {
@@ -222,18 +232,24 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String source = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CommentTreeParser().parse(source);
+			return new CommentTreeParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error(String.format("Can't parse comments at %s", url), e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
 	public String getCommentUrl(long articleId, Date articleDate, long commentId) {
 		return getArticleUrl(articleDate, articleId) + "/#comment" + commentId;
+	}
+
+	private String addRandomToUrl(String url) {
+		return url + "?" + Math.random();
 	}
 
 }
