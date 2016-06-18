@@ -45,7 +45,7 @@ public class Dao {
 		daoSession = daoMaster.newSession();
 	}
 
-	public void setArticles(final List<ListArticle> listArticles, final CategoryType category, final boolean needClearData) {
+	public void setArticles(final List<ListArticle> articles, final CategoryType category, final boolean needClearData) {
 		daoSession.runInTx(new Runnable() {
 			@Override
 			public void run() {
@@ -61,18 +61,19 @@ public class Dao {
 					L.trace("No need clear for category {}", category);
 				}
 
-				for (ListArticle listArticle : listArticles) {
+				for (ListArticle article : articles) {
 
-					Article article = new Article();
-					article.setId(listArticle.getId());
-					article.setDate(listArticle.getDate());
-					article.setTitle(listArticle.getTitle());
-					article.setDescription(listArticle.getDescription());
-					article.setImage(listArticle.getImage());
-					article.setCategory(getCategoryValue(category));
-					article.setPublishedDate(listArticle.getPublishedDate());
+					Article daoArticle = new Article();
+					daoArticle.setId(article.getId());
+					daoArticle.setDate(article.getDate());
+					daoArticle.setTitle(article.getTitle());
+					daoArticle.setImage(article.getImage());
+					daoArticle.setCategory(getCategoryValue(category));
+					daoArticle.setDescription(article.getDescription());
+					daoArticle.setPublishedDate(article.getPublishedDate());
+					daoArticle.setCommentsCount(article.getCommentsCount());
 
-					dao.insertOrReplace(article);
+					dao.insertOrReplace(daoArticle);
 				}
 			}
 		});

@@ -30,6 +30,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Category = new Property(4, String.class, "category", false, "CATEGORY");
         public final static Property Image = new Property(5, String.class, "image", false, "IMAGE");
         public final static Property PublishedDate = new Property(6, java.util.Date.class, "publishedDate", false, "PUBLISHED_DATE");
+        public final static Property CommentsCount = new Property(7, Integer.class, "commentsCount", false, "COMMENTS_COUNT");
     };
 
 
@@ -51,7 +52,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "\"DESCRIPTION\" TEXT," + // 3: description
                 "\"CATEGORY\" TEXT," + // 4: category
                 "\"IMAGE\" TEXT," + // 5: image
-                "\"PUBLISHED_DATE\" INTEGER);"); // 6: publishedDate
+                "\"PUBLISHED_DATE\" INTEGER," + // 6: publishedDate
+                "\"COMMENTS_COUNT\" INTEGER);"); // 7: commentsCount
     }
 
     /** Drops the underlying database table. */
@@ -99,6 +101,11 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         if (publishedDate != null) {
             stmt.bindLong(7, publishedDate.getTime());
         }
+ 
+        Integer commentsCount = entity.getCommentsCount();
+        if (commentsCount != null) {
+            stmt.bindLong(8, commentsCount);
+        }
     }
 
     /** @inheritdoc */
@@ -117,7 +124,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // image
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // publishedDate
+            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // publishedDate
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // commentsCount
         );
         return entity;
     }
@@ -132,6 +140,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setCategory(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setImage(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setPublishedDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setCommentsCount(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
      }
     
     /** @inheritdoc */

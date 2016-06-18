@@ -29,6 +29,7 @@ public class FourPdaDaoGenerator {
 		article.addStringProperty("category");
 		article.addStringProperty("image");
 		article.addDateProperty("publishedDate");
+		article.addIntProperty("commentsCount");
 	}
 
 	private static void addSearchArticleEntity(Schema schema) {

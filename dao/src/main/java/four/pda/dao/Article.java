@@ -13,6 +13,7 @@ public class Article {
     private String category;
     private String image;
     private java.util.Date publishedDate;
+    private Integer commentsCount;
 
     public Article() {
     }
@@ -21,7 +22,7 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate) {
+    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate, Integer commentsCount) {
         this.id = id;
         this.date = date;
         this.title = title;
@@ -29,6 +30,7 @@ public class Article {
         this.category = category;
         this.image = image;
         this.publishedDate = publishedDate;
+        this.commentsCount = commentsCount;
     }
 
     public Long getId() {
@@ -85,6 +87,14 @@ public class Article {
 
     public void setPublishedDate(java.util.Date publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public Integer getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(Integer commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
 }

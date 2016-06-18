@@ -8,6 +8,7 @@ import java.util.Date;
 public class ListArticle extends AbstractArticle {
 
 	private Date publishedDate;
+	private int commentsCount;
 
 	public Date getPublishedDate() {
 		return publishedDate;
@@ -15,6 +16,14 @@ public class ListArticle extends AbstractArticle {
 
 	public void setPublishedDate(Date publishedDate) {
 		this.publishedDate = publishedDate;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
 	}
 
 }
