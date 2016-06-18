@@ -16,4 +16,10 @@
 
 	<dimen name="profile_photo_size">100dp</dimen>
 
+	<dimen name="icon_size">48dp</dimen>
+
+	<dimen name="search_list_item_image_width">125dp</dimen>
+	<dimen name="search_list_item_title_text_size">@dimen/abc_text_size_body_1_material</dimen>
+	<dimen name="search_list_item_description_text_size">@dimen/abc_text_size_caption_material</dimen>
+
 </resources>

@@ -71,13 +71,13 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 		getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
 			@Override
 			public void onBackStackChanged() {
-				ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.list_container);
+				Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_container);
 
-				if (listFragment == null) {
+				if (fragment == null) {
 					return;
 				}
 
-				category = listFragment.getCategory();
+				category = ((ListFragment) fragment).getCategory();
 				drawer.setCategorySelected(category);
 			}
 		});

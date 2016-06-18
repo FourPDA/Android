@@ -15,6 +15,8 @@ import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
+import four.pda.client.model.SearchContainer;
+import four.pda.client.model.SearchListArticle;
 import okhttp3.OkHttpClient;
 
 /**
@@ -181,4 +183,31 @@ public class DummyFourPdaClient extends FourPdaClient {
 		profile.setPhoto("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
 		return profile;
 	}
+
+	@Override
+	public SearchContainer searchArticles(String search, int page) throws IOException {
+		SearchContainer container = new SearchContainer();
+
+		container.setAllArticlesCount(articles.size());
+		container.setHasNextPage(false);
+
+		List<SearchListArticle> searchArticles = new ArrayList<>();
+		double position = 0;
+		for (ListArticle article : articles) {
+			SearchListArticle searchArticle = new SearchListArticle();
+			searchArticle.setId(article.getId());
+			searchArticle.setDate(article.getDate());
+			searchArticle.setTitle(article.getTitle());
+			searchArticle.setDescription(article.getDescription());
+			searchArticle.setImage(article.getImage());
+			searchArticle.setPosition(position);
+			searchArticles.add(searchArticle);
+			position++;
+		}
+
+		container.setArticles(searchArticles);
+
+		return container;
+	}
+
 }

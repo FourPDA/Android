@@ -1,13 +1,12 @@
 package four.pda.ui.article.list;
 
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -30,6 +29,7 @@ import four.pda.client.FourPdaClient;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.CategoryTitleMap;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.SearchActivity_;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -64,6 +64,15 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 		toolbar.setTitle(CategoryTitleMap.get(category));
 		showMenuIcon();
+
+		toolbar.inflateMenu(R.menu.articles_list);
+		toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				SearchActivity_.intent(getActivity()).start();
+				return true;
+			}
+		});
 
 		container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
@@ -131,26 +140,6 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	public CategoryType getCategory() {
 		return category;
-	}
-
-	private void showMenuIcon() {
-
-		final View view = getActivity().findViewById(R.id.drawer_layout);
-
-		if (view == null) {
-			return;
-		}
-
-		if (view instanceof DrawerLayout) {
-			toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					((DrawerLayout) view).openDrawer(GravityCompat.START);
-				}
-			});
-		}
-
 	}
 
 }
