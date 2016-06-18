@@ -1,8 +1,10 @@
 package four.pda.dagger;
 
+import android.content.Context;
+
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,8 +20,8 @@ import okhttp3.HttpUrl;
  */
 class ForcePersistCookieJar extends PersistentCookieJar {
 
-	public ForcePersistCookieJar(CookiePersistor cookiePersistor) {
-        super(new SetCookieCache(), cookiePersistor);
+	public ForcePersistCookieJar(Context context) {
+        super(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
     }
 
     @Override
