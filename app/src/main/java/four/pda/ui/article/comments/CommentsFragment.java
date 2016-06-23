@@ -38,6 +38,7 @@ import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.actions.CommentActionsDialog_;
 import four.pda.ui.article.comments.actions.DialogParams;
 import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
+import four.pda.ui.article.comments.add.AddCommentDialog;
 import four.pda.ui.article.comments.add.AddCommentDialog_;
 import four.pda.ui.article.comments.add.AddCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
@@ -179,13 +180,15 @@ public class CommentsFragment extends BaseFragment {
 			return;
 		}
 
-		AddCommentDialog_.builder()
+		AddCommentDialog dialog = AddCommentDialog_.builder()
 				.postId(articleId)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
-				.build()
-				.show(getChildFragmentManager(), "add_comment");
+				.build();
 
+		getChildFragmentManager().beginTransaction()
+				.add(dialog, null)
+				.commitAllowingStateLoss();
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {
