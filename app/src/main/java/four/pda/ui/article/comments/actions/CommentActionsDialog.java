@@ -28,7 +28,6 @@ import four.pda.EventBus;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
-import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.add.AddCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
 
@@ -112,7 +111,6 @@ public class CommentActionsDialog extends DialogFragment {
 	@OnActivityResult(LIKE_AUTH_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (Activity.RESULT_OK == resultCode) {
-			eventBus.post(new UpdateProfileEvent());
 			like();
 		}
 	}

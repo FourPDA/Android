@@ -24,7 +24,6 @@ import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.CategoryType;
 import four.pda.ui.DrawerFragment;
-import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.comments.CommentsFragment_;
 import four.pda.ui.article.list.ListFragment;
@@ -175,10 +174,6 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 				.replace(R.id.item_container, fragment)
 				.addToBackStack(null)
 				.commit();
-	}
-
-	public void onEvent(UpdateProfileEvent event) {
-		drawer.updateProfile();
 	}
 
 	@Override

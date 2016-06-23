@@ -32,11 +32,14 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import four.pda.App;
+import four.pda.Auth;
+import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.analytics.Analytics;
 import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.Profile;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -67,6 +70,8 @@ public class DrawerFragment extends Fragment {
 	@Bean Analytics analytics;
 	@Pref Preferences_ preferences;
 
+	@Inject Auth auth;
+	@Inject EventBus eventBus;
 	@Inject FourPdaClient client;
 	@Inject PersistentCookieJar cookieJar;
 
@@ -106,9 +111,20 @@ public class DrawerFragment extends Fragment {
                 }
             });
         }
-
-		updateProfile();
     }
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+		updateProfile();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
+	}
 
 	public void setCategorySelected(CategoryType categoryType) {
 		for (Map.Entry<View, CategoryType> entry : map.entrySet()) {
@@ -117,11 +133,7 @@ public class DrawerFragment extends Fragment {
 	}
 
 	public void updateProfile() {
-		long profileId = preferences.profileId().get();
-		String login = preferences.profileLogin().get();
-		String photo = preferences.profilePhoto().get();
-
-		boolean isAuthorized = profileId != 0;
+		boolean isAuthorized = auth.isAuthorized();
 
 		loginView.setVisibility(isAuthorized ? View.GONE : View.VISIBLE);
 		logoutView.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
@@ -130,8 +142,9 @@ public class DrawerFragment extends Fragment {
 		profilePanel.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
 
 		if (isAuthorized) {
-			profileLoginView.setText(login);
-			ViewUtils.loadImage(profilePhotoView, photo);
+			Profile profile = auth.getProfile();
+			profileLoginView.setText(profile.getLogin());
+			ViewUtils.loadImage(profilePhotoView, profile.getPhoto());
 		}
 	}
 
@@ -158,6 +171,10 @@ public class DrawerFragment extends Fragment {
         AboutActivity_.intent(getActivity()).start();
     }
 
+	public void onEvent(UpdateProfileEvent event) {
+		updateProfile();
+	}
+
     public interface ChangeCategoryListener {
         void onChange(CategoryType type);
     }
@@ -182,13 +199,8 @@ public class DrawerFragment extends Fragment {
 		@Override
 		public void onLoadFinished(Loader<LoadResult<Boolean>> loader, LoadResult<Boolean> result) {
 			if (result.getException() == null && result.getData()) {
-				preferences.profileId().put(0l);
-				preferences.profileLogin().put(null);
-				preferences.profilePhoto().put(null);
-
+				auth.logout();
 				cookieJar.clear();
-
-				updateProfile();
 			} else {
 				//TODO Нужно ли запрашивать заново в случае ошибки?
 			}

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 
 import four.pda.App;
+import four.pda.Auth;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
@@ -45,6 +46,7 @@ public class AuthActivity extends AppCompatActivity {
 	@ViewById ImageView captchaImageView;
 	@ViewById SupportView supportView;
 
+	@Inject Auth auth;
 	@Inject FourPdaClient client;
 
 	@Pref Preferences_ preferences;

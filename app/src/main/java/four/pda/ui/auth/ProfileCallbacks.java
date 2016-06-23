@@ -62,9 +62,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 			return;
 		}
 
-		Profile profile = result.getData();
-		preferences.profileLogin().put(profile.getLogin());
-		preferences.profilePhoto().put(profile.getPhoto());
+		activity.auth.setProfile(result.getData());
 
 		activity.supportView.hide();
 		activity.setResult(Activity.RESULT_OK);
