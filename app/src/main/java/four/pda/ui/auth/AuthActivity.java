@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.Auth;
-import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Captcha;
@@ -49,16 +47,15 @@ public class AuthActivity extends AppCompatActivity {
 	@Inject Auth auth;
 	@Inject FourPdaClient client;
 
-	@Pref Preferences_ preferences;
-
 	Captcha captcha;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		boolean isAuthorized = preferences.profileId().get() != 0;
-		if (isAuthorized) {
+		((App) getApplication()).component().inject(this);
+
+		if (auth.isAuthorized()) {
 			setResult(RESULT_OK);
 			finish();
 			return;
@@ -70,7 +67,6 @@ public class AuthActivity extends AppCompatActivity {
 	@AfterViews
 	void afterViews() {
 		L.debug("Start login activity");
-		((App) getApplication()).component().inject(this);
 
 		toolbar.setTitle(R.string.auth_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);

@@ -45,4 +45,9 @@ public class Auth {
 		profile.setPhoto(preferences.profilePhoto().get());
 		return profile;
 	}
+
+	public Long getProfileId() {
+		return preferences.profileId().get();
+	}
+
 }

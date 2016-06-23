@@ -19,7 +19,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,6 @@ import javax.inject.Inject;
 import four.pda.App;
 import four.pda.Auth;
 import four.pda.EventBus;
-import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.analytics.Analytics;
 import four.pda.client.CategoryType;
@@ -68,7 +66,6 @@ public class DrawerFragment extends Fragment {
 	@ViewById TextView profileLoginView;
 
 	@Bean Analytics analytics;
-	@Pref Preferences_ preferences;
 
 	@Inject Auth auth;
 	@Inject EventBus eventBus;
