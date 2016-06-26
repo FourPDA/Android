@@ -81,7 +81,7 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Long>> 
 		}
 
 		Long memberId = result.getData();
-		activity.preferences.profileId().put(memberId);
+		activity.auth.login(memberId);
 		activity.loadProfile();
 		activity.supportView.hide();
 	}
