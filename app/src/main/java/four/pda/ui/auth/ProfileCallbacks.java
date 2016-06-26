@@ -10,7 +10,7 @@ import android.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import four.pda.Preferences_;
+import four.pda.Auth;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Profile;
@@ -25,12 +25,12 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 
 	private AuthActivity activity;
 	private FourPdaClient pdaClient;
-	private Preferences_ preferences;
+	private Auth auth;
 
 	public ProfileCallbacks(AuthActivity activity) {
 		this.activity = activity;
 		pdaClient = activity.client;
-		preferences = activity.preferences;
+		auth = activity.auth;
 	}
 
 	@Override
@@ -39,8 +39,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 			@Override
 			public LoadResult<Profile> loadInBackground() {
 				try {
-					Long memberId = preferences.profileId().get();
-					return new LoadResult<>(pdaClient.getProfile(memberId));
+					return new LoadResult<>(pdaClient.getProfile(auth.getProfileId()));
 				} catch (Exception e) {
 					L.error("Profile request error", e);
 					return new LoadResult<>(e);
@@ -62,9 +61,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 			return;
 		}
 
-		Profile profile = result.getData();
-		preferences.profileLogin().put(profile.getLogin());
-		preferences.profilePhoto().put(profile.getPhoto());
+		activity.auth.setProfile(result.getData());
 
 		activity.supportView.hide();
 		activity.setResult(Activity.RESULT_OK);

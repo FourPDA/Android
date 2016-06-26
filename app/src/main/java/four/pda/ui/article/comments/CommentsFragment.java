@@ -34,7 +34,6 @@ import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
-import four.pda.ui.UpdateProfileEvent;
 import four.pda.ui.article.comments.actions.CommentActionsDialog_;
 import four.pda.ui.article.comments.actions.DialogParams;
 import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
@@ -156,7 +155,6 @@ public class CommentsFragment extends BaseFragment {
 	@OnActivityResult(ADD_COMMENT_AUTH_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (Activity.RESULT_OK == resultCode) {
-			eventBus.post(new UpdateProfileEvent());
 			showAddCommentDialog();
 		}
 	}
