@@ -39,17 +39,17 @@ public class DummyFourPdaClient extends FourPdaClient {
 		// http://4pda.ru/2016/03/25/286425/
 		addArticle(286425, "Выиграй 1 ТБ и антивирус на все гаджеты в конкурсе от Dr. Web", "http://s.4pda.to/2RBAdFIaF2xopvCJdarD5jSlphuRODs2224z1.jpg");
 
-		addComment("Ortisiz", 0, "Ну вот как раз геймпад и куплю)");
+		addComment("Ortisiz", 0, "Ну вот как раз геймпад и куплю)", 1, Comment.CanLike.ALREADY_LIKED);
 		addDeletedComment(0);
-		addComment("ibis_87", 0, "Не то чтобы я считал, что игра никакая, она, судя по всему, хорошая, но зачем такая сложность искусственная нужна, решительно не понимаю.");
-		addComment("Dr_Destroi", 1, "ibis_87, \nЗдесь весь кайф в том что ты моешь пройти игру не совершенствуя своего персонажа а совершенствуя свои знания о тактике, ловушек и мув сете врагов! Это уже доказано игроками которые прошли игры серии Souls без прокачки своих персов!");
-		addComment("ibis_87", 2, "Dr_Destroi, \nЭто я понимаю, потому и говорю, что игра, судя по всему, хорошая. Я только не вижу в этом никакого интереса. Вот приходите вы домой после работы, устали, поели, поговорили с женой, потаскали на руках ребенка. И садитесь часик...поумирать? Позапоминать каждый поворот каждого подземелья? Я понимаю, в чем концепция игры, но непонимаю, как это может приносить удовольствия тем, у кого нет вагона времени играть в неуставшем состоянии.");
-		addComment("tapdroid", 3, "ibis_87, удовольствие? я бы сказал - играть интересно.");
-		addComment("ibis_87", 4, "Вот я и не понимаю удовольствия в этом. Если у меня после 10 часов на работе будет гореть стул, то еще до победы над боссом геймпад окажется в телевизоре, а диск - на барахолке. ");
+		addComment("ibis_87", 0, "Не то чтобы я считал, что игра никакая, она, судя по всему, хорошая, но зачем такая сложность искусственная нужна, решительно не понимаю.", 0, Comment.CanLike.CAN);
+		addComment("Dr_Destroi", 1, "ibis_87, \nЗдесь весь кайф в том что ты моешь пройти игру не совершенствуя своего персонажа а совершенствуя свои знания о тактике, ловушек и мув сете врагов! Это уже доказано игроками которые прошли игры серии Souls без прокачки своих персов!", 12, Comment.CanLike.CAN);
+		addComment("ibis_87", 2, "Dr_Destroi, \nЭто я понимаю, потому и говорю, что игра, судя по всему, хорошая. Я только не вижу в этом никакого интереса. Вот приходите вы домой после работы, устали, поели, поговорили с женой, потаскали на руках ребенка. И садитесь часик...поумирать? Позапоминать каждый поворот каждого подземелья? Я понимаю, в чем концепция игры, но непонимаю, как это может приносить удовольствия тем, у кого нет вагона времени играть в неуставшем состоянии.", 123, Comment.CanLike.CAN);
+		addComment("tapdroid", 3, "ibis_87, удовольствие? я бы сказал - играть интересно.", 0, Comment.CanLike.CAN);
+		addComment("ibis_87", 4, "Вот я и не понимаю удовольствия в этом. Если у меня после 10 часов на работе будет гореть стул, то еще до победы над боссом геймпад окажется в телевизоре, а диск - на барахолке. ", 0, Comment.CanLike.CAN);
 		addDeletedComment(5);
-		addComment("Very long nick name that I can imagine in the world", 6, "tapdroid, \nА зачем еще играть?");
-		addComment("Dr_Destroi", 7, "Тогда игра станет такой же как и все а не одной из миллиона!");
-		addComment("ibis_87", 8, "Dr_Destroi, \nИз-за того, что к тому, чем она УЖЕ является, не отрезая НИЧЕГО, добавят что-то еще?");
+		addComment("Very long nick name that I can imagine in the world", 6, "tapdroid, \nА зачем еще играть?", 0, Comment.CanLike.CAN);
+		addComment("Dr_Destroi", 7, "Тогда игра станет такой же как и все а не одной из миллиона!", 0, Comment.CanLike.CAN);
+		addComment("ibis_87", 8, "Dr_Destroi, \nИз-за того, что к тому, чем она УЖЕ является, не отрезая НИЧЕГО, добавят что-то еще?", 0, Comment.CanLike.CAN);
 		addDeletedComment(0);
 		addDeletedComment(0);
 	}
@@ -62,10 +62,11 @@ public class DummyFourPdaClient extends FourPdaClient {
 		article.setImage(image);
 		article.setDate(new Date());
 		article.setPublishedDate(new Date());
+		article.setCommentsCount(comments.size());
 		articles.add(article);
 	}
 
-	private static void addComment(String nick, int level, String content) {
+	private static void addComment(String nick, int level, String content, int likesCount, Comment.CanLike canLike) {
 		Comment comment = new Comment();
 		comment.setId(newId());
 		comment.setDate(new Date());
@@ -73,6 +74,14 @@ public class DummyFourPdaClient extends FourPdaClient {
 		comment.setLevel(level);
 		comment.setContent(content);
 		comment.setCanReply(level < 8);
+
+		Comment.Karma karma = new Comment.Karma();
+		karma.setLikesCount(likesCount);
+		karma.setCanLike(canLike);
+		karma.setUnknown2(0);
+		karma.setUnknown3(0);
+		comment.setKarma(karma);
+
 		comments.add(comment);
 	}
 
@@ -208,6 +217,19 @@ public class DummyFourPdaClient extends FourPdaClient {
 		container.setArticles(searchArticles);
 
 		return container;
+	}
+
+	@Override
+	public void likeArticleComment(long articleId, long commentId) throws IOException {
+		for (AbstractComment comment : comments) {
+			if (comment.getId() == commentId) {
+				Comment.Karma karma = ((Comment) comment).getKarma();
+				karma.setLikesCount(karma.getLikesCount() + 1);
+				karma.setCanLike(Comment.CanLike.ALREADY_LIKED);
+				((Comment) comment).setKarma(karma);
+				return;
+			}
+		}
 	}
 
 }
