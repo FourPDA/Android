@@ -20,20 +20,22 @@ import four.pda.ui.article.ShowArticleEvent;
 /**
  * Created by pavel on 12/04/15.
  */
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
+	@Bind(R.id.comments_count_text_view) TextView commentsCountView;
 
 	private long id;
 	private Date date;
 	private String title;
 	private String image;
+	private int commentsCount;
 
 	private final EventBus eventBus;
 
-	public ViewHolder(View view) {
+	public ArticleViewHolder(View view) {
 		super(view);
 		eventBus = EventBus_.getInstance_(view.getContext());
 
@@ -55,6 +57,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 		date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
 		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
 		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
+		commentsCount = cursor.getInt(ArticleDao.Properties.CommentsCount.ordinal);
 
 		titleView.setText(title);
 
@@ -62,6 +65,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
+
+		commentsCountView.setText(String.valueOf(commentsCount));
 
 	}
 

@@ -21,7 +21,7 @@ public class ArticleListParser extends AbstractParser {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticleListParser.class);
 
-	private static final SimpleDateFormat PUBLISHED_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public static final SimpleDateFormat PUBLISHED_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	public List<ListArticle> parse(String pageSource) {
 
@@ -92,6 +92,9 @@ public class ArticleListParser extends AbstractParser {
 
 		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
 		article.setImage(imageSrc);
+
+		int commentsCount = Integer.parseInt(element.select("a.v-count").text());
+		article.setCommentsCount(commentsCount);
 
 		String publishedDate = element.select("meta[itemprop=datePublished]").first().attr("content");
 		try {

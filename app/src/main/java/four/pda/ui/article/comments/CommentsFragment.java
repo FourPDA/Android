@@ -18,9 +18,10 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -30,9 +31,15 @@ import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.SupportView;
-import four.pda.ui.UpdateProfileEvent;
+import four.pda.ui.article.comments.actions.CommentActionsDialog_;
+import four.pda.ui.article.comments.actions.DialogParams;
+import four.pda.ui.article.comments.actions.UserLikesSomebodyCommentEvent;
+import four.pda.ui.article.comments.add.AddCommentDialog;
+import four.pda.ui.article.comments.add.AddCommentDialog_;
+import four.pda.ui.article.comments.add.AddCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
 
 /**
@@ -42,9 +49,10 @@ import four.pda.ui.auth.AuthActivity_;
 public class CommentsFragment extends BaseFragment {
 
 	private static final int LOADER_ID = 0;
-	private static final int LOGIN_REQUEST_CODE = 0;
+	private static final int ADD_COMMENT_AUTH_REQUEST_CODE = 0;
 
-	@FragmentArg long id;
+	@FragmentArg long articleId;
+	@FragmentArg Date articleDate;
 
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
@@ -55,8 +63,11 @@ public class CommentsFragment extends BaseFragment {
 	@Bean EventBus eventBus;
 
 	@Inject FourPdaClient client;
+
 	@Pref Preferences_ preferences;
+
 	CommentsAdapter adapter;
+
 	private AddCommentEvent addCommentEvent;
 
 	@AfterViews
@@ -109,7 +120,7 @@ public class CommentsFragment extends BaseFragment {
 		refresh.setRefreshing(true);
 		supportView.showProgress();
 
-		getLoaderManager().restartLoader(LOADER_ID, null, new CommentsCallbacks(this)).forceLoad();
+		getLoaderManager().restartLoader(LOADER_ID, null, new LoadArticleCommentsCallbacks(this)).forceLoad();
 	}
 
 	@Override
@@ -125,37 +136,30 @@ public class CommentsFragment extends BaseFragment {
 	}
 
 	public void onEvent(CommentActionsEvent event) {
+		Comment comment = event.getComment();
+		DialogParams params = DialogParams.create(comment, articleId, articleDate);
 		CommentActionsDialog_.builder()
-				.comment(event.getComment())
+				.params(params)
 				.build()
 				.show(getChildFragmentManager(), "show_comment");
 	}
 
 	public void onEvent(AddCommentEvent event) {
 		this.addCommentEvent = event;
-		boolean isAuthorized = preferences.profileId().get() != 0;
-
-		if (isAuthorized) {
-			showAddCommentDialog();
-		} else {
-			startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
-		}
+		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), ADD_COMMENT_AUTH_REQUEST_CODE);
 	}
 
-	@OnActivityResult(LOGIN_REQUEST_CODE)
+	public void onEvent(UserLikesSomebodyCommentEvent event) {
+		adapter.likeChanged(event.getCommentId(), event.getLikesCount());
+	}
+
+	@OnActivityResult(ADD_COMMENT_AUTH_REQUEST_CODE)
 	void onResult(int resultCode) {
 		if (Activity.RESULT_OK == resultCode) {
-			updateProfile();
 			showAddCommentDialog();
 		}
 	}
 
-	@UiThread
-	void updateProfile() {
-		eventBus.post(new UpdateProfileEvent());
-	}
-
-	@UiThread
 	void showAddCommentDialog() {
 
 		if (!preferences.isAcceptedCommentRules().get()) {
@@ -174,13 +178,15 @@ public class CommentsFragment extends BaseFragment {
 			return;
 		}
 
-		AddCommentDialog_.builder()
-				.postId(id)
+		AddCommentDialog dialog = AddCommentDialog_.builder()
+				.postId(articleId)
 				.replyId(addCommentEvent.getReplyId())
 				.replyAuthor(addCommentEvent.getReplyAuthor())
-				.build()
-				.show(getChildFragmentManager(), "add_comment");
+				.build();
 
+		getChildFragmentManager().beginTransaction()
+				.add(dialog, null)
+				.commitAllowingStateLoss();
 	}
 
 	public void onEvent(UpdateCommentsEvent event) {

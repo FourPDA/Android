@@ -72,9 +72,15 @@
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
 	<string name="share">Поделиться</string>
+	<string name="find">Найти</string>
 
 	<string name="deleted_comment">Комментарий удален</string>
 
 	<string name="first_comment_dialog_ok">Все понял</string>
+
+	<string name="search">Поиск</string>
+	<string name="search_articles_count">Найдено: %s</string>
+	<string name="article_comment_like_error">Не удалось залайкать</string>
+	<string name="article_comment_like_already">Уже залайкано</string>
 
 </resources>

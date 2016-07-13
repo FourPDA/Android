@@ -65,6 +65,18 @@ public class ReviewListParser extends AbstractParser {
 		String image = element.select("img[itemprop=image]").attr("src");
 		article.setImage(image);
 
+		int commentsCount = Integer.parseInt(element.select("a.v-count").text());
+		article.setCommentsCount(commentsCount);
+
+		String publishedDate = element.select("meta[itemprop=datePublished]").first().attr("content");
+		try {
+			article.setPublishedDate(ArticleListParser.PUBLISHED_DATE_FORMAT.parse(publishedDate));
+		} catch (java.text.ParseException e) {
+			String message = "Can't parse datePublished tag content as date";
+			L.error(message, e);
+			throw new RuntimeException(message, e);
+		}
+
 		return article;
 	}
 

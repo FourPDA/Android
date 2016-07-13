@@ -11,19 +11,18 @@ import org.slf4j.LoggerFactory;
 
 import four.pda.R;
 import four.pda.client.model.CommentsContainer;
-import four.pda.dao.Article;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 11/03/16.
  */
-public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
+class LoadArticleCommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
 
-	private static final Logger L = LoggerFactory.getLogger(CommentsCallbacks.class);
+	private static final Logger L = LoggerFactory.getLogger(LoadArticleCommentsCallbacks.class);
 
 	private CommentsFragment fragment;
 
-	public CommentsCallbacks(CommentsFragment fragment) {
+	public LoadArticleCommentsCallbacks(CommentsFragment fragment) {
 		this.fragment = fragment;
 	}
 
@@ -32,9 +31,8 @@ public class CommentsCallbacks implements LoaderManager.LoaderCallbacks<LoadResu
 		return new AsyncTaskLoader<LoadResult<CommentsContainer>>(fragment.getActivity()) {
 			@Override
 			public LoadResult<CommentsContainer> loadInBackground() {
-				Article article = fragment.dao.getArticle(fragment.id);
 				try {
-					return new LoadResult<>(fragment.client.getArticleComments(article.getDate(), article.getId()));
+					return new LoadResult<>(fragment.client.getArticleComments(fragment.articleDate, fragment.articleId));
 				} catch (Exception e) {
 					L.error("Article comments request error", e);
 					return new LoadResult<>(e);

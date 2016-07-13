@@ -1,9 +1,11 @@
 package four.pda.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ import four.pda.client.model.Captcha;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
+import four.pda.client.model.SearchContainer;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
 import four.pda.client.parsers.CaptchaParser;
@@ -20,11 +23,14 @@ import four.pda.client.parsers.CommentTreeParser;
 import four.pda.client.parsers.LoginParser;
 import four.pda.client.parsers.ProfileParser;
 import four.pda.client.parsers.ReviewListParser;
+import four.pda.client.parsers.SearchArticlesParser;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by asavinova on 09/04/15.
@@ -35,7 +41,8 @@ public class FourPdaClient {
 
 	public static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
-	private static final String BASE_URL = "http://4pda.ru/";
+	private static final String HOST = "4pda.ru";
+	private static final String BASE_URL = "http://" + HOST + "/";
 
 	private OkHttpClient client;
 
@@ -60,15 +67,18 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
+		ResponseBody body = response.body();
 
 		try {
-			return new LoginParser().parse(response.body().string());
+			return new LoginParser().parse(body.string());
 		} catch (LoginException e) {
 			L.info("Login error", e);
 			throw e;
 		} catch (RuntimeException e) {
 			L.error("Can't parse login result page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -89,13 +99,15 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new ProfileParser().parse(body);
+			return new ProfileParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse profile page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -113,17 +125,19 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
 			if (type == CategoryType.REVIEWS) {
-                return new ReviewListParser().parse(body);
+                return new ReviewListParser().parse(body.string());
             } else {
-                return new ArticleListParser().parse(body);
+                return new ArticleListParser().parse(body.string());
             }
 		} catch (RuntimeException e) {
 			L.error("Can't parse page at " + url);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -139,13 +153,15 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new ArticlePageParser().parse(body);
+			return new ArticlePageParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse page at " + url);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
 
@@ -158,14 +174,33 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CommentTreeParser().parse(body);
+			return new CommentTreeParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error(String.format("Can't parse comments at %s",  url), e);
 			throw e;
+		} finally {
+			body.close();
 		}
+	}
+
+	public void likeArticleComment(long articleId, long commentId) throws IOException {
+
+		String url = BASE_URL + "wp-content/plugins/karma/ajax.php?" +
+				"p=" + articleId + "&c=" + commentId + "&v=1";
+
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+
+		if (!response.isSuccessful()) {
+			throw new IllegalStateException("Comment like was not success");
+		}
+
 	}
 
 	public Captcha getCaptcha() throws IOException {
@@ -175,18 +210,16 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String body = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CaptchaParser().parse(body);
+			return new CaptchaParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error("Can't parse login page", e);
 			throw e;
+		} finally {
+			body.close();
 		}
-	}
-
-	private String addRandomToUrl(String url) {
-		return url + "?" + Math.random();
 	}
 
 	public CommentsContainer addComment(long postId, Long replyId, String message) throws IOException {
@@ -205,13 +238,70 @@ public class FourPdaClient {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String source = response.body().string();
+		ResponseBody body = response.body();
 
 		try {
-			return new CommentTreeParser().parse(source);
+			return new CommentTreeParser().parse(body.string());
 		} catch (RuntimeException e) {
 			L.error(String.format("Can't parse comments at %s", url), e);
 			throw e;
+		} finally {
+			body.close();
 		}
 	}
+
+	public String getCommentUrl(long articleId, Date articleDate, long commentId) {
+		return getArticleUrl(articleDate, articleId) + "/#comment" + commentId;
+	}
+
+	/**
+	 * Ищет новости по заданной строке и странице.
+	 *
+	 * @param searchCriteria строка поиска
+	 * @param page номер страницы выдачи начиная с 1
+	 * @return контейнер с результатами поиска
+	 * @throws IOException
+     */
+	public SearchContainer searchArticles(String searchCriteria, int page) throws IOException {
+
+		if (StringUtils.isBlank(searchCriteria)) {
+			throw new IllegalArgumentException("Search criteria can't be empty");
+		}
+
+		if (page < 1) {
+			throw new IllegalArgumentException("Page can't be less than 1");
+		}
+
+		HttpUrl url = new HttpUrl.Builder()
+				.scheme("http")
+				.host(HOST)
+				.addPathSegment("page")
+				.addPathSegment(String.valueOf(page))
+				.addEncodedQueryParameter("s", URLEncoder.encode(searchCriteria, "CP1251"))
+				.addQueryParameter("random", String.valueOf(Math.random()))
+				.build();
+
+		if (L.isTraceEnabled()) {
+			L.trace("URL: " + url.toString());
+		}
+
+		Request request = new Request.Builder()
+				.url(url)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		String body = response.body().string();
+
+		try {
+			return new SearchArticlesParser().parse(body, page);
+		} catch (RuntimeException e) {
+			L.error(String.format("Can't parse search page at %s", url), e);
+			throw e;
+		}
+	}
+
+	private String addRandomToUrl(String url) {
+		return url + "?" + Math.random();
+	}
+
 }

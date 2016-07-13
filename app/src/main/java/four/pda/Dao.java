@@ -14,10 +14,13 @@ import java.util.List;
 
 import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
+import four.pda.client.model.SearchListArticle;
 import four.pda.dao.Article;
 import four.pda.dao.ArticleDao;
 import four.pda.dao.DaoMaster;
 import four.pda.dao.DaoSession;
+import four.pda.dao.SearchArticle;
+import four.pda.dao.SearchArticleDao;
 
 /**
  * Created by asavinova on 10/04/15.
@@ -42,7 +45,7 @@ public class Dao {
 		daoSession = daoMaster.newSession();
 	}
 
-	public void setArticles(final List<ListArticle> listArticles, final CategoryType category, final boolean needClearData) {
+	public void setArticles(final List<ListArticle> articles, final CategoryType category, final boolean needClearData) {
 		daoSession.runInTx(new Runnable() {
 			@Override
 			public void run() {
@@ -58,18 +61,19 @@ public class Dao {
 					L.trace("No need clear for category {}", category);
 				}
 
-				for (ListArticle listArticle : listArticles) {
+				for (ListArticle article : articles) {
 
-					Article article = new Article();
-					article.setId(listArticle.getId());
-					article.setDate(listArticle.getDate());
-					article.setTitle(listArticle.getTitle());
-					article.setDescription(listArticle.getDescription());
-					article.setImage(listArticle.getImage());
-					article.setCategory(getCategoryValue(category));
-					article.setPublishedDate(listArticle.getPublishedDate());
+					Article daoArticle = new Article();
+					daoArticle.setId(article.getId());
+					daoArticle.setDate(article.getDate());
+					daoArticle.setTitle(article.getTitle());
+					daoArticle.setImage(article.getImage());
+					daoArticle.setCategory(getCategoryValue(category));
+					daoArticle.setDescription(article.getDescription());
+					daoArticle.setPublishedDate(article.getPublishedDate());
+					daoArticle.setCommentsCount(article.getCommentsCount());
 
-					dao.insertOrReplace(article);
+					dao.insertOrReplace(daoArticle);
 				}
 			}
 		});
@@ -77,13 +81,10 @@ public class Dao {
 		L.trace("All articles count = {}", daoSession.getArticleDao().count());
 	}
 
-	private String getCategoryValue(CategoryType category) {
-		return category.name().toLowerCase();
-	}
-
 	public Cursor getArticleCursor(CategoryType category) {
 		ArticleDao dao = daoSession.getArticleDao();
-		return db.query(ArticleDao.TABLENAME, dao.getAllColumns(),
+		return db.query(ArticleDao.TABLENAME,
+				dao.getAllColumns(),
 				ArticleDao.Properties.Category.columnName + " == '" + getCategoryValue(category) + "'",
 				null,
 				null,
@@ -91,8 +92,48 @@ public class Dao {
 				ArticleDao.Properties.PublishedDate.columnName + " DESC");
 	}
 
-	public Article getArticle(long id) {
-		ArticleDao dao = daoSession.getArticleDao();
-		return dao.load(id);
+	public void setSearchArticles(final List<SearchListArticle> articles, final boolean needClearData) {
+		daoSession.runInTx(new Runnable() {
+			@Override
+			public void run() {
+				SearchArticleDao dao = daoSession.getSearchArticleDao();
+
+				if (needClearData) {
+					dao.deleteAll();
+					L.trace("Delete all search articles");
+				}
+
+				for (SearchListArticle listArticle : articles) {
+
+					SearchArticle article = new SearchArticle();
+					article.setId(listArticle.getId());
+					article.setDate(listArticle.getDate());
+					article.setTitle(listArticle.getTitle());
+					article.setDescription(listArticle.getDescription());
+					article.setImage(listArticle.getImage());
+					article.setPosition(listArticle.getPosition());
+
+					dao.insertOrReplace(article);
+				}
+			}
+		});
+
+		L.trace("All search articles count = {}", daoSession.getSearchArticleDao().count());
 	}
+
+	public Cursor getSearchArticleCursor() {
+		SearchArticleDao dao = daoSession.getSearchArticleDao();
+		return db.query(SearchArticleDao.TABLENAME,
+				dao.getAllColumns(),
+				null,
+				null,
+				null,
+				null,
+				SearchArticleDao.Properties.Position.columnName + " ASC");
+	}
+
+	private String getCategoryValue(CategoryType category) {
+		return category.name().toLowerCase();
+	}
+
 }

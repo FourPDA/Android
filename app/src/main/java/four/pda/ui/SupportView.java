@@ -71,6 +71,8 @@ public class SupportView extends FrameLayout {
 
 	@UiThread
 	public void hide() {
+		errorPanel.setVisibility(GONE);
+		progressView.setVisibility(GONE);
 		setVisibility(GONE);
 	}
 
@@ -82,4 +84,9 @@ public class SupportView extends FrameLayout {
 		errorPanel.setVisibility(VISIBLE);
 		setVisibility(VISIBLE);
 	}
+
+	public boolean isLoading() {
+		return progressView.getVisibility() == VISIBLE;
+	}
+
 }

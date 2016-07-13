@@ -2,11 +2,13 @@ package four.pda.dagger;
 
 import dagger.Component;
 import four.pda.ui.DrawerFragment;
-import four.pda.ui.article.comments.AddCommentDialog;
+import four.pda.ui.article.comments.add.AddCommentDialog;
+import four.pda.ui.article.comments.actions.CommentActionsDialog;
 import four.pda.ui.article.comments.CommentsFragment;
 import four.pda.ui.article.list.ListFragment;
 import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleTaskLoader;
+import four.pda.ui.article.search.SearchFragment;
 import four.pda.ui.auth.AuthActivity;
 
 /**
@@ -28,5 +30,9 @@ public interface FourPdaComponent {
 	void inject(DrawerFragment x);
 
 	void inject(AddCommentDialog x);
+
+	void inject(SearchFragment x);
+
+	void inject(CommentActionsDialog x);
 
 }
