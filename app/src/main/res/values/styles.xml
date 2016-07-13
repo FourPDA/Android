@@ -35,7 +35,7 @@
 		<item name="android:background">@drawable/category_item_bg</item>
 	</style>
 
-	<style name="EditText" parent="TextAppearance.AppCompat">
+	<style name="EditText" parent="Widget.Design.TextInputLayout">
 		<item name="colorControlNormal">@color/primary</item>
 		<item name="colorControlActivated">@color/accent</item>
 		<item name="android:textColor">@color/primary</item>
