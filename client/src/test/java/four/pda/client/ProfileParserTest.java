@@ -14,33 +14,30 @@ import four.pda.client.parsers.ProfileParser;
 public class ProfileParserTest extends AbstractTest {
 
 	@Test
-	public void profileVarann() throws IOException {
+	public void checkVarannUserProfileFields() throws IOException {
 		String pageSource = getHtmlSource("/forum/index.php?showuser=4975039");
 		Profile profile = new ProfileParser().parse(pageSource);
 
-		Assert.assertEquals("Wrong profile login", "var.ann", profile.getLogin());
-		Assert.assertFalse("Wrong profile photo", profile.getPhoto().isEmpty());
-		Assert.assertFalse("Wrong profile info", profile.getPhoto().isEmpty());
+		Assert.assertEquals("Unexpected login name", "var.ann", profile.getLogin());
+		Assert.assertFalse("Avatar is empty", profile.getPhoto().isEmpty());
 	}
 
 	@Test
-	public void profileWadym72() throws IOException {
+	public void checkWadym72UserProfileFields() throws IOException {
 		String pageSource = getHtmlSource("/forum/index.php?showuser=1929816");
 		Profile profile = new ProfileParser().parse(pageSource);
 
-		Assert.assertEquals("Wrong profile login", "Wadym72", profile.getLogin());
-		Assert.assertFalse("Wrong profile photo", profile.getPhoto().isEmpty());
-		Assert.assertFalse("Wrong profile info", profile.getPhoto().isEmpty());
+		Assert.assertEquals("Unexpected login name", "Wadym72", profile.getLogin());
+		Assert.assertFalse("Avatar is empty", profile.getPhoto().isEmpty());
 	}
 
 	@Test
-	public void profileNews() throws IOException {
+	public void checkNewsUserProfileFields() throws IOException {
 		String pageSource = getHtmlSource("/forum/index.php?showuser=204809");
 		Profile profile = new ProfileParser().parse(pageSource);
 
-		Assert.assertEquals("Wrong profile login", "News", profile.getLogin());
-		Assert.assertFalse("Wrong profile photo", profile.getPhoto().isEmpty());
-		Assert.assertFalse("Wrong profile info", profile.getPhoto().isEmpty());
+		Assert.assertEquals("Unexpected login name", "News", profile.getLogin());
+		Assert.assertFalse("Avatar is empty", profile.getPhoto().isEmpty());
 	}
 
 }
