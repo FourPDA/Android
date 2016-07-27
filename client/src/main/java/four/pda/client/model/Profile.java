@@ -7,6 +7,7 @@ public class Profile {
 
 	private String photo;
 	private String login;
+	private String info;
 
 	public String getPhoto() {
 		return photo;
@@ -22,6 +23,14 @@ public class Profile {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
 }

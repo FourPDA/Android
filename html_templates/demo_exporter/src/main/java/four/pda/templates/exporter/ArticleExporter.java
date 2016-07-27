@@ -14,9 +14,9 @@ import four.pda.template.NewsArticleTemplate;
 /**
  * Created by pavel on 26/05/16.
  */
-public class Exporter {
+public class ArticleExporter {
 
-	private static final Logger L = LoggerFactory.getLogger(Exporter.class);
+	private static final Logger L = LoggerFactory.getLogger(ArticleExporter.class);
 
 	private static final String SERVER = "http://4pda.ru/";
 

@@ -7,9 +7,9 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import java.util.HashMap;
 
 /**
- * Created by pavel on 24/05/16.
+ * Created by asavinova on 26/07/16.
  */
-public class NewsArticleTemplate extends Template {
+public class ProfileTemplate extends Template {
 
 	public String make(String source) {
 
@@ -17,7 +17,7 @@ public class NewsArticleTemplate extends Template {
 		scopes.put("content", source);
 
 		StringBuilderWriter writer = new StringBuilderWriter();
-		Mustache template = getTemplate("NewsArticleTemplate.htm", "NewsArticle");
+		Mustache template = getTemplate("ProfileTemplate.htm", "Profile");
 		template.execute(writer, scopes);
 
 		return writer.toString();

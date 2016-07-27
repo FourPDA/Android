@@ -28,6 +28,9 @@ public class ProfileParser {
 
 			Element loginElement = document.select("div.user-box > h1").first();
 			profile.setLogin(loginElement.text());
+
+			Element infoElement = document.select("form > ul").first();
+			profile.setInfo(infoElement.outerHtml());
 		} catch (Exception e) {
 			String message = "Can't parse profile page";
 			L.error(message, e);
