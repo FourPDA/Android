@@ -39,6 +39,7 @@ import four.pda.client.CategoryType;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Profile;
 import four.pda.ui.auth.AuthActivity_;
+import four.pda.ui.profile.ProfileActivity_;
 
 /**
  * @author Anna Savinova
@@ -167,6 +168,13 @@ public class DrawerFragment extends Fragment {
         analytics.drawer().aboutClicked();
         AboutActivity_.intent(getActivity()).start();
     }
+
+	@Click(R.id.profile_panel)
+	void profileClicked() {
+		ProfileActivity_.intent(getActivity())
+				.profileId(auth.getProfileId())
+				.start();
+	}
 
 	public void onEvent(UpdateProfileEvent event) {
 		updateProfile();

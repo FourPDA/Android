@@ -83,4 +83,7 @@
 	<string name="article_comment_like_error">Не удалось залайкать</string>
 	<string name="article_comment_like_already">Уже залайкано</string>
 
+	<string name="profile_title">Профиль</string>
+	<string name="profile_network_error">Не удалось загрузить информацию о профиле.</string>
+
 </resources>
