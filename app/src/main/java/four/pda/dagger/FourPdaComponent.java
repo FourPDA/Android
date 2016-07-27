@@ -10,6 +10,7 @@ import four.pda.ui.article.one.ArticleFragment;
 import four.pda.ui.article.one.ArticleTaskLoader;
 import four.pda.ui.article.search.SearchFragment;
 import four.pda.ui.auth.AuthActivity;
+import four.pda.ui.profile.ProfileActivity;
 
 /**
  * Created by asavinova on 23/02/16.
@@ -34,5 +35,7 @@ public interface FourPdaComponent {
 	void inject(SearchFragment x);
 
 	void inject(CommentActionsDialog x);
+
+	void inject(ProfileActivity x);
 
 }
