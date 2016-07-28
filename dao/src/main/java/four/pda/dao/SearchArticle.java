@@ -12,6 +12,8 @@ public class SearchArticle {
     private String description;
     private String image;
     private Double position;
+    private Long authorId;
+    private String authorName;
 
     public SearchArticle() {
     }
@@ -20,13 +22,15 @@ public class SearchArticle {
         this.id = id;
     }
 
-    public SearchArticle(Long id, java.util.Date date, String title, String description, String image, Double position) {
+    public SearchArticle(Long id, java.util.Date date, String title, String description, String image, Double position, Long authorId, String authorName) {
         this.id = id;
         this.date = date;
         this.title = title;
         this.description = description;
         this.image = image;
         this.position = position;
+        this.authorId = authorId;
+        this.authorName = authorName;
     }
 
     public Long getId() {
@@ -75,6 +79,22 @@ public class SearchArticle {
 
     public void setPosition(Double position) {
         this.position = position;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
 }

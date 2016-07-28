@@ -103,7 +103,7 @@ public class SearchArticlesParser extends AbstractParser {
 		String imageSrc = element.select(".photo > a > img").first().attr("src");
 		article.setImage(imageSrc);
 
-		article.setUser(getUserFromLinkElement(element.select(".author > a").first()));
+		article.setAuthor(getUserFromLinkElement(element.select(".author > a").first()));
 
 		return article;
 	}

@@ -72,6 +72,8 @@ public class Dao {
 					daoArticle.setDescription(article.getDescription());
 					daoArticle.setPublishedDate(article.getPublishedDate());
 					daoArticle.setCommentsCount(article.getCommentsCount());
+					daoArticle.setAuthorId(article.getAuthor().getId());
+					daoArticle.setAuthorName(article.getAuthor().getNickname());
 
 					dao.insertOrReplace(daoArticle);
 				}
@@ -112,6 +114,8 @@ public class Dao {
 					article.setDescription(listArticle.getDescription());
 					article.setImage(listArticle.getImage());
 					article.setPosition(listArticle.getPosition());
+					article.setAuthorId(listArticle.getAuthor().getId());
+					article.setAuthorName(listArticle.getAuthor().getNickname());
 
 					dao.insertOrReplace(article);
 				}

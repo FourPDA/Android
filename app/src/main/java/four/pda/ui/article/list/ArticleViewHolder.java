@@ -16,6 +16,7 @@ import four.pda.R;
 import four.pda.dao.ArticleDao;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowArticleEvent;
+import four.pda.ui.profile.ProfileActivity_;
 
 /**
  * Created by pavel on 12/04/15.
@@ -25,6 +26,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
+	@Bind(R.id.author_view) TextView authorView;
 	@Bind(R.id.comments_count_text_view) TextView commentsCountView;
 
 	private long id;
@@ -32,10 +34,12 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 	private String title;
 	private String image;
 	private int commentsCount;
+	private long authorId;
+	private String authorName;
 
 	private final EventBus eventBus;
 
-	public ArticleViewHolder(View view) {
+	public ArticleViewHolder(final View view) {
 		super(view);
 		eventBus = EventBus_.getInstance_(view.getContext());
 
@@ -49,6 +53,17 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 				}
 			}
 		});
+
+		authorView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (authorId > 0) {
+					ProfileActivity_.intent(view.getContext())
+							.profileId(authorId)
+							.start();
+				}
+			}
+		});
 	}
 
 	public void setCursor(Cursor cursor) {
@@ -58,6 +73,8 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
 		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
 		commentsCount = cursor.getInt(ArticleDao.Properties.CommentsCount.ordinal);
+		authorId = cursor.getLong(ArticleDao.Properties.AuthorId.ordinal);
+		authorName = cursor.getString(ArticleDao.Properties.AuthorName.ordinal);
 
 		titleView.setText(title);
 
@@ -65,6 +82,8 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
+
+		authorView.setText(authorName);
 
 		commentsCountView.setText(String.valueOf(commentsCount));
 

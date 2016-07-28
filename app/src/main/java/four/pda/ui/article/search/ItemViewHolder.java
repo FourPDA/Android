@@ -20,6 +20,7 @@ import four.pda.R;
 import four.pda.dao.SearchArticleDao;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowArticleEvent;
+import four.pda.ui.profile.ProfileActivity_;
 
 /**
  * Created by asavinova on 08/05/16.
@@ -31,6 +32,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	@Bind(R.id.image_view) ImageView imageView;
 	@Bind(R.id.title_view) TextView titleView;
 	@Bind(R.id.date_view) TextView dateView;
+	@Bind(R.id.author_view) TextView authorView;
 
 	private final TextView descriptionView;
 
@@ -38,6 +40,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	private Date date;
 	private String title;
 	private String image;
+	private long authorId;
+	private String authorName;
 
 	private final EventBus eventBus;
 
@@ -60,6 +64,17 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 			descriptionView.addOnLayoutChangeListener(new MaxLinesListener());
 		}
 
+		authorView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (authorId > 0) {
+					ProfileActivity_.intent(view.getContext())
+							.profileId(authorId)
+							.start();
+				}
+			}
+		});
+
 	}
 
 	public void setCursor(Cursor cursor) {
@@ -75,6 +90,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		date = new Date(cursor.getLong(SearchArticleDao.Properties.Date.ordinal));
 		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
 		dateView.setText(verboseDate);
+
+		authorId = cursor.getLong(SearchArticleDao.Properties.AuthorId.ordinal);
+		authorName = cursor.getString(SearchArticleDao.Properties.AuthorName.ordinal);
+		authorView.setText(authorName);
 
 		if (descriptionView != null) {
 			String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
