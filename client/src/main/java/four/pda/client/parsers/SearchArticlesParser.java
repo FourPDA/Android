@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import four.pda.client.exceptions.ParseException;
-import four.pda.client.model.SearchListArticle;
 import four.pda.client.model.SearchContainer;
+import four.pda.client.model.SearchListArticle;
 
 /**
  * Created by asavinova on 07/05/16.
@@ -102,6 +102,8 @@ public class SearchArticlesParser extends AbstractParser {
 
 		String imageSrc = element.select(".photo > a > img").first().attr("src");
 		article.setImage(imageSrc);
+
+		article.setUser(getUserFromLinkElement(element.select(".author > a").first()));
 
 		return article;
 	}

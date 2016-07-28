@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import four.pda.client.model.ListArticle;
+import four.pda.client.model.User;
 import four.pda.client.parsers.ArticleListParser;
 import four.pda.client.parsers.ArticlePageParser;
 
@@ -35,6 +36,10 @@ public class ArticleListParserTest extends AbstractTest {
 		for (ListArticle article : articles) {
 			String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
 			new ArticlePageParser().parse(source);
+
+			User user = article.getUser();
+			Assert.assertTrue("Unexpected user id", user.getId() > 0);
+			Assert.assertFalse("Nickname is empty", user.getNickname().isEmpty());
 		}
 	}
 

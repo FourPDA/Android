@@ -32,11 +32,12 @@ public class CommentTreeParserTest extends AbstractTest {
 		Assert.assertTrue(comments.size() > 0);
 
 		Comment firstComment = (Comment) comments.get(0);
-		Assert.assertEquals("Wrong comment id", 1945077, firstComment.getId());
-		Assert.assertEquals("Wrong comment nickname", "Qwertymisha", firstComment.getNickname());
-		Assert.assertEquals("Wrong comment content", "Норм", firstComment.getContent());
-		Assert.assertEquals("Wrong comment level", 0, firstComment.getLevel());
-		Assert.assertEquals("Wrong comment date", "27.10.14 13:41", DATE_FORMAT.format(firstComment.getDate()));
+		Assert.assertEquals("Unexpected comment id", 1945077, firstComment.getId());
+		Assert.assertEquals("Unexpected comment user id", 1857314, firstComment.getUser().getId());
+		Assert.assertEquals("Unexpected comment user nickname", "Qwertymisha", firstComment.getUser().getNickname());
+		Assert.assertEquals("Unexpected comment content", "Норм", firstComment.getContent());
+		Assert.assertEquals("Unexpected comment level", 0, firstComment.getLevel());
+		Assert.assertEquals("Unexpected comment date", "27.10.14 13:41", DATE_FORMAT.format(firstComment.getDate()));
 	}
 
 	@Test
@@ -52,11 +53,12 @@ public class CommentTreeParserTest extends AbstractTest {
 		List<AbstractComment> childComments = secondComment.getChildren();
 
 		Comment child1 = (Comment) childComments.get(0);
-		Assert.assertEquals("Wrong comment id", 1945383, child1.getId());
-		Assert.assertEquals("Wrong comment nickname", "keeapk", child1.getNickname());
-		Assert.assertEquals("Wrong comment content", "xbrat, <br>Как ей пользоваться чего то не понял ?:)", child1.getContent());
-		Assert.assertEquals("Wrong comment level", 1, child1.getLevel());
-		Assert.assertEquals("Wrong comment date", "27.10.14 15:46", DATE_FORMAT.format(child1.getDate()));
+		Assert.assertEquals("Unexpected comment id", 1945383, child1.getId());
+		Assert.assertEquals("Unexpected comment user id", 3804015, child1.getUser().getId());
+		Assert.assertEquals("Unexpected comment user nickname", "keeapk", child1.getUser().getNickname());
+		Assert.assertEquals("Unexpected comment content", "xbrat, <br>Как ей пользоваться чего то не понял ?:)", child1.getContent());
+		Assert.assertEquals("Unexpected comment level", 1, child1.getLevel());
+		Assert.assertEquals("Unexpected comment date", "27.10.14 15:46", DATE_FORMAT.format(child1.getDate()));
 	}
 
 	@Test
@@ -72,18 +74,20 @@ public class CommentTreeParserTest extends AbstractTest {
 		List<AbstractComment> childComments = firstComment.getChildren();
 
 		Comment child1 = (Comment) childComments.get(0);
-		Assert.assertEquals("Wrong comment id", 1932557, child1.getId());
-		Assert.assertEquals("Wrong comment nickname", "mrPhilL", child1.getNickname());
-		Assert.assertEquals("Wrong comment content", "9900 цена. Что-то перегнули...", child1.getContent());
-		Assert.assertEquals("Wrong comment level", 1, child1.getLevel());
-		Assert.assertEquals("Wrong comment date", "20.10.14 01:55", DATE_FORMAT.format(child1.getDate()));
+		Assert.assertEquals("Unexpected comment id", 1932557, child1.getId());
+		Assert.assertEquals("Unexpected comment user id", 2262571, child1.getUser().getId());
+		Assert.assertEquals("Unexpected comment user nickname", "mrPhilL", child1.getUser().getNickname());
+		Assert.assertEquals("Unexpected comment content", "9900 цена. Что-то перегнули...", child1.getContent());
+		Assert.assertEquals("Unexpected comment level", 1, child1.getLevel());
+		Assert.assertEquals("Unexpected comment date", "20.10.14 01:55", DATE_FORMAT.format(child1.getDate()));
 
 		Comment child2 = (Comment) childComments.get(1);
-		Assert.assertEquals("Wrong comment id", 1932736, child2.getId());
-		Assert.assertEquals("Wrong comment nickname", "RDash", child2.getNickname());
-		Assert.assertEquals("Wrong comment content", "Vacum, <br>Ржать?))", child2.getContent().substring(0, 19));
-		Assert.assertEquals("Wrong comment level", 1, child2.getLevel());
-		Assert.assertEquals("Wrong comment date", "20.10.14 10:29", DATE_FORMAT.format(child2.getDate()));
+		Assert.assertEquals("Unexpected comment id", 1932736, child2.getId());
+		Assert.assertEquals("Unexpected comment user id", 3856586, child2.getUser().getId());
+		Assert.assertEquals("Unexpected comment user nickname", "RDash", child2.getUser().getNickname());
+		Assert.assertEquals("Unexpected comment content", "Vacum, <br>Ржать?))", child2.getContent().substring(0, 19));
+		Assert.assertEquals("Unexpected comment level", 1, child2.getLevel());
+		Assert.assertEquals("Unexpected comment date", "20.10.14 10:29", DATE_FORMAT.format(child2.getDate()));
 
 	}
 

@@ -37,7 +37,7 @@ class CommentViewHolder extends RecyclerView.ViewHolder {
 
 	public void setComment(final Comment comment) {
 
-		nickView.setText(comment.getNickname());
+		nickView.setText(comment.getUser().getNickname());
 
 		String verboseDate = DATE_FORMAT.format(comment.getDate());
 		dateView.setText(verboseDate);
