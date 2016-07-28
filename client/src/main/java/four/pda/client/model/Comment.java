@@ -7,16 +7,16 @@ import java.util.Date;
  */
 public class Comment extends AbstractComment {
 
-	private String nickname;
+	private User user;
 	private Date date;
 	private Karma karma;
 
-	public String getNickname() {
-		return nickname;
+	public User getUser() {
+		return user;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Date getDate() {

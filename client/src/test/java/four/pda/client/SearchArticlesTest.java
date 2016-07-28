@@ -9,6 +9,8 @@ import java.net.URL;
 
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.SearchContainer;
+import four.pda.client.model.SearchListArticle;
+import four.pda.client.model.User;
 import four.pda.client.parsers.SearchArticlesParser;
 
 /**
@@ -22,6 +24,12 @@ public class SearchArticlesTest extends AbstractTest {
 		SearchContainer container = new SearchArticlesParser().parse(pageSource, 1);
 		Assert.assertTrue("Wrong search 'android' result", container.getAllArticlesCount() > 0);
 		Assert.assertTrue("Wrong next page for search 'android' result", container.hasNextPage());
+
+		for (SearchListArticle article : container.getArticles()) {
+			User user = article.getUser();
+			Assert.assertTrue("Unexpected user id", user.getId() > 0);
+			Assert.assertFalse("Nickname is empty", user.getNickname().isEmpty());
+		}
 	}
 
 	@Test

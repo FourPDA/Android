@@ -17,6 +17,7 @@ import four.pda.client.model.ListArticle;
 import four.pda.client.model.Profile;
 import four.pda.client.model.SearchContainer;
 import four.pda.client.model.SearchListArticle;
+import four.pda.client.model.User;
 import okhttp3.OkHttpClient;
 
 /**
@@ -63,6 +64,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		article.setDate(new Date());
 		article.setPublishedDate(new Date());
 		article.setCommentsCount(comments.size());
+		article.setUser(getUser("Test"));
 		articles.add(article);
 	}
 
@@ -70,7 +72,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		Comment comment = new Comment();
 		comment.setId(newId());
 		comment.setDate(new Date());
-		comment.setNickname(nick);
+		comment.setUser(getUser(nick));
 		comment.setLevel(level);
 		comment.setContent(content);
 		comment.setCanReply(level < 8);
@@ -83,6 +85,13 @@ public class DummyFourPdaClient extends FourPdaClient {
 		comment.setKarma(karma);
 
 		comments.add(comment);
+	}
+
+	private static User getUser(String nick) {
+		User user = new User();
+		user.setId(1);
+		user.setNickname(nick);
+		return user;
 	}
 
 	private static void addDeletedComment(int level) {
@@ -151,7 +160,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		Comment comment = new Comment();
 		comment.setId(System.currentTimeMillis());
 		comment.setDate(new Date());
-		comment.setNickname("You");
+		comment.setUser(getUser("You"));
 		comment.setContent(message);
 
 		if (replyId == null) {
@@ -190,6 +199,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		Profile profile = new Profile();
 		profile.setLogin("var.ann");
 		profile.setPhoto("http://s.4pda.to/tp6nuQlKPdPSv8fwz1HfNVeHMOUxPbaFg.jpg");
+		profile.setInfo("User info");
 		return profile;
 	}
 

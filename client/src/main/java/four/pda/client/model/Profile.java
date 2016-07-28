@@ -8,7 +8,7 @@ public class Profile {
 	private String photo;
 	private String login;
 	/**
-	 * Html-код со страницы профиля, содержащий всю информацию о пользователе
+	 * Html-код со страницы профиля, содержащий всю информацию о пользователе.
 	 */
 	private String info;
 
