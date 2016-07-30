@@ -32,6 +32,7 @@ public class ProfileParser {
 
 			Element infoElement = document.select("form > ul").first();
 
+			// Удаляем блокнот со страницы профиля
 			Elements liElements = infoElement.getElementsByTag("li");
 			for (Element li : liElements) {
 				if (!li.select(".icon-pencil").isEmpty()) {
