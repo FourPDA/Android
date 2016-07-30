@@ -8,63 +8,60 @@
 
         body {
             padding: 4mm;
+            background: white;
+            font-size: 11pt;
+        }
+
+        .info-list {
+            font-size: 11pt;
+        }
+
+        .info-list .title,
+        .info-list.width1 .title {
+            min-width: auto !important;
+            padding: 0 3mm 0 0;
+        }
+
+        .info-list .warn-btn {
+            display: none;
+        }
+
+        .wrapper > ul {
+            margin: 0;
+            padding: 0;
         }
 
         .wrapper > ul > li {
-            width: 80mm;
-            min-height: 80mm;
-            display: inline-block;
-            position: relative;
             list-style: none;
-            margin: 5mm;
-            padding: 5mm;
-            vertical-align: top;
-            background: white;
-            border: 1px solid #ccc;
+            padding-bottom: 5mm;
             text-align: left;
         }
 
-        .margin-block {
-            height: 0;
-            line-height: 0;
-            visibility: hidden;
-            padding-top: 0;
+        .wrapper > ul > li:last {
             padding-bottom: 0;
-            border-color: transparent;
-            margin-top: 0;
-            margin-bottom: 0;
-            min-height: 0 !important;
+        }
+
+        .margin-block {
+            display: none;
         }
 
         .u-note {
-            margin: 2mm 0;
-            padding: 2mm 0;
-            border: 1px solid #ccc;
-            border-width: 1px 0 1px 0;
-            position: relative;
-            word-break: break-word;
-            min-height: 1em;
-            font-size: 10px;
-            display: block;
+            margin-top: 10mm;
         }
 
-        .u-note:after {
-            color: #8c8c8c;
-            position: absolute;
-            top: 0;
+        .u-note:before {
+            content: 'Подпись';
             display: block;
-            content: '\041F\041E\0414\041F\0418\0421\042C';
-            left: 50%;
-            width: 12mm;
-            margin: -2mm 0 0 -8mm;
-            line-height: 1;
-            font-size: 8px;
-            padding: 1mm 2mm;
-            text-align: center;
-            background: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 3mm;
         }
 
         .ico {
+            display: none;
+        }
+
+        .profile-edit-links {
             display: none;
         }
 

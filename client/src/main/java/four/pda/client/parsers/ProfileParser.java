@@ -3,6 +3,7 @@ package four.pda.client.parsers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,18 @@ public class ProfileParser {
 			profile.setLogin(loginElement.text());
 
 			Element infoElement = document.select("form > ul").first();
+
+			// Удаляем блокнот со страницы профиля
+			Elements liElements = infoElement.getElementsByTag("li");
+			for (Element li : liElements) {
+				if (!li.select(".icon-pencil").isEmpty()) {
+					li.remove();
+					break;
+				}
+			}
+
 			profile.setInfo(infoElement.outerHtml());
+
 		} catch (Exception e) {
 			String message = "Can't parse profile page";
 			L.error(message, e);
