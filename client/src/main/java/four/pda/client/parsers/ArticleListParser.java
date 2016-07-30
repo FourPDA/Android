@@ -105,7 +105,7 @@ public class ArticleListParser extends AbstractParser {
 			throw new RuntimeException(message, e);
 		}
 
-		article.setUser(getUserFromLinkElement(element.select(".autor > a").first()));
+		article.setAuthor(getUserFromLinkElement(element.select(".autor > a").first()));
 
 		return article;
 	}

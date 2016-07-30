@@ -12,7 +12,7 @@ public class AbstractArticle {
 	private String title;
 	private String description;
 	private String image;
-	private User user;
+	private User author;
 
 	public long getId() {
 		return id;
@@ -54,12 +54,12 @@ public class AbstractArticle {
 		this.image = image;
 	}
 
-	public User getUser() {
-		return user;
+	public User getAuthor() {
+		return author;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAuthor(User author) {
+		this.author = author;
 	}
 
 }

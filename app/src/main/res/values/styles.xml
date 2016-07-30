@@ -158,4 +158,12 @@
 		<item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 	</style>
 
+	<style name="TextOverImage">
+		<item name="android:shadowColor">@color/card_text_shadow</item>
+		<item name="android:shadowDx">1</item>
+		<item name="android:shadowDy">1</item>
+		<item name="android:shadowRadius">3</item>
+		<item name="android:textColor">@color/card_text</item>
+	</style>
+
 </resources>

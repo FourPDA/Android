@@ -37,9 +37,9 @@ public class ArticleListParserTest extends AbstractTest {
 			String source = getHtmlSource(getArticleUrl(article.getDate(), article.getId()));
 			new ArticlePageParser().parse(source);
 
-			User user = article.getUser();
-			Assert.assertTrue("Unexpected user id", user.getId() > 0);
-			Assert.assertFalse("Nickname is empty", user.getNickname().isEmpty());
+			User author = article.getAuthor();
+			Assert.assertTrue("Unexpected author id", author.getId() > 0);
+			Assert.assertFalse("Nickname is empty", author.getNickname().isEmpty());
 		}
 	}
 

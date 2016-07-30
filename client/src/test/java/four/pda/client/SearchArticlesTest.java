@@ -26,9 +26,9 @@ public class SearchArticlesTest extends AbstractTest {
 		Assert.assertTrue("Wrong next page for search 'android' result", container.hasNextPage());
 
 		for (SearchListArticle article : container.getArticles()) {
-			User user = article.getUser();
-			Assert.assertTrue("Unexpected user id", user.getId() > 0);
-			Assert.assertFalse("Nickname is empty", user.getNickname().isEmpty());
+			User author = article.getAuthor();
+			Assert.assertTrue("Unexpected author id", author.getId() > 0);
+			Assert.assertFalse("Nickname is empty", author.getNickname().isEmpty());
 		}
 	}
 

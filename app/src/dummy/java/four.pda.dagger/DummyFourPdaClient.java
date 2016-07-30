@@ -64,7 +64,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		article.setDate(new Date());
 		article.setPublishedDate(new Date());
 		article.setCommentsCount(comments.size());
-		article.setUser(getUser("Test"));
+		article.setAuthor(getUser("Test"));
 		articles.add(article);
 	}
 
@@ -220,6 +220,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 			searchArticle.setDescription(article.getDescription());
 			searchArticle.setImage(article.getImage());
 			searchArticle.setPosition(position);
+			searchArticle.setAuthor(article.getAuthor());
 			searchArticles.add(searchArticle);
 			position++;
 		}

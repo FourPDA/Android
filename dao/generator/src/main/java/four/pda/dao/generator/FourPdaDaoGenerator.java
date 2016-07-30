@@ -10,7 +10,7 @@ public class FourPdaDaoGenerator {
 
 	public static void main(String[] args) throws Exception {
 
-		Schema schema = new Schema(4, "four.pda.dao");
+		Schema schema = new Schema(5, "four.pda.dao");
 		addArticleEntity(schema);
 		addSearchArticleEntity(schema);
 
@@ -30,6 +30,8 @@ public class FourPdaDaoGenerator {
 		article.addStringProperty("image");
 		article.addDateProperty("publishedDate");
 		article.addIntProperty("commentsCount");
+		article.addLongProperty("authorId");
+		article.addStringProperty("authorName");
 	}
 
 	private static void addSearchArticleEntity(Schema schema) {
@@ -40,6 +42,8 @@ public class FourPdaDaoGenerator {
 		article.addStringProperty("description");
 		article.addStringProperty("image");
 		article.addDoubleProperty("position");
+		article.addLongProperty("authorId");
+		article.addStringProperty("authorName");
 	}
 
 }
