@@ -59,6 +59,8 @@ public class SearchActivity extends AppCompatActivity {
 				.date(event.getDate())
 				.title(event.getTitle())
 				.image(event.getImage())
+				.authorId(event.getAuthorId())
+				.authorName(event.getAuthorName())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()

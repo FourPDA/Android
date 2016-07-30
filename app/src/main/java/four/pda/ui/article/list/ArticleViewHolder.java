@@ -49,7 +49,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 			@Override
 			public void onClick(View v) {
 				if (id > 0) {
-					eventBus.post(new ShowArticleEvent(id, date, title, image));
+					eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
 				}
 			}
 		});

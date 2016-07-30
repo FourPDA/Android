@@ -15,6 +15,7 @@ import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
@@ -46,6 +47,7 @@ import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowArticleCommentsEvent;
+import four.pda.ui.profile.ProfileActivity_;
 
 /**
  * Created by asavinova on 11/04/15.
@@ -59,12 +61,16 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg Date date;
 	@FragmentArg String title;
 	@FragmentArg String image;
+	@FragmentArg long authorId;
+	@FragmentArg String authorName;
 
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
 	@ViewById WebView webView;
+	@ViewById TextView authorView;
+	@ViewById TextView dateView;
 
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
@@ -144,6 +150,9 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
+		authorView.setText(authorName);
+		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
+
 		loadData();
 	}
 
@@ -162,6 +171,13 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@Click
 	void commentsButton() {
 		eventBus.post(new ShowArticleCommentsEvent(id, date));
+	}
+
+	@Click(R.id.author_view)
+	void authorClicked() {
+		ProfileActivity_.intent(this)
+				.profileId(authorId)
+				.start();
 	}
 
 	private void loadData() {
