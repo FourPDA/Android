@@ -67,6 +67,15 @@
 				</FrameLayout>
 
 				<Space
+					android:layout_width="@dimen/offset_normal"
+					android:layout_height="wrap_content" />
+
+				<ImageView
+					android:id="@+id/profile_button"
+					style="@style/MaterialFlatButton"
+					android:src="@drawable/ic_person_blue_18dp" />
+
+				<Space
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1" />
