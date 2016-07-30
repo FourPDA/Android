@@ -54,7 +54,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				eventBus.post(new ShowArticleEvent(id, date, title, image));
+				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
 			}
 		});
 
