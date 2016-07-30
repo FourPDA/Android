@@ -18,6 +18,7 @@ import four.pda.App;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Profile;
+import four.pda.template.ProfileTemplate;
 import four.pda.ui.SupportView;
 
 /**
@@ -63,6 +64,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 	void updateProfile(Profile profile) {
 		supportView.hide();
-		webView.loadData(profile.getLogin(), "text/html; charset=utf-8", null);
+		toolbar.setSubtitle(profile.getLogin());
+		String formattedInfo = new ProfileTemplate().make(profile.getInfo());
+		webView.loadData(formattedInfo, "text/html; charset=utf-8", null);
 	}
 }
