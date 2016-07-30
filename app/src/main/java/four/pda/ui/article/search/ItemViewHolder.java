@@ -45,7 +45,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 	private final EventBus eventBus;
 
-	public ItemViewHolder(final View view) {
+	public ItemViewHolder(View view) {
 		super(view);
 		eventBus = EventBus_.getInstance_(view.getContext());
 
@@ -68,7 +68,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 			@Override
 			public void onClick(View v) {
 				if (authorId > 0) {
-					ProfileActivity_.intent(view.getContext())
+					ProfileActivity_.intent(v.getContext())
 							.profileId(authorId)
 							.start();
 				}
