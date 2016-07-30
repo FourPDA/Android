@@ -73,7 +73,7 @@
 				<ImageView
 					android:id="@+id/profile_button"
 					style="@style/MaterialFlatButton"
-					android:src="@drawable/ic_person_blue_18dp" />
+					android:src="@drawable/ic_person_blue_24dp" />
 
 				<Space
 					android:layout_width="0dp"
