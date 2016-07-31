@@ -14,6 +14,8 @@ public class Article {
     private String image;
     private java.util.Date publishedDate;
     private Integer commentsCount;
+    private Long authorId;
+    private String authorName;
 
     public Article() {
     }
@@ -22,7 +24,7 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate, Integer commentsCount) {
+    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate, Integer commentsCount, Long authorId, String authorName) {
         this.id = id;
         this.date = date;
         this.title = title;
@@ -31,6 +33,8 @@ public class Article {
         this.image = image;
         this.publishedDate = publishedDate;
         this.commentsCount = commentsCount;
+        this.authorId = authorId;
+        this.authorName = authorName;
     }
 
     public Long getId() {
@@ -95,6 +99,22 @@ public class Article {
 
     public void setCommentsCount(Integer commentsCount) {
         this.commentsCount = commentsCount;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
 }

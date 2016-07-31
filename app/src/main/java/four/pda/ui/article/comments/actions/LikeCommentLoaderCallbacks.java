@@ -56,7 +56,8 @@ class LikeCommentLoaderCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 
         dialog.params = new AutoValue_DialogParams(
                 dialog.params.id(),
-                dialog.params.nickname(),
+                dialog.params.authorId(),
+                dialog.params.authorName(),
                 dialog.params.date(),
                 Comment.CanLike.ALREADY_LIKED,
                 dialog.params.likeCount() + 1,

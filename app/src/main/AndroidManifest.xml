@@ -28,11 +28,15 @@
 
 		<activity android:name=".ui.auth.AuthActivity_"
 			android:parentActivityName=".ui.article.NewsActivity_"
-			android:theme="@style/Auth_Activity"
+			android:theme="@style/Dialog_Activity"
 			android:windowSoftInputMode="adjustResize" />
 
 		<activity android:name=".ui.article.SearchActivity_"
 			android:windowSoftInputMode="stateHidden" />
+
+		<activity android:name=".ui.profile.ProfileActivity_"
+			android:parentActivityName=".ui.article.NewsActivity_"
+			android:theme="@style/Dialog_Activity" />
 
 	    <meta-data
             android:name="io.fabric.ApiKey"

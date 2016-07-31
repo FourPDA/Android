@@ -31,6 +31,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Image = new Property(5, String.class, "image", false, "IMAGE");
         public final static Property PublishedDate = new Property(6, java.util.Date.class, "publishedDate", false, "PUBLISHED_DATE");
         public final static Property CommentsCount = new Property(7, Integer.class, "commentsCount", false, "COMMENTS_COUNT");
+        public final static Property AuthorId = new Property(8, Long.class, "authorId", false, "AUTHOR_ID");
+        public final static Property AuthorName = new Property(9, String.class, "authorName", false, "AUTHOR_NAME");
     };
 
 
@@ -53,7 +55,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "\"CATEGORY\" TEXT," + // 4: category
                 "\"IMAGE\" TEXT," + // 5: image
                 "\"PUBLISHED_DATE\" INTEGER," + // 6: publishedDate
-                "\"COMMENTS_COUNT\" INTEGER);"); // 7: commentsCount
+                "\"COMMENTS_COUNT\" INTEGER," + // 7: commentsCount
+                "\"AUTHOR_ID\" INTEGER," + // 8: authorId
+                "\"AUTHOR_NAME\" TEXT);"); // 9: authorName
     }
 
     /** Drops the underlying database table. */
@@ -106,6 +110,16 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         if (commentsCount != null) {
             stmt.bindLong(8, commentsCount);
         }
+ 
+        Long authorId = entity.getAuthorId();
+        if (authorId != null) {
+            stmt.bindLong(9, authorId);
+        }
+ 
+        String authorName = entity.getAuthorName();
+        if (authorName != null) {
+            stmt.bindString(10, authorName);
+        }
     }
 
     /** @inheritdoc */
@@ -125,7 +139,9 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // image
             cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // publishedDate
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // commentsCount
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // commentsCount
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // authorId
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // authorName
         );
         return entity;
     }
@@ -141,6 +157,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setImage(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setPublishedDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
         entity.setCommentsCount(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setAuthorId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setAuthorName(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */

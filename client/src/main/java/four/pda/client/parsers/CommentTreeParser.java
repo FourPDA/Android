@@ -117,8 +117,7 @@ public class CommentTreeParser extends AbstractParser {
 		idString = split[1];
 		comment.setId(Long.parseLong(idString));
 
-		String nickname = element.select(".nickname").first().text();
-		comment.setNickname(nickname);
+		comment.setUser(getUserFromLinkElement(element.select(".nickname").first()));
 
 		String metaString = element.select(".h-meta").first().text().trim();
 		try {

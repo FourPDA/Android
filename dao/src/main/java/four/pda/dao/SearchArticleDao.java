@@ -29,6 +29,8 @@ public class SearchArticleDao extends AbstractDao<SearchArticle, Long> {
         public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
         public final static Property Image = new Property(4, String.class, "image", false, "IMAGE");
         public final static Property Position = new Property(5, Double.class, "position", false, "POSITION");
+        public final static Property AuthorId = new Property(6, Long.class, "authorId", false, "AUTHOR_ID");
+        public final static Property AuthorName = new Property(7, String.class, "authorName", false, "AUTHOR_NAME");
     };
 
 
@@ -49,7 +51,9 @@ public class SearchArticleDao extends AbstractDao<SearchArticle, Long> {
                 "\"TITLE\" TEXT," + // 2: title
                 "\"DESCRIPTION\" TEXT," + // 3: description
                 "\"IMAGE\" TEXT," + // 4: image
-                "\"POSITION\" REAL);"); // 5: position
+                "\"POSITION\" REAL," + // 5: position
+                "\"AUTHOR_ID\" INTEGER," + // 6: authorId
+                "\"AUTHOR_NAME\" TEXT);"); // 7: authorName
     }
 
     /** Drops the underlying database table. */
@@ -92,6 +96,16 @@ public class SearchArticleDao extends AbstractDao<SearchArticle, Long> {
         if (position != null) {
             stmt.bindDouble(6, position);
         }
+ 
+        Long authorId = entity.getAuthorId();
+        if (authorId != null) {
+            stmt.bindLong(7, authorId);
+        }
+ 
+        String authorName = entity.getAuthorName();
+        if (authorName != null) {
+            stmt.bindString(8, authorName);
+        }
     }
 
     /** @inheritdoc */
@@ -109,7 +123,9 @@ public class SearchArticleDao extends AbstractDao<SearchArticle, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // image
-            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5) // position
+            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // position
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // authorId
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // authorName
         );
         return entity;
     }
@@ -123,6 +139,8 @@ public class SearchArticleDao extends AbstractDao<SearchArticle, Long> {
         entity.setDescription(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setImage(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setPosition(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
+        entity.setAuthorId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setAuthorName(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     /** @inheritdoc */

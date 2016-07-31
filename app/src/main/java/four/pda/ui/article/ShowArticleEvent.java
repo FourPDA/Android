@@ -11,12 +11,16 @@ public class ShowArticleEvent {
 	private Date date;
 	private String title;
 	private String image;
+	private long authorId;
+	private String authorName;
 
-	public ShowArticleEvent(long id, Date date, String title, String image) {
+	public ShowArticleEvent(long id, Date date, String title, String image, long authorId, String authorName) {
 		this.id = id;
 		this.date = date;
 		this.title = title;
 		this.image = image;
+		this.authorId = authorId;
+		this.authorName = authorName;
 	}
 
 	public long getId() {
@@ -33,6 +37,14 @@ public class ShowArticleEvent {
 
 	public String getImage() {
 		return image;
+	}
+
+	public long getAuthorId() {
+		return authorId;
+	}
+
+	public String getAuthorName() {
+		return authorName;
 	}
 
 }

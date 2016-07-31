@@ -1,7 +1,11 @@
 package four.pda.client.parsers;
 
+import org.jsoup.nodes.Element;
+
 import java.util.Calendar;
 import java.util.Date;
+
+import four.pda.client.model.User;
 
 /**
  * Created by swap_i on 25/10/15.
@@ -26,6 +30,16 @@ public class AbstractParser {
 		idAndDate.date = calendar.getTime();
 
 		return idAndDate;
+	}
+
+	protected User getUserFromLinkElement(Element userElement) {
+		User user = new User();
+
+		String authorHref = userElement.attr("href");
+		user.setId(Long.parseLong(authorHref.split("=")[1]));
+		user.setNickname(userElement.text());
+
+		return user;
 	}
 
 	class IdAndDate {

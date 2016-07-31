@@ -49,7 +49,7 @@
 		<item name="android:background">@drawable/vertical_shadow</item>
 	</style>
 
-	<style name="Auth_Activity" parent="Theme.AppCompat.DialogWhenLarge">
+	<style name="Dialog_Activity" parent="Theme.AppCompat.DialogWhenLarge">
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/accent</item>
@@ -156,6 +156,14 @@
 
 	<style name="SearchView" parent="Widget.AppCompat.SearchView">
 		<item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+	</style>
+
+	<style name="TextOverImage">
+		<item name="android:shadowColor">@color/card_text_shadow</item>
+		<item name="android:shadowDx">1</item>
+		<item name="android:shadowDy">1</item>
+		<item name="android:shadowRadius">3</item>
+		<item name="android:textColor">@color/card_text</item>
 	</style>
 
 </resources>

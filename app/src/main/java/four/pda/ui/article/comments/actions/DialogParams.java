@@ -16,7 +16,9 @@ public abstract class DialogParams implements Parcelable {
 
     abstract long id();
 
-    abstract String nickname();
+	abstract long authorId();
+
+    abstract String authorName();
 
     abstract Date date();
 
@@ -39,7 +41,8 @@ public abstract class DialogParams implements Parcelable {
     public static DialogParams create(Comment comment, long articleId, Date articleDate) {
         return new AutoValue_DialogParams(
                 comment.getId(),
-                comment.getNickname(),
+                comment.getUser().getId(),
+                comment.getUser().getNickname(),
                 comment.getDate(),
                 comment.getKarma().getCanLike(),
                 comment.getKarma().getLikesCount(),
