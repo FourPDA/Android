@@ -154,6 +154,8 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 				.date(event.getDate())
 				.title(event.getTitle())
 				.image(event.getImage())
+				.authorId(event.getAuthorId())
+				.authorName(event.getAuthorName())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()

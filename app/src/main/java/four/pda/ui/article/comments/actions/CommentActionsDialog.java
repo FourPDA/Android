@@ -30,6 +30,7 @@ import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.article.comments.add.AddCommentEvent;
 import four.pda.ui.auth.AuthActivity_;
+import four.pda.ui.profile.ProfileActivity_;
 
 /**
  * Created by asavinova on 25/04/16.
@@ -75,7 +76,7 @@ public class CommentActionsDialog extends DialogFragment {
 			}
 		});
 
-		nickView.setText(params.nickname());
+		nickView.setText(params.authorName());
 
 		String verboseDate = DATE_FORMAT.format(params.date());
 		dateView.setText(verboseDate);
@@ -104,8 +105,15 @@ public class CommentActionsDialog extends DialogFragment {
 
 	@Click(R.id.reply_button)
 	void reply() {
-		eventBus.post(new AddCommentEvent(params.id(), params.nickname()));
+		eventBus.post(new AddCommentEvent(params.id(), params.authorName()));
 		dismiss();
+	}
+
+	@Click(R.id.profile_button)
+	void profile() {
+		ProfileActivity_.intent(getActivity())
+				.profileId(params.authorId())
+				.start();
 	}
 
 	@OnActivityResult(LIKE_AUTH_REQUEST_CODE)
