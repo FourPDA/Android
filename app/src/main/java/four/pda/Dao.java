@@ -15,6 +15,7 @@ import java.util.List;
 import four.pda.client.CategoryType;
 import four.pda.client.model.ListArticle;
 import four.pda.client.model.SearchListArticle;
+import four.pda.client.model.User;
 import four.pda.dao.Article;
 import four.pda.dao.ArticleDao;
 import four.pda.dao.DaoMaster;
@@ -72,8 +73,13 @@ public class Dao {
 					daoArticle.setDescription(article.getDescription());
 					daoArticle.setPublishedDate(article.getPublishedDate());
 					daoArticle.setCommentsCount(article.getCommentsCount());
-					daoArticle.setAuthorId(article.getAuthor().getId());
-					daoArticle.setAuthorName(article.getAuthor().getNickname());
+
+					User author = article.getAuthor();
+					// В списке обзоров автор равен null
+					if (author != null) {
+						daoArticle.setAuthorId(author.getId());
+						daoArticle.setAuthorName(author.getNickname());
+					}
 
 					dao.insertOrReplace(daoArticle);
 				}
