@@ -175,9 +175,12 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@Click(R.id.author_view)
 	void authorClicked() {
-		ProfileActivity_.intent(this)
-				.profileId(authorId)
-				.start();
+		// При переходе на статью из категории обзоров автора не будет
+		if (authorId > 0) {
+			ProfileActivity_.intent(this)
+					.profileId(authorId)
+					.start();
+		}
 	}
 
 	private void loadData() {
