@@ -29,6 +29,7 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -47,6 +48,7 @@ import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
 import four.pda.ui.ViewUtils;
 import four.pda.ui.article.ShowArticleCommentsEvent;
+import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
 
 /**
@@ -199,11 +201,25 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				openActionViewIntent(url);
+				if (url.contains("jpg")) {
+					openImageGallery(url);
+				} else {
+					openActionViewIntent(url);
+				}
 				return true;
 			}
 		});
 		webView.loadData(getFormattedText(content), "text/html; charset=utf-8", null);
+	}
+
+	private void openImageGallery(String url) {
+		ArrayList<String> images = new ArrayList<>();
+		images.add(url);
+
+		ImageGalleryActivity_.intent(this)
+				.currentUrl(url)
+				.images(images)
+				.start();
 	}
 
 	private void openActionViewIntent(String url) {
