@@ -40,6 +40,7 @@ import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
@@ -194,7 +195,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	@UiThread
-	void updateData(String content) {
+	void updateData(ArticleContent article) {
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -203,7 +204,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				return true;
 			}
 		});
-		webView.loadData(getFormattedText(content), "text/html; charset=utf-8", null);
+		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
 	}
 
 	private void openActionViewIntent(String url) {
@@ -223,15 +224,15 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		webView.getSettings().setTextZoom(event.getZoom());
 	}
 
-	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<String>> {
+	class Callbacks implements LoaderManager.LoaderCallbacks<LoadResult<ArticleContent>> {
 
 		@Override
-		public Loader<LoadResult<String>> onCreateLoader(int loaderId, final Bundle args) {
+		public Loader<LoadResult<ArticleContent>> onCreateLoader(int loaderId, final Bundle args) {
 			return new ArticleTaskLoader(getActivity(), client, id, date);
 		}
 
 		@Override
-		public void onLoadFinished(Loader<LoadResult<String>> loader, LoadResult<String> result) {
+		public void onLoadFinished(Loader<LoadResult<ArticleContent>> loader, LoadResult<ArticleContent> result) {
 			if (result.getException() == null) {
 				updateData(result.getData());
 				supportView.hide();
@@ -247,7 +248,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		}
 
 		@Override
-		public void onLoaderReset(Loader<LoadResult<String>> loader) {
+		public void onLoaderReset(Loader<LoadResult<ArticleContent>> loader) {
 		}
 
 	}

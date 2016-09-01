@@ -16,7 +16,7 @@ public class ArticleExporter extends Exporter {
 
 	@Override
 	protected String getCroppedPage(String originalPage) {
-		return new ArticlePageParser().parse(originalPage);
+		return new ArticlePageParser().parse(originalPage).getContent();
 	}
 
 	@Override

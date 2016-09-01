@@ -12,12 +12,13 @@ import javax.inject.Inject;
 
 import four.pda.App;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.ArticleContent;
 import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 12/04/15.
  */
-public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
+public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<ArticleContent>> {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticleTaskLoader.class);
 
@@ -43,7 +44,7 @@ public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<String>> {
 	}
 
 	@Override
-	public LoadResult<String> loadInBackground() {
+	public LoadResult<ArticleContent> loadInBackground() {
 		try {
 			return new LoadResult<>(client.getArticleContent(date, id));
 		} catch (Exception e) {
