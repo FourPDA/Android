@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import four.pda.client.exceptions.LoginException;
+import four.pda.client.model.ArticleContent;
 import four.pda.client.model.Captcha;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.ListArticle;
@@ -146,7 +147,7 @@ public class FourPdaClient {
 		return BASE_URL + fullId;
 	}
 
-	public String getArticleContent(Date date, long id) throws IOException {
+	public ArticleContent getArticleContent(Date date, long id) throws IOException {
 		String url = getArticleUrl(date, id);
 		Request request = new Request.Builder()
 				.url(url)

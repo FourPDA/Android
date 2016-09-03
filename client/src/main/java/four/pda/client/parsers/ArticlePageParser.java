@@ -3,10 +3,15 @@ package four.pda.client.parsers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import four.pda.client.exceptions.ParseException;
+import four.pda.client.model.ArticleContent;
 
 /**
  * Created by asavinova on 09/04/15.
@@ -17,7 +22,7 @@ public class ArticlePageParser {
 
 	private static final String PREVIEW_URL_STRING = "http://i.ytimg.com/vi/%s/hqdefault.jpg";
 
-	public String parse(String pageSource) {
+	public ArticleContent parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
 		Element content = document.select("div.content").first();
 
@@ -34,7 +39,12 @@ public class ArticlePageParser {
 			L.error(message, e);
 			throw new ParseException(message, e);
 		}
-		return content.html();
+
+		ArticleContent articleContent = new ArticleContent();
+		articleContent.setContent(content.html());
+		articleContent.setImages(getImages(content));
+
+		return articleContent;
 	}
 
 	private void replaceVideoBlocks(Element element) {
@@ -56,6 +66,17 @@ public class ArticlePageParser {
 
 		}
 
+	}
+
+	private List<String> getImages(Element content) {
+		List<String> images = new ArrayList<>();
+
+		Elements elements = content.select("a > img");
+		for (Element element : elements) {
+			images.add(element.attr("src"));
+		}
+
+		return images;
 	}
 
 }
