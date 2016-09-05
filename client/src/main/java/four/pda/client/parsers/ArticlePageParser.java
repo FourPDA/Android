@@ -73,7 +73,8 @@ public class ArticlePageParser {
 
 		Elements elements = content.select("a > img");
 		for (Element element : elements) {
-			images.add(element.attr("src"));
+			Element link = element.parent();
+			images.add(link.attr("href"));
 		}
 
 		return images;

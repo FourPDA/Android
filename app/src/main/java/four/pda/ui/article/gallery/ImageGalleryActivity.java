@@ -2,6 +2,8 @@ package four.pda.ui.article.gallery;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -21,11 +23,46 @@ public class ImageGalleryActivity extends AppCompatActivity {
 	@Extra String currentUrl;
 	@Extra ArrayList<String> images;
 
+	@ViewById Toolbar toolbar;
 	@ViewById ViewPager pager;
 
 	@AfterViews
 	void afterViews() {
+		toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+
+		int index = 0;
+		for (String image : images) {
+			if (image.equals(currentUrl)) {
+				break;
+			}
+			index++;
+		}
+		toolbar.setTitle(getString(R.string.gallery_title, index + 1, images.size()));
+
 		pager.setAdapter(new ImagesPagerAdapter(this, images));
+		pager.setCurrentItem(index, true);
+		pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				toolbar.setTitle(getString(R.string.gallery_title, position + 1, images.size()));
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+			}
+		});
+
+
 	}
 
 }

@@ -85,5 +85,6 @@
 
 	<string name="profile_title">Профиль</string>
 	<string name="profile_network_error">Не удалось загрузить информацию о профиле.</string>
+	<string name="gallery_title">%1$s/%2$s</string>
 
 </resources>
