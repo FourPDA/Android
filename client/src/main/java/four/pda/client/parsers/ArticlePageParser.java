@@ -54,6 +54,7 @@ public class ArticlePageParser {
 	private void addLinkToBigImages(Element content) {
 		Elements images = content.select("p > img");
 		for (Element img : images) {
+			img.addClass("big-image");
 			img.wrap("<a href=\"" + img.attr("src") + "\"></a>");
 		}
 	}
