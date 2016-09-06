@@ -12,6 +12,7 @@ public class ArticleExporter extends Exporter {
 		ArticleExporter exporter = new ArticleExporter();
 		exporter.convertPage("2016/05/26/300085", "news_text");
 		exporter.convertPage("2016/04/27/294201", "review");
+		exporter.convertPage("2016/09/02/321525", "screenshots");
 	}
 
 	@Override

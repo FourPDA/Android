@@ -40,6 +40,8 @@ public class ArticlePageParser {
 			throw new ParseException(message, e);
 		}
 
+		replaceScreenshotsSrc(content);
+
 		ArticleContent articleContent = new ArticleContent();
 		articleContent.setContent(content.html());
 		articleContent.setImages(getImages(content));
@@ -66,6 +68,20 @@ public class ArticlePageParser {
 
 		}
 
+	}
+
+	private void replaceScreenshotsSrc(Element content) {
+		Elements screenshots = content.select("div.sc-content > a > img");
+		for (Element img : screenshots) {
+			String src = img.attr("src");
+			if (src.startsWith("//")) {
+				src = "http:" + src;
+				img.attr("src", src);
+
+				Element link = img.parent();
+				link.attr("href", src);
+			}
+		}
 	}
 
 	private List<String> getImages(Element content) {
