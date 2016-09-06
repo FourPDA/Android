@@ -33,6 +33,7 @@ public class ArticlePageParser {
 		}
 
 		addLinkToBigImages(content);
+		replaceScreenshotsSrc(content);
 
 		ArticleContent articleContent = new ArticleContent();
 		articleContent.setImages(getImages(content));
@@ -56,6 +57,20 @@ public class ArticlePageParser {
 		for (Element img : images) {
 			img.addClass("big-image");
 			img.wrap("<a href=\"" + img.attr("src") + "\"></a>");
+		}
+	}
+
+	private void replaceScreenshotsSrc(Element content) {
+		Elements screenshots = content.select("div.sc-content > a > img");
+		for (Element img : screenshots) {
+			String src = img.attr("src");
+			if (src.startsWith("//")) {
+				src = "http:" + src;
+				img.attr("src", src);
+
+				Element link = img.parent();
+				link.attr("href", src);
+			}
 		}
 	}
 
