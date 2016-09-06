@@ -32,7 +32,14 @@ public class ArticlePageParser {
 			throw new ParseException(message);
 		}
 
+		addLinkToBigImages(content);
+		replaceScreenshotsSrc(content);
+
+		ArticleContent articleContent = new ArticleContent();
+		articleContent.setImages(getImages(content));
+
 		try {
+			// Замена видеороликов на ссылки должна происходить после подсчета картинок для галереи
 			replaceVideoBlocks(content);
 		} catch (Exception e) {
 			String message = "Can't parse article page";
@@ -40,34 +47,17 @@ public class ArticlePageParser {
 			throw new ParseException(message, e);
 		}
 
-		replaceScreenshotsSrc(content);
-
-		ArticleContent articleContent = new ArticleContent();
 		articleContent.setContent(content.html());
-		articleContent.setImages(getImages(content));
 
 		return articleContent;
 	}
 
-	private void replaceVideoBlocks(Element element) {
-
-		for (Element videoBlockEl : element.select("iframe[allowfullscreen]")) {
-
-			String src = videoBlockEl.attr("src");
-
-			if (!src.contains("www.youtube.com")) {
-				continue;
-			}
-
-			String hash = src.substring(src.lastIndexOf("/") + 1);
-			String previewImageUrl = String.format(PREVIEW_URL_STRING, hash);
-			String link = String.format("<a href=\"%s\"><img src=\"%s\" width=\"100%%\" /></a>", src, previewImageUrl);
-
-			videoBlockEl.parent().append(link);
-			videoBlockEl.remove();
-
+	private void addLinkToBigImages(Element content) {
+		Elements images = content.select("p > img");
+		for (Element img : images) {
+			img.addClass("big-image");
+			img.wrap("<a href=\"" + img.attr("src") + "\"></a>");
 		}
-
 	}
 
 	private void replaceScreenshotsSrc(Element content) {
@@ -93,6 +83,27 @@ public class ArticlePageParser {
 		}
 
 		return images;
+	}
+
+	private void replaceVideoBlocks(Element element) {
+
+		for (Element videoBlockEl : element.select("iframe[allowfullscreen]")) {
+
+			String src = videoBlockEl.attr("src");
+
+			if (!src.contains("www.youtube.com")) {
+				continue;
+			}
+
+			String hash = src.substring(src.lastIndexOf("/") + 1);
+			String previewImageUrl = String.format(PREVIEW_URL_STRING, hash);
+			String link = String.format("<a href=\"%s\"><img src=\"%s\" width=\"100%%\" /></a>", src, previewImageUrl);
+
+			videoBlockEl.parent().append(link);
+			videoBlockEl.remove();
+
+		}
+
 	}
 
 }
