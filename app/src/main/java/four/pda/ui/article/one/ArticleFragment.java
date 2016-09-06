@@ -226,7 +226,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	private void openImageGallery(List<String> images, String url) {
 		ImageGalleryActivity_.intent(this)
 				.currentUrl(url)
-				.images((ArrayList<String>) images)
+				.images(new ArrayList<>(images))
 				.start();
 	}
 

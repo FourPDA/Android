@@ -36,6 +36,21 @@ public class ImageGalleryActivity extends AppCompatActivity {
 			}
 		});
 
+		int index = getCurrentImageIndex();
+		toolbar.setTitle(getString(R.string.gallery_title, index + 1, images.size()));
+
+		pager.setAdapter(new ImagesPagerAdapter(this, images));
+		pager.setCurrentItem(index, true);
+		pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				toolbar.setTitle(getString(R.string.gallery_title, position + 1, images.size()));
+			}
+		});
+
+	}
+
+	private int getCurrentImageIndex() {
 		int index = 0;
 		for (String image : images) {
 			if (image.equals(currentUrl)) {
@@ -43,26 +58,7 @@ public class ImageGalleryActivity extends AppCompatActivity {
 			}
 			index++;
 		}
-		toolbar.setTitle(getString(R.string.gallery_title, index + 1, images.size()));
-
-		pager.setAdapter(new ImagesPagerAdapter(this, images));
-		pager.setCurrentItem(index, true);
-		pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				toolbar.setTitle(getString(R.string.gallery_title, position + 1, images.size()));
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-			}
-		});
-
-
+		return index;
 	}
 
 }
