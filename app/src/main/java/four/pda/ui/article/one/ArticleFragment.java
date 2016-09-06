@@ -31,6 +31,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -197,13 +198,13 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	@UiThread
-	void updateData(ArticleContent article) {
+	void updateData(final ArticleContent article) {
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.contains("jpg")) {
-					openImageGallery(url);
+				if (isGalleryImage(article.getImages(), url)) {
+					openImageGallery(article.getImages(), url);
 				} else {
 					openActionViewIntent(url);
 				}
@@ -213,13 +214,19 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
 	}
 
-	private void openImageGallery(String url) {
-		ArrayList<String> images = new ArrayList<>();
-		images.add(url);
+	private boolean isGalleryImage(List<String> images, String url) {
+		for (String image : images) {
+			if (image.equals(url)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
+	private void openImageGallery(List<String> images, String url) {
 		ImageGalleryActivity_.intent(this)
 				.currentUrl(url)
-				.images(images)
+				.images(new ArrayList<>(images))
 				.start();
 	}
 

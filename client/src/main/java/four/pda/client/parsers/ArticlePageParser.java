@@ -76,10 +76,11 @@ public class ArticlePageParser {
 
 	private List<String> getImages(Element content) {
 		List<String> images = new ArrayList<>();
-
 		Elements elements = content.select("a > img");
+
 		for (Element element : elements) {
-			images.add(element.attr("src"));
+			Element link = element.parent();
+			images.add(link.attr("href"));
 		}
 
 		return images;
