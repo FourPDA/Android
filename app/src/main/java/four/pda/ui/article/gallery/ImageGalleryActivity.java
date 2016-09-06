@@ -2,8 +2,9 @@ package four.pda.ui.article.gallery;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -23,13 +24,14 @@ public class ImageGalleryActivity extends AppCompatActivity {
 	@Extra String currentUrl;
 	@Extra ArrayList<String> images;
 
-	@ViewById Toolbar toolbar;
+	@ViewById ImageView closeView;
+	@ViewById TextView currentIndexView;
+	@ViewById TextView imagesCountView;
 	@ViewById ViewPager pager;
 
 	@AfterViews
 	void afterViews() {
-		toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		closeView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onBackPressed();
@@ -37,14 +39,15 @@ public class ImageGalleryActivity extends AppCompatActivity {
 		});
 
 		int index = getCurrentImageIndex();
-		toolbar.setTitle(getString(R.string.gallery_title, index + 1, images.size()));
+		currentIndexView.setText(String.valueOf(index + 1));
+		imagesCountView.setText(String.valueOf(images.size()));
 
 		pager.setAdapter(new ImagesPagerAdapter(this, images));
 		pager.setCurrentItem(index, true);
 		pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
-				toolbar.setTitle(getString(R.string.gallery_title, position + 1, images.size()));
+				currentIndexView.setText(String.valueOf(position + 1));
 			}
 		});
 
