@@ -32,7 +32,14 @@ public class ArticlePageParser {
 			throw new ParseException(message);
 		}
 
+		addLinkToBigImages(content);
+		replaceScreenshotsSrc(content);
+
+		ArticleContent articleContent = new ArticleContent();
+		articleContent.setImages(getImages(content));
+
 		try {
+			// Замена видеороликов на ссылки должна происходить после подсчета картинок для галереи
 			replaceVideoBlocks(content);
 		} catch (Exception e) {
 			String message = "Can't parse article page";
@@ -40,11 +47,43 @@ public class ArticlePageParser {
 			throw new ParseException(message, e);
 		}
 
-		ArticleContent articleContent = new ArticleContent();
 		articleContent.setContent(content.html());
-		articleContent.setImages(getImages(content));
 
 		return articleContent;
+	}
+
+	private void addLinkToBigImages(Element content) {
+		Elements images = content.select("p > img");
+		for (Element img : images) {
+			img.addClass("big-image");
+			img.wrap("<a href=\"" + img.attr("src") + "\"></a>");
+		}
+	}
+
+	private void replaceScreenshotsSrc(Element content) {
+		Elements screenshots = content.select("div.sc-content > a > img");
+		for (Element img : screenshots) {
+			String src = img.attr("src");
+			if (src.startsWith("//")) {
+				src = "http:" + src;
+				img.attr("src", src);
+
+				Element link = img.parent();
+				link.attr("href", src);
+			}
+		}
+	}
+
+	private List<String> getImages(Element content) {
+		List<String> images = new ArrayList<>();
+		Elements elements = content.select("a > img");
+
+		for (Element element : elements) {
+			Element link = element.parent();
+			images.add(link.attr("href"));
+		}
+
+		return images;
 	}
 
 	private void replaceVideoBlocks(Element element) {
@@ -66,18 +105,6 @@ public class ArticlePageParser {
 
 		}
 
-	}
-
-	private List<String> getImages(Element content) {
-		List<String> images = new ArrayList<>();
-
-		Elements elements = content.select("a > img");
-		for (Element element : elements) {
-			Element link = element.parent();
-			images.add(link.attr("href"));
-		}
-
-		return images;
 	}
 
 }

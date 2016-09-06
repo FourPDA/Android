@@ -66,4 +66,20 @@ public class ArticleContentParserTest extends AbstractTest {
 		Assert.assertTrue("Images list is not empty!", article.getImages().isEmpty());
 	}
 
+	@Test
+	public void checkPageWithImagesWithoutLinks() throws IOException {
+		String page = "/2016/09/01/321164/";
+		String pageSource = getHtmlSource(page);
+		ArticleContent article = new ArticlePageParser().parse(pageSource);
+		Assert.assertTrue("Unexpected images list", article.getImages().size() == 5);
+	}
+
+	@Test
+	public void checkPageWithOnlyVideo() throws IOException {
+		String page = "/2016/09/03/321807/";
+		String pageSource = getHtmlSource(page);
+		ArticleContent article = new ArticlePageParser().parse(pageSource);
+		Assert.assertTrue("Images list is not empty!", article.getImages().isEmpty());
+	}
+
 }
