@@ -35,6 +35,8 @@
 				style="@style/Gallery_Text"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginLeft="4sp"
+				android:layout_marginRight="4sp"
 				android:text="/" />
 
 			<TextView
