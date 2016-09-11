@@ -7,12 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import four.pda.EventBus;
 import four.pda.R;
 
 /**
@@ -24,17 +26,21 @@ public class ImageGalleryActivity extends AppCompatActivity {
 	@Extra String currentUrl;
 	@Extra ArrayList<String> images;
 
+	@ViewById View toolbar;
 	@ViewById ImageView closeView;
 	@ViewById TextView currentIndexView;
 	@ViewById TextView imagesCountView;
 	@ViewById ViewPager pager;
 
+	@Bean EventBus eventBus;
+
 	@AfterViews
 	void afterViews() {
+
 		closeView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onBackPressed();
+				finish();
 			}
 		});
 
@@ -51,6 +57,26 @@ public class ImageGalleryActivity extends AppCompatActivity {
 			}
 		});
 
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		eventBus.unregister(this);
+		super.onPause();
+	}
+
+	public void onEvent(ImagesPagerAdapter.ImageClickEvent event) {
+		toolbar.setVisibility(toolbar.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+	}
+
+	public void onEvent(ImagesPagerAdapter.OutsideImageClickEvent event) {
+		finish();
 	}
 
 	private int getCurrentImageIndex() {
