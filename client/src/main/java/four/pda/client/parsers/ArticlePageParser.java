@@ -96,7 +96,7 @@ public class ArticlePageParser {
 				continue;
 			}
 
-			String hash = src.substring(src.lastIndexOf("/") + 1);
+			String hash = src.substring(src.lastIndexOf("/") + 1, src.lastIndexOf("?"));
 			String previewImageUrl = String.format(PREVIEW_URL_STRING, hash);
 			String link = String.format("<a href=\"%s\"><img src=\"%s\" width=\"100%%\" /></a>", src, previewImageUrl);
 
