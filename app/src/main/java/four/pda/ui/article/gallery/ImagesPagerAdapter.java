@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import four.pda.ui.ViewUtils;
+import four.pda.ui.Images;
 
 /**
  * Created by asavinova on 01/09/16.
@@ -37,8 +37,7 @@ public class ImagesPagerAdapter extends PagerAdapter {
 	@Override
 	public Object instantiateItem(ViewGroup collection, int position) {
 		ImageView imageView = new ImageView(context);
-		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		ViewUtils.loadImage(imageView, images.get(position));
+		Images.loadWithZoom(imageView, images.get(position));
 		collection.addView(imageView);
 		return imageView;
 	}

@@ -142,7 +142,7 @@ public class DrawerFragment extends Fragment {
 		if (isAuthorized) {
 			Profile profile = auth.getProfile();
 			profileLoginView.setText(profile.getLogin());
-			ViewUtils.loadImage(profilePhotoView, profile.getPhoto());
+			Images.load(profilePhotoView, profile.getPhoto());
 		}
 	}
 

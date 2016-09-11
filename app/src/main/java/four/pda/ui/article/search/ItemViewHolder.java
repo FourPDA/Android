@@ -14,11 +14,12 @@ import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.SearchArticleDao;
-import four.pda.ui.ViewUtils;
+import four.pda.ui.Images;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.profile.ProfileActivity_;
 
@@ -85,10 +86,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		titleView.setText(title);
 
 		image = cursor.getString(SearchArticleDao.Properties.Image.ordinal);
-		ViewUtils.loadImage(imageView, image);
+		Images.load(imageView, image);
 
 		date = new Date(cursor.getLong(SearchArticleDao.Properties.Date.ordinal));
-		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
+		String verboseDate = DateFormats.VERBOSE.format(date);
 		dateView.setText(verboseDate);
 
 		authorId = cursor.getLong(SearchArticleDao.Properties.AuthorId.ordinal);

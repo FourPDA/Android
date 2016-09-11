@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/gallery_background"
-	android:orientation="vertical">
+	android:background="@color/gallery_background">
+
+	<four.pda.ui.SafeViewPager
+		android:id="@+id/pager"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
 
 	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize">
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/card_info_back">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -51,9 +56,4 @@
 
 	</FrameLayout>
 
-	<android.support.v4.view.ViewPager
-		android:id="@+id/pager"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
-
-</LinearLayout>
+</FrameLayout>
