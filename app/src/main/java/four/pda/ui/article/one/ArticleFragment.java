@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import four.pda.App;
 import four.pda.BuildConfig;
 import four.pda.Dao;
+import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
@@ -48,7 +49,7 @@ import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
-import four.pda.ui.ViewUtils;
+import four.pda.ui.Images;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -129,7 +130,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		});
 
 		collapsingToolbar.setTitle(title);
-		ViewUtils.loadImage(backdropImageView, image);
+		Images.load(backdropImageView, image);
 
 		getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
@@ -155,7 +156,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		});
 
 		authorView.setText(authorName);
-		dateView.setText(ViewUtils.VERBOSE_DATE_FORMAT.format(date));
+		dateView.setText(DateFormats.VERBOSE.format(date));
 
 		loadData();
 	}

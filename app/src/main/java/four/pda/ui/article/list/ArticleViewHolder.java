@@ -10,11 +10,12 @@ import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.ArticleDao;
-import four.pda.ui.ViewUtils;
+import four.pda.ui.Images;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.profile.ProfileActivity_;
 
@@ -78,9 +79,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 		titleView.setText(title);
 
-		ViewUtils.loadImage(imageView, image);
+		Images.load(imageView, image);
 
-		String verboseDate = ViewUtils.VERBOSE_DATE_FORMAT.format(date);
+		String verboseDate = DateFormats.VERBOSE.format(date);
 		dateView.setText(verboseDate);
 
 		authorView.setText(authorName);
