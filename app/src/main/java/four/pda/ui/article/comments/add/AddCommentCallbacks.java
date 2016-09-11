@@ -2,12 +2,8 @@ package four.pda.ui.article.comments.add;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import four.pda.R;
 import four.pda.client.model.CommentsContainer;
@@ -18,8 +14,6 @@ import four.pda.ui.LoadResult;
  */
 public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<CommentsContainer>> {
 
-	private static final Logger L = LoggerFactory.getLogger(AddCommentCallbacks.class);
-
 	private AddCommentDialog fragment;
 
 	public AddCommentCallbacks(AddCommentDialog fragment) {
@@ -28,7 +22,7 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 
 	@Override
 	public AddCommentLoader onCreateLoader(int id, Bundle args) {
-		return new AddCommentLoader();
+		return new AddCommentLoader(fragment);
 	}
 
 	@Override
@@ -50,30 +44,6 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 
 	@Override
 	public void onLoaderReset(Loader<LoadResult<CommentsContainer>> loader) {
-	}
-
-	private class AddCommentLoader extends AsyncTaskLoader<LoadResult<CommentsContainer>> {
-
-		public AddCommentLoader() {
-			super(AddCommentCallbacks.this.fragment.getActivity());
-		}
-
-		@Override
-        public LoadResult<CommentsContainer> loadInBackground() {
-            try {
-                String message = fragment.messageEditText.getText().toString();
-                CommentsContainer container = fragment.client.addComment(
-						fragment.postId,
-                        fragment.replyId,
-                        message
-				);
-                return new LoadResult<>(container);
-            } catch (Exception e) {
-                L.error("Add comment request error", e);
-                return new LoadResult<>(e);
-            }
-        }
-
 	}
 
 }

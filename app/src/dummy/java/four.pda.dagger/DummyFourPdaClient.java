@@ -10,6 +10,7 @@ import four.pda.client.FourPdaClient;
 import four.pda.client.LoginParams;
 import four.pda.client.exceptions.ParseException;
 import four.pda.client.model.AbstractComment;
+import four.pda.client.model.ArticleContent;
 import four.pda.client.model.Comment;
 import four.pda.client.model.CommentsContainer;
 import four.pda.client.model.DeletedComment;
@@ -117,7 +118,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 	}
 
 	@Override
-	public String getArticleContent(Date date, long id) throws IOException {
+	public ArticleContent getArticleContent(Date date, long id) throws IOException {
 		if (id == 1) {
 			throw new ParseException("");
 		}
@@ -128,7 +129,10 @@ public class DummyFourPdaClient extends FourPdaClient {
 
 		for (ListArticle article : articles) {
 			if (article.getId() == id) {
-				return article.getDescription();
+				ArticleContent articleContent = new ArticleContent();
+				articleContent.setContent(article.getDescription());
+				articleContent.setImages(new ArrayList<String>());
+				return articleContent;
 			}
 		}
 
