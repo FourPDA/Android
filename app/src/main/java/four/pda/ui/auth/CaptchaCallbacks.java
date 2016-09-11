@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import four.pda.R;
 import four.pda.client.model.Captcha;
 import four.pda.ui.LoadResult;
-import four.pda.ui.ViewUtils;
+import four.pda.ui.Images;
 
 /**
  * Created by asavinova on 21/02/16.
@@ -56,7 +56,7 @@ class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captc
 		}
 
 		activity.captcha = result.getData();
-		ViewUtils.loadImage(activity.captchaImageView, activity.captcha.getUrl());
+		Images.load(activity.captchaImageView, activity.captcha.getUrl());
 		activity.supportView.hide();
 	}
 

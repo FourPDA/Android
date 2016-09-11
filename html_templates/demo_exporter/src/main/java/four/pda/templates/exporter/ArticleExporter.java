@@ -12,11 +12,13 @@ public class ArticleExporter extends Exporter {
 		ArticleExporter exporter = new ArticleExporter();
 		exporter.convertPage("2016/05/26/300085", "news_text");
 		exporter.convertPage("2016/04/27/294201", "review");
+		exporter.convertPage("2016/09/01/321164", "images_without_links");
+		exporter.convertPage("2016/09/02/321525", "screenshots");
 	}
 
 	@Override
 	protected String getCroppedPage(String originalPage) {
-		return new ArticlePageParser().parse(originalPage);
+		return new ArticlePageParser().parse(originalPage).getContent();
 	}
 
 	@Override
