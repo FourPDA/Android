@@ -69,12 +69,7 @@ public class CommentActionsDialog extends DialogFragment {
 
 		toolbar.setTitle(R.string.show_comment_dialog_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CommentActionsDialog.this.dismiss();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> CommentActionsDialog.this.dismiss());
 
 		nickView.setText(params.authorName());
 

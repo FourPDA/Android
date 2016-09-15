@@ -5,7 +5,6 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.os.Bundle;
-import android.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,12 +51,7 @@ class ProfileCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Profi
 	public void onLoadFinished(Loader<LoadResult<Profile>> loader, LoadResult<Profile> result) {
 
 		if (result.isError()) {
-			activity.supportView.showError(activity.getString(R.string.auth_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activity.loadProfile();
-				}
-			});
+			activity.supportView.showError(activity.getString(R.string.auth_network_error), v -> activity.loadProfile());
 			return;
 		}
 

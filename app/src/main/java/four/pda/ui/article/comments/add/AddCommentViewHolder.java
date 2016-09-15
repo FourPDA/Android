@@ -19,13 +19,9 @@ public class AddCommentViewHolder extends RecyclerView.ViewHolder {
 		super(view);
 		ButterKnife.bind(this, view);
 
-		addCommentButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+		addCommentButton.setOnClickListener(v ->
 				EventBus_.getInstance_(v.getContext())
-						.post(new AddCommentEvent());
-			}
-		});
+				.post(new AddCommentEvent()));
 	}
 
 }

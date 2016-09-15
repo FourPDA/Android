@@ -52,12 +52,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 		ButterKnife.bind(this, view);
 
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
-			}
-		});
+		itemView.setOnClickListener(v ->
+				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName)));
 
 		descriptionView = (TextView) itemView.findViewById(R.id.description_view);
 
@@ -65,14 +61,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 			descriptionView.addOnLayoutChangeListener(new MaxLinesListener());
 		}
 
-		authorView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (authorId > 0) {
-					ProfileActivity_.intent(v.getContext())
-							.profileId(authorId)
-							.start();
-				}
+		authorView.setOnClickListener(v -> {
+			if (authorId > 0) {
+				ProfileActivity_.intent(v.getContext())
+						.profileId(authorId)
+						.start();
 			}
 		});
 
@@ -118,12 +111,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             if (view.getMaxLines() != maxLines) {
 
                 view.setMaxLines(maxLines);
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.requestLayout();
-                    }
-                }, 100);
+                view.postDelayed(view::requestLayout, 100);
 
             }
 

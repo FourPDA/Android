@@ -47,42 +47,39 @@ public class Dao {
 	}
 
 	public void setArticles(final List<ListArticle> articles, final CategoryType category, final boolean needClearData) {
-		daoSession.runInTx(new Runnable() {
-			@Override
-			public void run() {
-				ArticleDao dao = daoSession.getArticleDao();
+		daoSession.runInTx(() -> {
+			ArticleDao dao = daoSession.getArticleDao();
 
-				if (needClearData) {
-					dao.queryBuilder()
-							.where(ArticleDao.Properties.Category.eq(getCategoryValue(category)))
-							.buildDelete()
-							.executeDeleteWithoutDetachingEntities();
-					L.trace("Delete all articles from category {}", category);
-				} else {
-					L.trace("No need clear for category {}", category);
+			if (needClearData) {
+				dao.queryBuilder()
+						.where(ArticleDao.Properties.Category.eq(getCategoryValue(category)))
+						.buildDelete()
+						.executeDeleteWithoutDetachingEntities();
+				L.trace("Delete all articles from category {}", category);
+			} else {
+				L.trace("No need clear for category {}", category);
+			}
+
+			for (ListArticle article : articles) {
+
+				Article daoArticle = new Article();
+				daoArticle.setId(article.getId());
+				daoArticle.setDate(article.getDate());
+				daoArticle.setTitle(article.getTitle());
+				daoArticle.setImage(article.getImage());
+				daoArticle.setCategory(getCategoryValue(category));
+				daoArticle.setDescription(article.getDescription());
+				daoArticle.setPublishedDate(article.getPublishedDate());
+				daoArticle.setCommentsCount(article.getCommentsCount());
+
+				User author = article.getAuthor();
+				// В списке обзоров автор равен null
+				if (author != null) {
+					daoArticle.setAuthorId(author.getId());
+					daoArticle.setAuthorName(author.getNickname());
 				}
 
-				for (ListArticle article : articles) {
-
-					Article daoArticle = new Article();
-					daoArticle.setId(article.getId());
-					daoArticle.setDate(article.getDate());
-					daoArticle.setTitle(article.getTitle());
-					daoArticle.setImage(article.getImage());
-					daoArticle.setCategory(getCategoryValue(category));
-					daoArticle.setDescription(article.getDescription());
-					daoArticle.setPublishedDate(article.getPublishedDate());
-					daoArticle.setCommentsCount(article.getCommentsCount());
-
-					User author = article.getAuthor();
-					// В списке обзоров автор равен null
-					if (author != null) {
-						daoArticle.setAuthorId(author.getId());
-						daoArticle.setAuthorName(author.getNickname());
-					}
-
-					dao.insertOrReplace(daoArticle);
-				}
+				dao.insertOrReplace(daoArticle);
 			}
 		});
 
@@ -101,30 +98,27 @@ public class Dao {
 	}
 
 	public void setSearchArticles(final List<SearchListArticle> articles, final boolean needClearData) {
-		daoSession.runInTx(new Runnable() {
-			@Override
-			public void run() {
-				SearchArticleDao dao = daoSession.getSearchArticleDao();
+		daoSession.runInTx(() -> {
+			SearchArticleDao dao = daoSession.getSearchArticleDao();
 
-				if (needClearData) {
-					dao.deleteAll();
-					L.trace("Delete all search articles");
-				}
+			if (needClearData) {
+				dao.deleteAll();
+				L.trace("Delete all search articles");
+			}
 
-				for (SearchListArticle listArticle : articles) {
+			for (SearchListArticle listArticle : articles) {
 
-					SearchArticle article = new SearchArticle();
-					article.setId(listArticle.getId());
-					article.setDate(listArticle.getDate());
-					article.setTitle(listArticle.getTitle());
-					article.setDescription(listArticle.getDescription());
-					article.setImage(listArticle.getImage());
-					article.setPosition(listArticle.getPosition());
-					article.setAuthorId(listArticle.getAuthor().getId());
-					article.setAuthorName(listArticle.getAuthor().getNickname());
+				SearchArticle article = new SearchArticle();
+				article.setId(listArticle.getId());
+				article.setDate(listArticle.getDate());
+				article.setTitle(listArticle.getTitle());
+				article.setDescription(listArticle.getDescription());
+				article.setImage(listArticle.getImage());
+				article.setPosition(listArticle.getPosition());
+				article.setAuthorId(listArticle.getAuthor().getId());
+				article.setAuthorName(listArticle.getAuthor().getNickname());
 
-					dao.insertOrReplace(article);
-				}
+				dao.insertOrReplace(article);
 			}
 		});
 

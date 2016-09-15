@@ -2,7 +2,6 @@ package four.pda.ui.profile;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.webkit.WebView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -47,12 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 		toolbar.setTitle(R.string.profile_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> finish());
 
 		loadProfile();
 	}
