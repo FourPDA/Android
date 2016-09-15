@@ -9,7 +9,6 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
@@ -47,9 +46,9 @@ import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.Images;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
-import four.pda.ui.Images;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -101,32 +100,21 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 		}
 
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getActivity().onBackPressed();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
 		toolbar.inflateMenu(R.menu.article);
-		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				textZoomPanel.setZoom(preferences.textZoom().get());
-				textZoomPanel.setVisibility(View.VISIBLE);
-				return true;
-			}
+		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(item -> {
+			textZoomPanel.setZoom(preferences.textZoom().get());
+			textZoomPanel.setVisibility(View.VISIBLE);
+			return true;
 		});
 
-		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				startActivity(ShareCompat.IntentBuilder.from(getActivity())
-						.setType("text/plain")
-						.setText(client.getArticleUrl(date, id))
-						.createChooserIntent());
-				return true;
-			}
+		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(item -> {
+			startActivity(ShareCompat.IntentBuilder.from(getActivity())
+					.setType("text/plain")
+					.setText(client.getArticleUrl(date, id))
+					.createChooserIntent());
+			return true;
 		});
 
 		collapsingToolbar.setTitle(title);
@@ -263,12 +251,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				return;
 			}
 
-			supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData();
-				}
-			});
+			supportView.showError(getString(R.string.article_network_error), v -> loadData());
 		}
 
 		@Override

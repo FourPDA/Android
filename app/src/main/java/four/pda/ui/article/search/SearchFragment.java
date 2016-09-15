@@ -171,12 +171,7 @@ public class SearchFragment extends BaseFragment {
 
 	void showError() {
 
-		View.OnClickListener retryListener = new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				loadData();
-			}
-		};
+		View.OnClickListener retryListener = v -> loadData();
 
 		if (adapter.isEmpty()) {
 			upButton.setVisibility(View.GONE);
