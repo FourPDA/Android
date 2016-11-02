@@ -28,7 +28,7 @@ public class CommentTreeParser extends AbstractParser {
 	private static final Logger L = LoggerFactory.getLogger(CommentTreeParser.class);
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy | HH:ss");
-	private static final Pattern KARMA_PATTERN = Pattern.compile("\"(\\d+)\":\\[(\\d+),(\\d+),(\\d+),(\\d+)\\]");
+	private static final Pattern KARMA_PATTERN = Pattern.compile("\"(\\d+)\":\\[(\\d+),(.+?),(\\d+),(\\d+)\\]");
 
 	private Map<Long, Comment.Karma> karmaMap;
 
@@ -80,7 +80,7 @@ public class CommentTreeParser extends AbstractParser {
 			Comment.Karma karma = new Comment.Karma();
 			int canLike = Integer.parseInt(matcher.group(2));
 			karma.setCanLike(Comment.CanLike.fromServerValue(canLike));
-			karma.setUnknown2(Integer.parseInt(matcher.group(3)));
+			karma.setUnknown2(Boolean.parseBoolean(matcher.group(3)));
 			karma.setUnknown3(Integer.parseInt(matcher.group(4)));
 			karma.setLikesCount(Integer.parseInt(matcher.group(5)));
 			map.put(commentId, karma);
