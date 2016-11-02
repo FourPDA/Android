@@ -54,9 +54,11 @@ public class FourPdaClient {
 	public long login(LoginParams params) throws IOException {
 		String url = BASE_URL + "forum/index.php?act=auth";
 
+		String login = URLEncoder.encode(params.getLogin(), "CP1251");
+		String password = URLEncoder.encode(params.getPassword(), "CP1251");
 		RequestBody requestBody = new FormBody.Builder()
-				.add("login", params.getLogin())
-				.add("password", params.getPassword())
+				.addEncoded("login", login)
+				.addEncoded("password", password)
 				.add("captcha-time", params.getCaptchaTime())
 				.add("captcha-sig", params.getCaptchaSig())
 				.add("captcha", params.getCaptcha())

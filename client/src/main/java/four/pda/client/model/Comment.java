@@ -38,7 +38,7 @@ public class Comment extends AbstractComment {
 	public static class Karma {
 
 		private CanLike canLike;
-		private int unknown2;
+		private boolean unknown2;
 		private int unknown3;
 		private int likesCount;
 
@@ -50,11 +50,11 @@ public class Comment extends AbstractComment {
 			this.canLike = canLike;
 		}
 
-		public int getUnknown2() {
+		public boolean getUnknown2() {
 			return unknown2;
 		}
 
-		public void setUnknown2(int unknown2) {
+		public void setUnknown2(boolean unknown2) {
 			this.unknown2 = unknown2;
 		}
 
