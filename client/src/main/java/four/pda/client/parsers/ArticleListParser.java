@@ -82,13 +82,8 @@ public class ArticleListParser extends AbstractParser {
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
 
-		Elements descrEl = element.select("div.description");
-
-		article.setTitle(descrEl.select("h1 > a").text());
-
-		descrEl.select("h1").remove();
-
-		article.setDescription(descrEl.html());
+		article.setTitle(element.select(".list-post-title > a > span").text());
+		article.setDescription(element.select("div[itemprop=description] > p").html());
 
 		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
 		article.setImage(imageSrc);
