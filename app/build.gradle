@@ -22,11 +22,11 @@ android {
 
 	signingConfigs {
 
-		develop {
-			storeFile file('develop.keystore')
-			storePassword 'develop'
-			keyAlias 'fourpda_develop'
-			keyPassword 'develop'
+		fromProperties {
+			storeFile file(project.fourpda_sign_storeFile)
+			storePassword project.fourpda_sign_storePassword
+			keyAlias project.fourpda_sign_keyAlias
+			keyPassword project.fourpda_sign_keyPassword
 		}
 
 	}
@@ -35,11 +35,11 @@ android {
 
 		debug {
 			applicationIdSuffix '.debug'
-			signingConfig signingConfigs.develop
+			signingConfig signingConfigs.fromProperties
 		}
 
 		release {
-			signingConfig signingConfigs.develop
+			signingConfig signingConfigs.fromProperties
 		}
 
 	}
