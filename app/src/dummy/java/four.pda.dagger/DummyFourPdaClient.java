@@ -81,7 +81,7 @@ public class DummyFourPdaClient extends FourPdaClient {
 		Comment.Karma karma = new Comment.Karma();
 		karma.setLikesCount(likesCount);
 		karma.setCanLike(canLike);
-		karma.setUnknown2(0);
+		karma.setUnknown2(false);
 		karma.setUnknown3(0);
 		comment.setKarma(karma);
 
