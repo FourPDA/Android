@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@android:color/white">
@@ -98,14 +100,31 @@
 
 		</android.support.v4.widget.NestedScrollView>
 
-		<android.support.design.widget.FloatingActionButton
-			android:id="@+id/comments_button"
-			android:layout_height="wrap_content"
+		<FrameLayout
 			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			app:layout_anchor="@id/scroll_view"
-			app:layout_anchorGravity="bottom|right|end"
-			android:src="@drawable/ic_comment_white_24dp"
-			android:layout_margin="@dimen/offset_normal" />
+			app:layout_anchorGravity="bottom|right|end">
+
+			<android.support.design.widget.FloatingActionButton
+				android:id="@+id/comments_button"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_margin="@dimen/offset_normal"
+				app:elevation="10dp" />
+
+			<TextView
+				android:id="@+id/comments_count_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/ic_chat_bubble_white"
+				android:textColor="@color/primary"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:elevation="10dp"
+				tools:text="123" />
+
+		</FrameLayout>
 
 	</android.support.design.widget.CoordinatorLayout>
 

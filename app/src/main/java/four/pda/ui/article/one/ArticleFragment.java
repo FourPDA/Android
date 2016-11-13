@@ -78,6 +78,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
+	@ViewById TextView commentsCountView;
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
@@ -245,13 +246,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<ArticleContent>> loader, LoadResult<ArticleContent> result) {
-			if (result.getException() == null) {
-				updateData(result.getData());
-				supportView.hide();
+			if (result.getException() != null) {
+				supportView.showError(getString(R.string.article_network_error), v -> loadData());
 				return;
 			}
 
-			supportView.showError(getString(R.string.article_network_error), v -> loadData());
+			updateData(result.getData());
+			commentsCountView.setText(String.valueOf(result.getData().getCommentsCount()));
+			supportView.hide();
 		}
 
 		@Override

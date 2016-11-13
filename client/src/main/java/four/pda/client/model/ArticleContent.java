@@ -9,6 +9,7 @@ public class ArticleContent {
 
 	private String content;
 	private List<String> images;
+	private int commentsCount;
 
 	public String getContent() {
 		return content;
@@ -24,6 +25,14 @@ public class ArticleContent {
 
 	public void setImages(List<String> images) {
 		this.images = images;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
 	}
 
 }
