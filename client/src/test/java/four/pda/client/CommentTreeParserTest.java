@@ -206,8 +206,8 @@ public class CommentTreeParserTest extends AbstractTest {
 			long id = comment.getId();
 
 			Assert.assertEquals(
-					"Unknown karma param 2 of comment " + id + " is not zero",
-					0, karma.getUnknown2()
+					"Unknown karma param 2 of comment " + id + " is not false",
+					false, karma.getUnknown2()
 			);
 
 			Assert.assertEquals(
