@@ -47,12 +47,8 @@ public class BaseFragment extends Fragment {
 			if (toolbar == null) return;
 
 			toolbar.setNavigationIcon(R.mipmap.ic_menu_white_24dp);
-			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					((DrawerLayout) view).openDrawer(GravityCompat.START);
-				}
-			});
+			toolbar.setNavigationOnClickListener(v ->
+					((DrawerLayout) view).openDrawer(GravityCompat.START));
 
 		}
 	}

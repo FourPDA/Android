@@ -96,18 +96,15 @@ public class DrawerFragment extends Fragment {
         map.put(softwareCategoryView, CategoryType.SOFTWARE);
 
         for (View view : map.keySet()) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-					CategoryType category = map.get(view);
+            view.setOnClickListener(view1 -> {
+				CategoryType category = map.get(view1);
 
-					analytics.drawer().categoryClicked(category);
+				analytics.drawer().categoryClicked(category);
 
-					for (ChangeCategoryListener listener : listeners) {
-						listener.onChange(category);
-					}
-                }
-            });
+				for (ChangeCategoryListener listener : listeners) {
+					listener.onChange(category);
+				}
+			});
         }
     }
 

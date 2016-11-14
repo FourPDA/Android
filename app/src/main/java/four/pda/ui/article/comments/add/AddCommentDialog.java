@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
@@ -55,12 +54,7 @@ public class AddCommentDialog extends DialogFragment {
 
 		toolbar.setTitle(replyId == null ? R.string.comments_new : R.string.comments_reply_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				AddCommentDialog.this.dismiss();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> AddCommentDialog.this.dismiss());
 
 		if (replyId != null) {
 			String replyText = replyAuthor + ",\n";

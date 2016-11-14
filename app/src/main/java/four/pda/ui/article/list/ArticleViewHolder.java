@@ -46,23 +46,17 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 		ButterKnife.bind(this, view);
 
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (id > 0) {
-					eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
-				}
+		itemView.setOnClickListener(v -> {
+			if (id > 0) {
+				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
 			}
 		});
 
-		authorView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (authorId > 0) {
-					ProfileActivity_.intent(v.getContext())
-							.profileId(authorId)
-							.start();
-				}
+		authorView.setOnClickListener(v -> {
+			if (authorId > 0) {
+				ProfileActivity_.intent(v.getContext())
+						.profileId(authorId)
+						.start();
 			}
 		});
 	}

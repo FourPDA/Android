@@ -37,12 +37,7 @@ public class ImageGalleryActivity extends AppCompatActivity {
 	@AfterViews
 	void afterViews() {
 
-		closeView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		closeView.setOnClickListener(v -> finish());
 
 		int index = getCurrentImageIndex();
 		currentIndexView.setText(String.valueOf(index + 1));

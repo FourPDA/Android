@@ -21,21 +21,11 @@ public class Keyboard {
 
 	public void showFor(final View view) {
 		view.requestFocus();
-		view.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				inputMethodManager.showSoftInput(view, 0);
-			}
-		}, 100);
+		view.postDelayed(() -> inputMethodManager.showSoftInput(view, 0), 100);
 	}
 
 	public void toggle(View view) {
-		view.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-			}
-		}, 100);
+		view.postDelayed(() -> inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0), 100);
 	}
 
 	public void hide(Activity activity) {

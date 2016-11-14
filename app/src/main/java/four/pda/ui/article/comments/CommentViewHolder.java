@@ -50,13 +50,9 @@ class CommentViewHolder extends RecyclerView.ViewHolder {
 
 		contentView.setText(Html.fromHtml(comment.getContent()));
 
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+		itemView.setOnClickListener(v ->
 				EventBus_.getInstance_(v.getContext())
-						.post(new CommentActionsEvent(comment));
-			}
-		});
+				.post(new CommentActionsEvent(comment)));
 
 	}
 
