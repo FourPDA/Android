@@ -99,8 +99,8 @@ dependencies {
 	compile project(':client')
 	compile project(':html_templates')
 
-	apt 'org.androidannotations:androidannotations:3.3.2'
-	compile 'org.androidannotations:androidannotations-api:3.3.2'
+	apt 'org.androidannotations:androidannotations:4.1.0'
+	compile 'org.androidannotations:androidannotations-api:4.1.0'
 
 	apt 'com.google.dagger:dagger-compiler:2.7'
 	compile 'com.google.dagger:dagger:2.7'

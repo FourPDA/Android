@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -39,7 +38,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@FragmentArg CategoryType category;
 
-	@ViewById LinearLayout container;
+	@ViewById View container;
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
@@ -70,6 +69,8 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		});
 
 		container.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+			if (container == null) return;
+
 			int spanCount = (int) (container.getWidth() / container.getResources().getDimension(R.dimen.list_item_width));
 			if (spanCount > 1) {
 				layoutManager.setSpanCount(spanCount);
