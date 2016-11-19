@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.DateFormats;
 import four.pda.EventBus;
@@ -24,11 +24,11 @@ import four.pda.ui.profile.ProfileActivity_;
  */
 public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
-	@Bind(R.id.image_view) ImageView imageView;
-	@Bind(R.id.title_view) TextView titleView;
-	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.author_view) TextView authorView;
-	@Bind(R.id.comments_count_text_view) TextView commentsCountView;
+	@BindView(R.id.image_view) ImageView imageView;
+	@BindView(R.id.title_view) TextView titleView;
+	@BindView(R.id.date_view) TextView dateView;
+	@BindView(R.id.author_view) TextView authorView;
+	@BindView(R.id.comments_count_text_view) TextView commentsCountView;
 
 	private long id;
 	private Date date;
@@ -42,9 +42,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 	public ArticleViewHolder(View view) {
 		super(view);
-		eventBus = EventBus_.getInstance_(view.getContext());
-
 		ButterKnife.bind(this, view);
+
+		eventBus = EventBus_.getInstance_(view.getContext());
 
 		itemView.setOnClickListener(v -> {
 			if (id > 0) {
