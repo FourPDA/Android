@@ -3,7 +3,7 @@ package four.pda.ui.article.comments.add;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
@@ -13,7 +13,7 @@ import four.pda.R;
  */
 public class AddCommentViewHolder extends RecyclerView.ViewHolder {
 
-	@Bind(R.id.add_comment_button) View addCommentButton;
+	@BindView(R.id.add_comment_button) View addCommentButton;
 
 	public AddCommentViewHolder(View view) {
 		super(view);
