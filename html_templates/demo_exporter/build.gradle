@@ -11,7 +11,7 @@ dependencies {
 	compile project(':html_templates')
 	compile project(':client')
 
-    compile 'org.slf4j:slf4j-simple:1.7.12'
-	compile 'commons-io:commons-io:2.4'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+	compile 'commons-io:commons-io:2.5'
 
 }

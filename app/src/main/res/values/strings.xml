@@ -68,7 +68,7 @@
 	<string name="add_comment_network_error">Не удалось добавить комментарий</string>
 
 	<string name="text_zoom">Размер шрифта</string>
-	<string name="text_zoom_value">%s%%</string>
+	<string name="text_zoom_value">%d%%</string>
 	<string name="close">Закрыть</string>
 	<string name="reset">Сбросить</string>
 	<string name="share">Поделиться</string>
@@ -79,7 +79,7 @@
 	<string name="first_comment_dialog_ok">Все понял</string>
 
 	<string name="search">Поиск</string>
-	<string name="search_articles_count">Найдено: %s</string>
+	<string name="search_articles_count">Найдено: %d</string>
 	<string name="article_comment_like_error">Не удалось залайкать</string>
 	<string name="article_comment_like_already">Уже залайкано</string>
 

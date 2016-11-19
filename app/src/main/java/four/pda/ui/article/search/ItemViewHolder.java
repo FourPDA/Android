@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.DateFormats;
 import four.pda.EventBus;
@@ -30,10 +30,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 	private static final Logger L = LoggerFactory.getLogger(ItemViewHolder.class);
 
-	@Bind(R.id.image_view) ImageView imageView;
-	@Bind(R.id.title_view) TextView titleView;
-	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.author_view) TextView authorView;
+	@BindView(R.id.image_view) ImageView imageView;
+	@BindView(R.id.title_view) TextView titleView;
+	@BindView(R.id.date_view) TextView dateView;
+	@BindView(R.id.author_view) TextView authorView;
 
 	private final TextView descriptionView;
 
@@ -48,9 +48,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 	public ItemViewHolder(View view) {
 		super(view);
-		eventBus = EventBus_.getInstance_(view.getContext());
-
 		ButterKnife.bind(this, view);
+
+		eventBus = EventBus_.getInstance_(view.getContext());
 
 		itemView.setOnClickListener(v ->
 				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName)));
