@@ -37,6 +37,7 @@ public class ArticlePageParser {
 
 		ArticleContent articleContent = new ArticleContent();
 		articleContent.setImages(getImages(content));
+		articleContent.setCommentsCount(getCommentsCount(document));
 
 		try {
 			// Замена видеороликов на ссылки должна происходить после подсчета картинок для галереи
@@ -50,6 +51,14 @@ public class ArticlePageParser {
 		articleContent.setContent(content.html());
 
 		return articleContent;
+	}
+
+	private int getCommentsCount(Element content) {
+		Element commentsCountEl = content.select(".product-detail .more-box .number").first();
+		if (commentsCountEl == null) {
+			throw new RuntimeException("Can't find comments count element");
+		}
+		return Integer.parseInt(commentsCountEl.text());
 	}
 
 	private void addLinkToBigImages(Element content) {
