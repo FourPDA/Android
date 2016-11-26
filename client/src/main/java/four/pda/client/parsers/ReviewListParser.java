@@ -27,13 +27,18 @@ public class ReviewListParser extends AbstractParser {
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
+			ListArticle article;
 			try {
-				articles.add(articleFromElement(element));
+				article = articleFromElement(element);
 			} catch (Exception e) {
 				String message = "Can't parse reviews list";
 				L.error(message, e);
 				throw new ParseException(message, e);
 			}
+			if (article == null) {
+				continue;
+			}
+			articles.add(article);
 		}
 
 		if (articles.isEmpty()) {
@@ -50,9 +55,15 @@ public class ReviewListParser extends AbstractParser {
 		ListArticle article = new ListArticle();
 
 		String url = element.select("a[itemprop=url]").attr("href");
-		IdAndDate idAndDate = getIdAndDateFromUrl(url);
-		article.setId(idAndDate.id);
-		article.setDate(idAndDate.date);
+
+		try {
+			IdAndDate idAndDate = getIdAndDateFromUrl(url);
+			article.setId(idAndDate.id);
+			article.setDate(idAndDate.date);
+		} catch (Exception e) {
+			L.error("Can't parse id and date from url [{}]", url);
+			return null;
+		}
 
 		String title = element.select("span[itemprop=name]").get(0).text();
 		article.setTitle(title);
