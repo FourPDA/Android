@@ -21,7 +21,7 @@ public class ReviewsListParserTest extends AbstractTest {
 	public void mainPage() throws IOException {
 		String pageSource = getHtmlSource(REVIEW_PATH);
 		List<ListArticle> articles = new ReviewListParser().parse(pageSource);
-		Assert.assertEquals("Wrong reviews list size", 30, articles.size());
+		Assert.assertTrue("Wrong reviews list size", articles.size() > 10);
 	}
 
 	@Test
