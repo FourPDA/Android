@@ -78,9 +78,14 @@ public class ArticleListParser extends AbstractParser {
 			return null;
 		}
 
-		IdAndDate idAndDate = getIdAndDateFromUrl(url);
-		article.setId(idAndDate.id);
-		article.setDate(idAndDate.date);
+		try {
+			IdAndDate idAndDate = getIdAndDateFromUrl(url);
+			article.setId(idAndDate.id);
+			article.setDate(idAndDate.date);
+		} catch (Exception e) {
+			L.error("Can't parse id and date from url [{}]", url);
+			return null;
+		}
 
 		Element labelEl = element.select(".visual .label").first();
 		article.setLabel(new ArticleLabelParser().parse(labelEl));
