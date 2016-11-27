@@ -10,6 +10,7 @@ public class ArticleContent {
 	private String content;
 	private List<String> images;
 	private int commentsCount;
+	private AbstractArticle.Label label;
 
 	public String getContent() {
 		return content;
@@ -33,6 +34,14 @@ public class ArticleContent {
 
 	public void setCommentsCount(int commentsCount) {
 		this.commentsCount = commentsCount;
+	}
+
+	public AbstractArticle.Label getLabel() {
+		return label;
+	}
+
+	public void setLabel(AbstractArticle.Label label) {
+		this.label = label;
 	}
 
 }

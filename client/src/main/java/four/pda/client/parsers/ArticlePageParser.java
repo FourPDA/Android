@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import four.pda.client.exceptions.ParseException;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.ArticleContent;
 
 /**
@@ -35,9 +36,13 @@ public class ArticlePageParser {
 		addLinkToBigImages(content);
 		replaceScreenshotsSrc(content);
 
+		Element labelEl = document.select(".container .product-detail .label").first();
+		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
+
 		ArticleContent articleContent = new ArticleContent();
 		articleContent.setImages(getImages(content));
 		articleContent.setCommentsCount(getCommentsCount(document));
+		articleContent.setLabel(label);
 
 		try {
 			// Замена видеороликов на ссылки должна происходить после подсчета картинок для галереи

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import four.pda.client.exceptions.ParseException;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.SearchContainer;
 import four.pda.client.model.SearchListArticle;
 
@@ -94,6 +95,10 @@ public class SearchArticlesParser extends AbstractParser {
 		IdAndDate idAndDate = getIdAndDateFromUrl(url);
 		article.setId(idAndDate.id);
 		article.setDate(idAndDate.date);
+
+		Element labelEl = element.select(".description .meta-box .label").first();
+		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
+		article.setLabel(label);
 
 		article.setPosition(page + ((double) position) / ARTICLES_PER_PAGE);
 
