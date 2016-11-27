@@ -86,4 +86,8 @@
 	<string name="profile_title">Профиль</string>
 	<string name="profile_network_error">Не удалось загрузить информацию о профиле.</string>
 
+	<string name="feedback">Обратная связь</string>
+	<string name="feedback_subject">Обратная связь</string>
+	<string name="feedback_chooser_title">Отправить сообщение через</string>
+
 </resources>
