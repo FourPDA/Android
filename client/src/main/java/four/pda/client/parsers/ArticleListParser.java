@@ -87,6 +87,9 @@ public class ArticleListParser extends AbstractParser {
 			return null;
 		}
 
+		Element labelEl = element.select(".visual .label").first();
+		article.setLabel(new ArticleLabelParser().parse(labelEl));
+
 		article.setTitle(element.select(".list-post-title > a > span").text());
 		article.setDescription(element.select("div[itemprop=description] > p").html());
 
