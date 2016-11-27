@@ -2,11 +2,7 @@ package four.pda.analytics;
 
 import android.content.Context;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.androidannotations.annotations.EBean;
-
-import java.util.Map;
 
 import four.pda.BuildConfig;
 import four.pda.client.CategoryType;
@@ -46,18 +42,11 @@ public class Analytics {
 	public class Drawer {
 
 		public void aboutClicked() {
-			tracker.send(action("About click"));
+			// TODO Send by tracker
 		}
 
 		public void categoryClicked(CategoryType type) {
-			tracker.send(action("Category click " + type.name()));
-		}
-
-		private Map<String, String> action(String action) {
-			return new HitBuilders.EventBuilder()
-					.setCategory("Drawer")
-					.setAction(action)
-					.build();
+			// TODO Send by tracker
 		}
 
 	}
@@ -65,11 +54,7 @@ public class Analytics {
 	public class ArticlesList {
 
 		public void scrollUp(int currentPosition) {
-			tracker.send(new HitBuilders.EventBuilder()
-					.setCategory("ArticlesList")
-					.setAction("Scroll up")
-					.setCustomMetric(1, currentPosition)
-					.build());
+			// TODO Send by tracker
 		}
 
 	}
