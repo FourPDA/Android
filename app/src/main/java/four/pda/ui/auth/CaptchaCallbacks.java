@@ -43,6 +43,7 @@ class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captc
 
 	@Override
 	public void onLoadFinished(Loader<LoadResult<Captcha>> loader, LoadResult<Captcha> result) {
+		activity.captchaTextView.setText("");
 
 		if (result.isError()) {
 			activity.supportView.showError(activity.getString(R.string.auth_network_error), v -> activity.loadCaptcha());
