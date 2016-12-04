@@ -38,6 +38,8 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 	private String image;
 	private long authorId;
 	private String authorName;
+	private String labelName;
+	private String labelColor;
 
 	private final EventBus eventBus;
 
@@ -49,7 +51,12 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 		itemView.setOnClickListener(v -> {
 			if (id > 0) {
-				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
+				ShowArticleEvent event = new ShowArticleEvent(
+						id, date, title, image,
+						authorId, authorName,
+						labelName, labelColor
+				);
+				eventBus.post(event);
 			}
 		});
 
@@ -65,27 +72,28 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 	public void setCursor(Cursor cursor) {
 
 		id = cursor.getLong(ArticleDao.Properties.Id.ordinal);
-		date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
-		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
-		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
 		authorId = cursor.getLong(ArticleDao.Properties.AuthorId.ordinal);
-		authorName = cursor.getString(ArticleDao.Properties.AuthorName.ordinal);
 
-		String labelName = cursor.getString(ArticleDao.Properties.LabelName.ordinal);
-		String labelColor = cursor.getString(ArticleDao.Properties.LabelColor.ordinal);
+		date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
+		String verboseDate = DateFormats.VERBOSE.format(date);
+		dateView.setText(verboseDate);
+
+		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
+		titleView.setText(title);
+
+		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
+		Images.load(imageView, image);
+
+		authorName = cursor.getString(ArticleDao.Properties.AuthorName.ordinal);
+		authorView.setText(authorName);
+
+		labelName = cursor.getString(ArticleDao.Properties.LabelName.ordinal);
+		labelColor = cursor.getString(ArticleDao.Properties.LabelColor.ordinal);
 		labelView.setLabel(labelName, labelColor);
 
 		int commentsCount = cursor.getInt(ArticleDao.Properties.CommentsCount.ordinal);
 		commentsCountView.setText(String.valueOf(commentsCount));
 
-		titleView.setText(title);
-
-		Images.load(imageView, image);
-
-		String verboseDate = DateFormats.VERBOSE.format(date);
-		dateView.setText(verboseDate);
-
-		authorView.setText(authorName);
 	}
 
 }

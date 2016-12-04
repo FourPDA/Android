@@ -42,6 +42,7 @@ import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
@@ -49,6 +50,7 @@ import four.pda.ui.BaseFragment;
 import four.pda.ui.Images;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -67,14 +69,20 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String image;
 	@FragmentArg long authorId;
 	@FragmentArg String authorName;
+	@FragmentArg String labelName;
+	@FragmentArg String labelColor;
 
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
-	@ViewById WebView webView;
+
+	@ViewById LabelView labelView;
+
 	@ViewById TextView authorView;
 	@ViewById TextView dateView;
+
+	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
@@ -144,6 +152,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
+		labelView.setLabel(labelName, labelColor);
+
 		authorView.setText(authorName);
 		dateView.setText(DateFormats.VERBOSE.format(date));
 
@@ -189,6 +199,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(final ArticleContent article) {
+
+		//TODO Show author name from ArticleContent for reviews
+
+		if (article.getLabel() != null) {
+			AbstractArticle.Label label = article.getLabel();
+			labelView.setLabel(label.getName(), label.getColor());
+		}
+
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
