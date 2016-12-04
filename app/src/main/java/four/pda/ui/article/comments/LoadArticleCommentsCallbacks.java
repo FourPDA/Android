@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,12 +51,7 @@ class LoadArticleCommentsCallbacks implements LoaderManager.LoaderCallbacks<Load
 			return;
 		}
 
-		fragment.supportView.showError(fragment.getString(R.string.comments_network_error), new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				fragment.loadData();
-			}
-		});
+		fragment.supportView.showError(fragment.getString(R.string.comments_network_error), v -> fragment.loadData());
 	}
 
 	@Override

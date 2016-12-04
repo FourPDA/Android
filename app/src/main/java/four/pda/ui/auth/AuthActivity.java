@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -70,12 +69,7 @@ public class AuthActivity extends AppCompatActivity {
 
 		toolbar.setTitle(R.string.auth_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> finish());
 		toolbar.inflateMenu(R.menu.auth);
 		toolbar.setOnMenuItemClickListener(new MenuListener());
 

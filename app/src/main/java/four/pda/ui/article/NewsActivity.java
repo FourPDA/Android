@@ -2,7 +2,6 @@ package four.pda.ui.article;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -67,18 +66,15 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 					.commit();
 		}
 
-		getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-			@Override
-			public void onBackStackChanged() {
-				Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_container);
+		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+			Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_container);
 
-				if (fragment == null) {
-					return;
-				}
-
-				category = ((ListFragment) fragment).getCategory();
-				drawer.setCategorySelected(category);
+			if (fragment == null) {
+				return;
 			}
+
+			category = ((ListFragment) fragment).getCategory();
+			drawer.setCategorySelected(category);
 		});
 	}
 
@@ -156,6 +152,8 @@ public class NewsActivity extends AppCompatActivity implements DrawerFragment.Ch
 				.image(event.getImage())
 				.authorId(event.getAuthorId())
 				.authorName(event.getAuthorName())
+				.labelName(event.getLabelName())
+				.labelColor(event.getLabelColor())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()

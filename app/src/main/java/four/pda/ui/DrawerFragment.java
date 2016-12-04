@@ -74,42 +74,39 @@ public class DrawerFragment extends Fragment {
 	@Inject PersistentCookieJar cookieJar;
 
 	private List<ChangeCategoryListener> listeners = new ArrayList<>();
-    private Map<View, CategoryType> map = new HashMap<>();
+	private Map<View, CategoryType> map = new HashMap<>();
 
-    public void addListener(ChangeCategoryListener listener) {
-        listeners.add(listener);
-    }
+	public void addListener(ChangeCategoryListener listener) {
+		listeners.add(listener);
+	}
 
-    public void removeListener(ChangeCategoryListener listener) {
-        listeners.remove(listener);
-    }
+	public void removeListener(ChangeCategoryListener listener) {
+		listeners.remove(listener);
+	}
 
-    @AfterViews
-    void afterViews() {
+	@AfterViews
+	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
 		map.put(allCategoryView, CategoryType.ALL);
-        map.put(newsCategoryView, CategoryType.NEWS);
-        map.put(gamesCategoryView, CategoryType.GAMES);
-        map.put(reviewsCategoryView, CategoryType.REVIEWS);
-        map.put(articlesCategoryView, CategoryType.ARTICLES);
-        map.put(softwareCategoryView, CategoryType.SOFTWARE);
+		map.put(newsCategoryView, CategoryType.NEWS);
+		map.put(gamesCategoryView, CategoryType.GAMES);
+		map.put(reviewsCategoryView, CategoryType.REVIEWS);
+		map.put(articlesCategoryView, CategoryType.ARTICLES);
+		map.put(softwareCategoryView, CategoryType.SOFTWARE);
 
-        for (View view : map.keySet()) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-					CategoryType category = map.get(view);
+		for (View view : map.keySet()) {
+			view.setOnClickListener(view1 -> {
+				CategoryType category = map.get(view1);
 
-					analytics.drawer().categoryClicked(category);
+				analytics.drawer().categoryClicked(category);
 
-					for (ChangeCategoryListener listener : listeners) {
-						listener.onChange(category);
-					}
-                }
-            });
-        }
-    }
+				for (ChangeCategoryListener listener : listeners) {
+					listener.onChange(category);
+				}
+			});
+		}
+	}
 
 	@Override
 	public void onResume() {
@@ -147,9 +144,10 @@ public class DrawerFragment extends Fragment {
 	}
 
 	@Click(R.id.login_view)
-    void loginClicked() {
+	void loginClicked() {
+		analytics.drawer().loginClicked();
 		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
-    }
+	}
 
 	@OnActivityResult(LOGIN_REQUEST_CODE)
 	void onResult(int resultCode) {
@@ -159,18 +157,30 @@ public class DrawerFragment extends Fragment {
 	}
 
 	@Click(R.id.logout_view)
-    void logoutClicked() {
+	void logoutClicked() {
+		analytics.drawer().logoutClicked();
 		getLoaderManager().restartLoader(LOGOUT_LOADER_ID, null, new LogoutCallbacks()).forceLoad();
 	}
 
-    @Click(R.id.about_view)
-    void aboutClicked() {
-        analytics.drawer().aboutClicked();
-        AboutActivity_.intent(getActivity()).start();
-    }
+	@Click(R.id.feedback_view)
+	void feedbackClicked() {
+		analytics.drawer().feedbackClicked();
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/email");
+		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"4pda@gigahub.org"});
+		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject));
+		startActivity(Intent.createChooser(intent, getString(R.string.feedback_chooser_title)));
+	}
+
+	@Click(R.id.about_view)
+	void aboutClicked() {
+		analytics.drawer().aboutClicked();
+		AboutActivity_.intent(getActivity()).start();
+	}
 
 	@Click(R.id.profile_panel)
 	void profileClicked() {
+		analytics.drawer().profileClicked();
 		ProfileActivity_.intent(getActivity())
 				.profileId(auth.getProfileId())
 				.start();
@@ -180,9 +190,9 @@ public class DrawerFragment extends Fragment {
 		updateProfile();
 	}
 
-    public interface ChangeCategoryListener {
-        void onChange(CategoryType type);
-    }
+	public interface ChangeCategoryListener {
+		void onChange(CategoryType type);
+	}
 
 	class LogoutCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Boolean>> {
 

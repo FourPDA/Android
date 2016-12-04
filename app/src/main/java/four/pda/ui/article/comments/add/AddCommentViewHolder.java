@@ -3,29 +3,29 @@ package four.pda.ui.article.comments.add;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
+import four.pda.analytics.Analytics_;
 
 /**
  * Created by asavinova on 10/03/16.
  */
 public class AddCommentViewHolder extends RecyclerView.ViewHolder {
 
-	@Bind(R.id.add_comment_button) View addCommentButton;
+	@BindView(R.id.add_comment_button) View addCommentButton;
 
 	public AddCommentViewHolder(View view) {
 		super(view);
 		ButterKnife.bind(this, view);
 
-		addCommentButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				EventBus_.getInstance_(v.getContext())
-						.post(new AddCommentEvent());
-			}
+		addCommentButton.setOnClickListener(v -> {
+			Analytics_.getInstance_(v.getContext()).comments().add();
+			EventBus_.getInstance_(v.getContext())
+					.post(new AddCommentEvent());
 		});
+
 	}
 
 }

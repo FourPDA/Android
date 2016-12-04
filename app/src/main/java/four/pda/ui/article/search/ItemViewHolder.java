@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.DateFormats;
 import four.pda.EventBus;
@@ -20,6 +20,7 @@ import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.SearchArticleDao;
 import four.pda.ui.Images;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.profile.ProfileActivity_;
 
@@ -30,10 +31,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 	private static final Logger L = LoggerFactory.getLogger(ItemViewHolder.class);
 
-	@Bind(R.id.image_view) ImageView imageView;
-	@Bind(R.id.title_view) TextView titleView;
-	@Bind(R.id.date_view) TextView dateView;
-	@Bind(R.id.author_view) TextView authorView;
+	@BindView(R.id.image_view) ImageView imageView;
+	@BindView(R.id.title_view) TextView titleView;
+	@BindView(R.id.date_view) TextView dateView;
+	@BindView(R.id.author_view) TextView authorView;
+	@BindView(R.id.label_view) LabelView labelView;
 
 	private final TextView descriptionView;
 
@@ -43,20 +45,24 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	private String image;
 	private long authorId;
 	private String authorName;
+	private String labelName;
+	private String labelColor;
 
 	private final EventBus eventBus;
 
 	public ItemViewHolder(View view) {
 		super(view);
-		eventBus = EventBus_.getInstance_(view.getContext());
-
 		ButterKnife.bind(this, view);
 
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName));
-			}
+		eventBus = EventBus_.getInstance_(view.getContext());
+
+		itemView.setOnClickListener(v -> {
+			ShowArticleEvent event = new ShowArticleEvent(
+					id, date, title, image,
+					authorId, authorName,
+					labelName, labelColor
+			);
+			eventBus.post(event);
 		});
 
 		descriptionView = (TextView) itemView.findViewById(R.id.description_view);
@@ -65,14 +71,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 			descriptionView.addOnLayoutChangeListener(new MaxLinesListener());
 		}
 
-		authorView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (authorId > 0) {
-					ProfileActivity_.intent(v.getContext())
-							.profileId(authorId)
-							.start();
-				}
+		authorView.setOnClickListener(v -> {
+			if (authorId > 0) {
+				ProfileActivity_.intent(v.getContext())
+						.profileId(authorId)
+						.start();
 			}
 		});
 
@@ -96,6 +99,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		authorName = cursor.getString(SearchArticleDao.Properties.AuthorName.ordinal);
 		authorView.setText(authorName);
 
+		labelName = cursor.getString(SearchArticleDao.Properties.LabelName.ordinal);
+		labelColor = cursor.getString(SearchArticleDao.Properties.LabelColor.ordinal);
+		labelView.setLabel(labelName, labelColor);
+
 		if (descriptionView != null) {
 			String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
 			descriptionView.setText(Html.fromHtml(description));
@@ -106,7 +113,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	private static class MaxLinesListener implements View.OnLayoutChangeListener {
 
 		@Override
-        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        public void onLayoutChange(View v, int left, int top, int right, int bottom,
+								   int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
             final TextView view = ((TextView) v);
 
@@ -118,12 +126,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             if (view.getMaxLines() != maxLines) {
 
                 view.setMaxLines(maxLines);
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.requestLayout();
-                    }
-                }, 100);
+                view.postDelayed(view::requestLayout, 100);
 
             }
 

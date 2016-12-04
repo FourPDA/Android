@@ -4,15 +4,14 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.os.Bundle;
-import android.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import four.pda.R;
 import four.pda.client.model.Captcha;
-import four.pda.ui.LoadResult;
 import four.pda.ui.Images;
+import four.pda.ui.LoadResult;
 
 /**
  * Created by asavinova on 21/02/16.
@@ -44,14 +43,10 @@ class CaptchaCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Captc
 
 	@Override
 	public void onLoadFinished(Loader<LoadResult<Captcha>> loader, LoadResult<Captcha> result) {
+		activity.captchaTextView.setText("");
 
 		if (result.isError()) {
-			activity.supportView.showError(activity.getString(R.string.auth_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activity.loadCaptcha();
-				}
-			});
+			activity.supportView.showError(activity.getString(R.string.auth_network_error), v -> activity.loadCaptcha());
 			return;
 		}
 

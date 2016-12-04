@@ -6,10 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -41,7 +38,7 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 	@FragmentArg CategoryType category;
 
-	@ViewById LinearLayout container;
+	@ViewById View container;
 	@ViewById Toolbar toolbar;
 	@ViewById SwipeRefreshLayout refresh;
 	@ViewById RecyclerView recyclerView;
@@ -66,21 +63,17 @@ public class ListFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 		showMenuIcon();
 
 		toolbar.inflateMenu(R.menu.articles_list);
-		toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				SearchActivity_.intent(getActivity()).start();
-				return true;
-			}
+		toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(item -> {
+			SearchActivity_.intent(getActivity()).start();
+			return true;
 		});
 
-		container.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				int spanCount = (int) (container.getWidth() / container.getResources().getDimension(R.dimen.list_item_width));
-				if (spanCount > 1) {
-					layoutManager.setSpanCount(spanCount);
-				}
+		container.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+			if (container == null) return;
+
+			int spanCount = (int) (container.getWidth() / container.getResources().getDimension(R.dimen.list_item_width));
+			if (spanCount > 1) {
+				layoutManager.setSpanCount(spanCount);
 			}
 		});
 

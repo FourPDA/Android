@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import four.pda.EventBus_;
 import four.pda.R;
@@ -20,15 +20,15 @@ class CommentViewHolder extends RecyclerView.ViewHolder {
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy HH:ss");
 
-	@Bind(R.id.author_info_view) View authorInfoView;
-	@Bind(R.id.delimiter_view) View delimiterView;
-	@Bind(R.id.nick_view) TextView nickView;
-	@Bind(R.id.date_view) TextView dateView;
+	@BindView(R.id.author_info_view) View authorInfoView;
+	@BindView(R.id.delimiter_view) View delimiterView;
+	@BindView(R.id.nick_view) TextView nickView;
+	@BindView(R.id.date_view) TextView dateView;
 
-	@Bind(R.id.likes_check_view) View likesCheckView;
-	@Bind(R.id.likes_count_view) TextView likesView;
+	@BindView(R.id.likes_check_view) View likesCheckView;
+	@BindView(R.id.likes_count_view) TextView likesView;
 
-	@Bind(R.id.content_view) TextView contentView;
+	@BindView(R.id.content_view) TextView contentView;
 
 	public CommentViewHolder(final View view) {
 		super(view);
@@ -50,13 +50,9 @@ class CommentViewHolder extends RecyclerView.ViewHolder {
 
 		contentView.setText(Html.fromHtml(comment.getContent()));
 
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+		itemView.setOnClickListener(v ->
 				EventBus_.getInstance_(v.getContext())
-						.post(new CommentActionsEvent(comment));
-			}
-		});
+				.post(new CommentActionsEvent(comment)));
 
 	}
 

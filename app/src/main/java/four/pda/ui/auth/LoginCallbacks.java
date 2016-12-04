@@ -4,7 +4,6 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.os.Bundle;
-import android.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,21 +61,11 @@ class LoginCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<Long>> 
 					errors.append(e);
 					errors.append(" ");
 				}
-				activity.supportView.showError(errors.toString().trim(), new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						activity.loadCaptcha();
-					}
-				});
+				activity.supportView.showError(errors.toString().trim(), v -> activity.loadCaptcha());
 				return;
 			}
 
-			activity.supportView.showError(activity.getString(R.string.auth_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					activity.signIn();
-				}
-			});
+			activity.supportView.showError(activity.getString(R.string.auth_network_error), v -> activity.signIn());
 			return;
 		}
 

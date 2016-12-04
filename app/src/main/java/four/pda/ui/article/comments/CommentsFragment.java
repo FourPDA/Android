@@ -1,7 +1,6 @@
 package four.pda.ui.article.comments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,6 +29,7 @@ import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
@@ -61,6 +61,7 @@ public class CommentsFragment extends BaseFragment {
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Inject FourPdaClient client;
 
@@ -74,14 +75,11 @@ public class CommentsFragment extends BaseFragment {
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
+		analytics.comments().open();
+
 		toolbar.setTitle(R.string.comments_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getActivity().onBackPressed();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
 		if (getView() == null) {
 			throw new IllegalStateException("View is NULL");
@@ -103,12 +101,7 @@ public class CommentsFragment extends BaseFragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		recyclerView.addItemDecoration(new SpaceDecorator(getResources().getDimensionPixelOffset(R.dimen.offset_normal)));
 
-		refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				loadData();
-			}
-		});
+		refresh.setOnRefreshListener(this::loadData);
 		refresh.setColorSchemeResources(R.color.primary);
 		refresh.setProgressViewOffset(false, 0,
 				(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
@@ -166,12 +159,9 @@ public class CommentsFragment extends BaseFragment {
 
 			new AlertDialog.Builder(getActivity())
 					.setMessage(R.string.add_comment_text_hint)
-					.setPositiveButton(R.string.first_comment_dialog_ok, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							preferences.isAcceptedCommentRules().put(true);
-							showAddCommentDialog();
-						}
+					.setPositiveButton(R.string.first_comment_dialog_ok, (dialog, which) -> {
+						preferences.isAcceptedCommentRules().put(true);
+						showAddCommentDialog();
 					})
 					.show();
 

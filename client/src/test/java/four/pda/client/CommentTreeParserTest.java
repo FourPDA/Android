@@ -79,7 +79,7 @@ public class CommentTreeParserTest extends AbstractTest {
 		Assert.assertEquals("Unexpected comment user nickname", "mrPhilL", child1.getUser().getNickname());
 		Assert.assertEquals("Unexpected comment content", "9900 цена. Что-то перегнули...", child1.getContent());
 		Assert.assertEquals("Unexpected comment level", 1, child1.getLevel());
-		Assert.assertEquals("Unexpected comment date", "20.10.14 01:55", DATE_FORMAT.format(child1.getDate()));
+		Assert.assertEquals("Unexpected comment date", "20.10.14 00:55", DATE_FORMAT.format(child1.getDate()));
 
 		Comment child2 = (Comment) childComments.get(1);
 		Assert.assertEquals("Unexpected comment id", 1932736, child2.getId());
@@ -87,7 +87,7 @@ public class CommentTreeParserTest extends AbstractTest {
 		Assert.assertEquals("Unexpected comment user nickname", "RDash", child2.getUser().getNickname());
 		Assert.assertEquals("Unexpected comment content", "Vacum, <br>Ржать?))", child2.getContent().substring(0, 19));
 		Assert.assertEquals("Unexpected comment level", 1, child2.getLevel());
-		Assert.assertEquals("Unexpected comment date", "20.10.14 10:29", DATE_FORMAT.format(child2.getDate()));
+		Assert.assertEquals("Unexpected comment date", "20.10.14 09:29", DATE_FORMAT.format(child2.getDate()));
 
 	}
 

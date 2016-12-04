@@ -53,12 +53,7 @@ public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<L
 
 		if (result.isError()) {
 
-			View.OnClickListener retryListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					fragment.loadData();
-				}
-			};
+			View.OnClickListener retryListener = v -> fragment.loadData();
 
 			int itemCount = fragment.adapter.getItemCount();
 

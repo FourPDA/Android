@@ -9,10 +9,10 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -42,14 +42,17 @@ import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
 import four.pda.ui.BaseFragment;
+import four.pda.ui.Images;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
-import four.pda.ui.Images;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -68,20 +71,28 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String image;
 	@FragmentArg long authorId;
 	@FragmentArg String authorName;
+	@FragmentArg String labelName;
+	@FragmentArg String labelColor;
 
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
-	@ViewById WebView webView;
+
+	@ViewById LabelView labelView;
+
 	@ViewById TextView authorView;
 	@ViewById TextView dateView;
 
+	@ViewById WebView webView;
+
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
+	@ViewById TextView commentsCountView;
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Pref Preferences_ preferences;
 
@@ -93,40 +104,35 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
+		analytics.article().open();
+
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setTextZoom(preferences.textZoom().get());
+		webView.getSettings().setAppCacheEnabled(false);
+		webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
 			WebView.setWebContentsDebuggingEnabled(true);
 		}
 
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getActivity().onBackPressed();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
 		toolbar.inflateMenu(R.menu.article);
-		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				textZoomPanel.setZoom(preferences.textZoom().get());
-				textZoomPanel.setVisibility(View.VISIBLE);
-				return true;
-			}
+		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(item -> {
+			analytics.article().textZoomOpen();
+			textZoomPanel.setZoom(preferences.textZoom().get());
+			textZoomPanel.setVisibility(View.VISIBLE);
+			return true;
 		});
 
-		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				startActivity(ShareCompat.IntentBuilder.from(getActivity())
-						.setType("text/plain")
-						.setText(client.getArticleUrl(date, id))
-						.createChooserIntent());
-				return true;
-			}
+		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(item -> {
+			analytics.article().share();
+			startActivity(ShareCompat.IntentBuilder.from(getActivity())
+					.setType("text/plain")
+					.setText(client.getArticleUrl(date, id))
+					.createChooserIntent());
+			return true;
 		});
 
 		collapsingToolbar.setTitle(title);
@@ -155,6 +161,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
+		labelView.setLabel(labelName, labelColor);
+
 		authorView.setText(authorName);
 		dateView.setText(DateFormats.VERBOSE.format(date));
 
@@ -182,6 +190,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	void authorClicked() {
 		// При переходе на статью из категории обзоров автора не будет
 		if (authorId > 0) {
+			analytics.article().profileClicked();
 			ProfileActivity_.intent(this)
 					.profileId(authorId)
 					.start();
@@ -200,6 +209,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(final ArticleContent article) {
+
+		//TODO Show author name from ArticleContent for reviews
+
+		if (article.getLabel() != null) {
+			AbstractArticle.Label label = article.getLabel();
+			labelView.setLabel(label.getName(), label.getColor());
+		}
+
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -225,6 +242,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	private void openImageGallery(List<String> images, String url) {
+		analytics.article().openImageGallery();
 		ImageGalleryActivity_.intent(this)
 				.currentUrl(url)
 				.images(new ArrayList<>(images))
@@ -257,18 +275,18 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<ArticleContent>> loader, LoadResult<ArticleContent> result) {
-			if (result.getException() == null) {
-				updateData(result.getData());
-				supportView.hide();
+
+			if (result.getException() != null) {
+				supportView.showError(getString(R.string.article_network_error), v -> loadData());
 				return;
 			}
 
-			supportView.showError(getString(R.string.article_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					loadData();
-				}
-			});
+			updateData(result.getData());
+
+			int commentsCount = result.getData().getCommentsCount();
+			commentsCountView.setText(String.valueOf(commentsCount));
+
+			supportView.hide();
 		}
 
 		@Override

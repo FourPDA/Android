@@ -3,7 +3,6 @@ package four.pda.ui.article.comments.add;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.view.View;
 
 import four.pda.R;
 import four.pda.client.model.CommentsContainer;
@@ -30,12 +29,7 @@ public class AddCommentCallbacks implements LoaderManager.LoaderCallbacks<LoadRe
 		fragment.supportView.hide();
 
 		if (result.getException() != null) {
-			fragment.supportView.showError(fragment.getString(R.string.add_comment_network_error), new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					fragment.addComment();
-				}
-			});
+			fragment.supportView.showError(fragment.getString(R.string.add_comment_network_error), v -> fragment.addComment());
 			return;
 		}
 
