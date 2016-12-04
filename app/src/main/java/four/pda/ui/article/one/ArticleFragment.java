@@ -27,7 +27,6 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,7 +77,6 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
 
-	@ViewById View labelContainer;
 	@ViewById LabelView labelView;
 
 	@ViewById TextView authorView;
@@ -154,7 +152,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
-		updateLabel(labelName, labelColor);
+		labelView.setLabel(labelName, labelColor);
 
 		authorView.setText(authorName);
 		dateView.setText(DateFormats.VERBOSE.format(date));
@@ -202,11 +200,11 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@UiThread
 	void updateData(final ArticleContent article) {
 
-		//TODO Show author name from ArticleContent
+		//TODO Show author name from ArticleContent for reviews
 
 		if (article.getLabel() != null) {
 			AbstractArticle.Label label = article.getLabel();
-			updateLabel(label.getName(), label.getColor());
+			labelView.setLabel(label.getName(), label.getColor());
 		}
 
 		webView.setWebChromeClient(new WebChromeClient());
@@ -222,12 +220,6 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
-	}
-
-	private void updateLabel(String labelName, String labelColor) {
-		boolean isLabelVisible = StringUtils.isNotBlank(labelName);
-		labelContainer.setVisibility(isLabelVisible ? View.VISIBLE : View.GONE);
-		labelView.setLabel(labelName, labelColor);
 	}
 
 	private boolean isGalleryImage(List<String> images, String url) {
