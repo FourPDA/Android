@@ -145,6 +145,7 @@ public class DrawerFragment extends Fragment {
 
 	@Click(R.id.login_view)
 	void loginClicked() {
+		analytics.drawer().loginClicked();
 		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LOGIN_REQUEST_CODE);
 	}
 
@@ -157,11 +158,13 @@ public class DrawerFragment extends Fragment {
 
 	@Click(R.id.logout_view)
 	void logoutClicked() {
+		analytics.drawer().logoutClicked();
 		getLoaderManager().restartLoader(LOGOUT_LOADER_ID, null, new LogoutCallbacks()).forceLoad();
 	}
 
 	@Click(R.id.feedback_view)
 	void feedbackClicked() {
+		analytics.drawer().feedbackClicked();
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/email");
 		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"4pda@gigahub.org"});
@@ -177,6 +180,7 @@ public class DrawerFragment extends Fragment {
 
 	@Click(R.id.profile_panel)
 	void profileClicked() {
+		analytics.drawer().profileClicked();
 		ProfileActivity_.intent(getActivity())
 				.profileId(auth.getProfileId())
 				.start();

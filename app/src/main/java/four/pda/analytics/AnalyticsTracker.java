@@ -10,7 +10,14 @@ import java.util.Map;
  */
 class AnalyticsTracker {
 
-    public void send(Map<String, String> params) {
+    public void sendCustomEvent(String event) {
+		sendCustomEvent(event, null);
     }
+
+    public void sendCustomEvent(String event, Map<String, String> params) {
+    }
+
+	public void search(String searchCriteria) {
+	}
 
 }

@@ -41,7 +41,9 @@ import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
@@ -49,6 +51,7 @@ import four.pda.ui.BaseFragment;
 import four.pda.ui.Images;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -67,14 +70,20 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String image;
 	@FragmentArg long authorId;
 	@FragmentArg String authorName;
+	@FragmentArg String labelName;
+	@FragmentArg String labelColor;
 
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
-	@ViewById WebView webView;
+
+	@ViewById LabelView labelView;
+
 	@ViewById TextView authorView;
 	@ViewById TextView dateView;
+
+	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
@@ -82,6 +91,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Pref Preferences_ preferences;
 
@@ -92,6 +102,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@AfterViews
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
+
+		analytics.article().open();
 
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setTextZoom(preferences.textZoom().get());
@@ -105,12 +117,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		toolbar.inflateMenu(R.menu.article);
 		toolbar.getMenu().findItem(R.id.text_zoom).setOnMenuItemClickListener(item -> {
+			analytics.article().textZoomOpen();
 			textZoomPanel.setZoom(preferences.textZoom().get());
 			textZoomPanel.setVisibility(View.VISIBLE);
 			return true;
 		});
 
 		toolbar.getMenu().findItem(R.id.share).setOnMenuItemClickListener(item -> {
+			analytics.article().share();
 			startActivity(ShareCompat.IntentBuilder.from(getActivity())
 					.setType("text/plain")
 					.setText(client.getArticleUrl(date, id))
@@ -144,6 +158,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
+		labelView.setLabel(labelName, labelColor);
+
 		authorView.setText(authorName);
 		dateView.setText(DateFormats.VERBOSE.format(date));
 
@@ -171,6 +187,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	void authorClicked() {
 		// При переходе на статью из категории обзоров автора не будет
 		if (authorId > 0) {
+			analytics.article().profileClicked();
 			ProfileActivity_.intent(this)
 					.profileId(authorId)
 					.start();
@@ -189,6 +206,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(final ArticleContent article) {
+
+		//TODO Show author name from ArticleContent for reviews
+
+		if (article.getLabel() != null) {
+			AbstractArticle.Label label = article.getLabel();
+			labelView.setLabel(label.getName(), label.getColor());
+		}
+
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -214,6 +239,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	}
 
 	private void openImageGallery(List<String> images, String url) {
+		analytics.article().openImageGallery();
 		ImageGalleryActivity_.intent(this)
 				.currentUrl(url)
 				.images(new ArrayList<>(images))

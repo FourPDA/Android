@@ -61,6 +61,8 @@ public class SearchActivity extends AppCompatActivity {
 				.image(event.getImage())
 				.authorId(event.getAuthorId())
 				.authorName(event.getAuthorName())
+				.labelName(event.getLabelName())
+				.labelColor(event.getLabelColor())
 				.build();
 
 		getSupportFragmentManager().beginTransaction()
