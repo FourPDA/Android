@@ -126,7 +126,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="@drawable/ic_chat_bubble_white"
-				android:textColor="@color/primary"
+				android:textColor="@color/accent"
 				android:layout_gravity="center"
 				android:gravity="center"
 				android:elevation="10dp"
