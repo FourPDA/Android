@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -107,6 +108,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setTextZoom(preferences.textZoom().get());
+		webView.getSettings().setAppCacheEnabled(false);
+		webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
 			WebView.setWebContentsDebuggingEnabled(true);
@@ -272,13 +275,17 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		@Override
 		public void onLoadFinished(Loader<LoadResult<ArticleContent>> loader, LoadResult<ArticleContent> result) {
+
 			if (result.getException() != null) {
 				supportView.showError(getString(R.string.article_network_error), v -> loadData());
 				return;
 			}
 
 			updateData(result.getData());
-			commentsCountView.setText(String.valueOf(result.getData().getCommentsCount()));
+
+			int commentsCount = result.getData().getCommentsCount();
+			commentsCountView.setText(String.valueOf(commentsCount));
+
 			supportView.hide();
 		}
 
