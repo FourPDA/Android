@@ -22,6 +22,7 @@ import four.pda.App;
 import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.SearchContainer;
 import four.pda.ui.BaseFragment;
@@ -45,6 +46,7 @@ public class SearchFragment extends BaseFragment {
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Inject FourPdaClient client;
 	@Inject Keyboard keyboard;
@@ -61,6 +63,8 @@ public class SearchFragment extends BaseFragment {
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
 
+		analytics.search().open();
+
 		searchView.onActionViewExpanded();
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -68,6 +72,7 @@ public class SearchFragment extends BaseFragment {
 			public boolean onQueryTextSubmit(String query) {
 				keyboard.hide(getActivity());
 				searchView.clearFocus();
+				analytics.search().load(currentSearchCriteria);
 				loadData();
 				return true;
 			}
@@ -117,6 +122,7 @@ public class SearchFragment extends BaseFragment {
 
 	@Click
 	void upButton() {
+		analytics.search().scrollUp(layoutManager.findFirstVisibleItemPosition());
 		layoutManager.scrollToPosition(0);
 	}
 

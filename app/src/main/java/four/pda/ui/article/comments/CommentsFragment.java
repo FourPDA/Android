@@ -29,6 +29,7 @@ import four.pda.Dao;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.BaseFragment;
@@ -60,6 +61,7 @@ public class CommentsFragment extends BaseFragment {
 
 	@Bean Dao dao;
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Inject FourPdaClient client;
 
@@ -72,6 +74,8 @@ public class CommentsFragment extends BaseFragment {
 	@AfterViews
 	void afterViews() {
 		((App) getActivity().getApplication()).component().inject(this);
+
+		analytics.comments().open();
 
 		toolbar.setTitle(R.string.comments_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
