@@ -14,6 +14,7 @@ import four.pda.DateFormats;
 import four.pda.EventBus;
 import four.pda.EventBus_;
 import four.pda.R;
+import four.pda.analytics.Analytics_;
 import four.pda.dao.ArticleDao;
 import four.pda.ui.Images;
 import four.pda.ui.article.LabelView;
@@ -62,6 +63,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 		authorView.setOnClickListener(v -> {
 			if (authorId > 0) {
+				Analytics_.getInstance_(v.getContext())
+						.articlesList()
+						.profileClicked();
 				ProfileActivity_.intent(v.getContext())
 						.profileId(authorId)
 						.start();

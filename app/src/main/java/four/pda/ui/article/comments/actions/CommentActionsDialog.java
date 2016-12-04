@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import four.pda.App;
 import four.pda.EventBus;
 import four.pda.R;
+import four.pda.analytics.Analytics;
 import four.pda.client.FourPdaClient;
 import four.pda.client.model.Comment;
 import four.pda.ui.article.comments.add.AddCommentEvent;
@@ -59,6 +60,7 @@ public class CommentActionsDialog extends DialogFragment {
  	@ViewById ImageView likeButton;
 
 	@Bean EventBus eventBus;
+	@Bean Analytics analytics;
 
 	@Inject FourPdaClient client;
 
@@ -66,6 +68,8 @@ public class CommentActionsDialog extends DialogFragment {
 	void afterViews() {
 
 		((App) getContext().getApplicationContext()).component().inject(this);
+
+		analytics.comments().showDialog();
 
 		toolbar.setTitle(R.string.show_comment_dialog_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -86,6 +90,7 @@ public class CommentActionsDialog extends DialogFragment {
 
 	@Click(R.id.share_button)
 	void share() {
+		analytics.comments().share();
 		startActivity(ShareCompat.IntentBuilder.from(getActivity())
 				.setType("text/plain")
 				.setText(client.getCommentUrl(params.articleId(), params.articleDate(), params.id()))
@@ -95,17 +100,20 @@ public class CommentActionsDialog extends DialogFragment {
 
 	@Click(R.id.like_button)
 	void likeButton() {
+		analytics.comments().like();
 		startActivityForResult(new Intent(getActivity(), AuthActivity_.class), LIKE_AUTH_REQUEST_CODE);
 	}
 
 	@Click(R.id.reply_button)
 	void reply() {
+		analytics.comments().reply();
 		eventBus.post(new AddCommentEvent(params.id(), params.authorName()));
 		dismiss();
 	}
 
 	@Click(R.id.profile_button)
 	void profile() {
+		analytics.comments().profileClicked();
 		ProfileActivity_.intent(getActivity())
 				.profileId(params.authorId())
 				.start();

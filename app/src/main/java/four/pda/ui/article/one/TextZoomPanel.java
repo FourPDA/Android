@@ -16,6 +16,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
+import four.pda.analytics.Analytics_;
 
 /**
  * Created by asavinova on 25/03/16.
@@ -64,6 +65,7 @@ public class TextZoomPanel extends LinearLayout {
 
 	@Click(R.id.close_view)
 	void close() {
+		Analytics_.getInstance_(getContext()).article().textZoomSet(preferences.textZoom().get());
 		setVisibility(GONE);
 	}
 
