@@ -27,6 +27,7 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +43,7 @@ import four.pda.EventBus;
 import four.pda.Preferences_;
 import four.pda.R;
 import four.pda.client.FourPdaClient;
+import four.pda.client.model.AbstractArticle;
 import four.pda.client.model.ArticleContent;
 import four.pda.template.NewsArticleTemplate;
 import four.pda.ui.AspectRatioImageView;
@@ -49,6 +51,7 @@ import four.pda.ui.BaseFragment;
 import four.pda.ui.Images;
 import four.pda.ui.LoadResult;
 import four.pda.ui.SupportView;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleCommentsEvent;
 import four.pda.ui.article.gallery.ImageGalleryActivity_;
 import four.pda.ui.profile.ProfileActivity_;
@@ -67,14 +70,21 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 	@FragmentArg String image;
 	@FragmentArg long authorId;
 	@FragmentArg String authorName;
+	@FragmentArg String labelName;
+	@FragmentArg String labelColor;
 
 	@ViewById Toolbar toolbar;
 	@ViewById CollapsingToolbarLayout collapsingToolbar;
 	@ViewById AspectRatioImageView backdropImageView;
 	@ViewById AspectRatioImageView backdropImageShadowView;
-	@ViewById WebView webView;
+
+	@ViewById View labelContainer;
+	@ViewById LabelView labelView;
+
 	@ViewById TextView authorView;
 	@ViewById TextView dateView;
+
+	@ViewById WebView webView;
 
 	@ViewById SupportView supportView;
 	@ViewById TextZoomPanel textZoomPanel;
@@ -144,6 +154,8 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 
+		updateLabel(labelName, labelColor);
+
 		authorView.setText(authorName);
 		dateView.setText(DateFormats.VERBOSE.format(date));
 
@@ -189,6 +201,14 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 	@UiThread
 	void updateData(final ArticleContent article) {
+
+		//TODO Show author name from ArticleContent
+
+		if (article.getLabel() != null) {
+			AbstractArticle.Label label = article.getLabel();
+			updateLabel(label.getName(), label.getColor());
+		}
+
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -202,6 +222,12 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
+	}
+
+	private void updateLabel(String labelName, String labelColor) {
+		boolean isLabelVisible = StringUtils.isNotBlank(labelName);
+		labelContainer.setVisibility(isLabelVisible ? View.VISIBLE : View.GONE);
+		labelView.setLabel(labelName, labelColor);
 	}
 
 	private boolean isGalleryImage(List<String> images, String url) {

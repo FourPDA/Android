@@ -13,14 +13,20 @@ public class ShowArticleEvent {
 	private String image;
 	private long authorId;
 	private String authorName;
+	private final String labelName;
+	private final String labelColor;
 
-	public ShowArticleEvent(long id, Date date, String title, String image, long authorId, String name, String labelName, String authorName) {
+	public ShowArticleEvent(long id, Date date, String title, String image,
+							long authorId, String authorName,
+							String labelName, String labelColor) {
 		this.id = id;
 		this.date = date;
 		this.title = title;
 		this.image = image;
 		this.authorId = authorId;
 		this.authorName = authorName;
+		this.labelName = labelName;
+		this.labelColor = labelColor;
 	}
 
 	public long getId() {
@@ -45,6 +51,14 @@ public class ShowArticleEvent {
 
 	public String getAuthorName() {
 		return authorName;
+	}
+
+	public String getLabelName() {
+		return labelName;
+	}
+
+	public String getLabelColor() {
+		return labelColor;
 	}
 
 }
