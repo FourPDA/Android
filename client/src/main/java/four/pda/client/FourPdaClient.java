@@ -145,7 +145,7 @@ public class FourPdaClient {
 	}
 
 	public String getArticleUrl(Date date, long id) {
-		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id;
+		String fullId = ARTICLE_DATE_FORMAT.format(date) + "/" + id + "?salt=" + System.currentTimeMillis();
 		return BASE_URL + fullId;
 	}
 
