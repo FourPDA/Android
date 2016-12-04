@@ -1,7 +1,82 @@
+-dontobfuscate
+-dontwarn **
+
+
+# http://blog.androidquery.com/2011/06/android-optimization-with-proper.html
+
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class com.android.vending.licensing.ILicensingService
+
+#keep all classes that might be used in XML layouts
+-keep public class * extends android.view.View
+-keep public class * extends android.app.Fragment
+-keep public class * extends android.support.v4.Fragment
+
+
+#keep all public and protected methods that could be used by java reflection
+-keepclassmembernames class * {
+     public protected <methods>;
+}
+
+-keepclasseswithmembernames class * {
+     native <methods>;
+}
+
+-keepclasseswithmembernames class * {
+     public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembernames class * {
+     public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+
+-keepclassmembers enum * {
+     public static **[] values();
+     public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+	public static final android.os.Parcelable$Creator *;
+}
+
+-dontwarn **CompatHoneycomb
+-dontwarn org.htmlcleaner.*
+
+
+# PersistentCookieJar
+# https://github.com/franmontiel/PersistentCookieJar
+-dontwarn com.franmontiel.persistentcookiejar.**
+-keep class com.franmontiel.persistentcookiejar.**
+
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+
 # AndroidAnnotations
 # https://github.com/androidannotations/androidannotations/wiki/ProGuard
 
--optimizationpasses 1
+-optimizationpasses 5
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify
@@ -149,11 +224,6 @@ public static java.lang.String TABLENAME;
 # https://github.com/contentful/vault/issues/47
 
 -dontwarn org.jruby.**
-
-
-## Google Analytics 3.0 specific rules ##
-
--keep class com.google.analytics.** { *; }
 
 
 # Configuration for Guava 18.0
