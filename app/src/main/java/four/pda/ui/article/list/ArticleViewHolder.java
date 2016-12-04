@@ -16,6 +16,7 @@ import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.ArticleDao;
 import four.pda.ui.Images;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.profile.ProfileActivity_;
 
@@ -25,6 +26,7 @@ import four.pda.ui.profile.ProfileActivity_;
 public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 	@BindView(R.id.image_view) ImageView imageView;
+	@BindView(R.id.label_view) LabelView labelView;
 	@BindView(R.id.title_view) TextView titleView;
 	@BindView(R.id.date_view) TextView dateView;
 	@BindView(R.id.author_view) TextView authorView;
@@ -34,7 +36,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 	private Date date;
 	private String title;
 	private String image;
-	private int commentsCount;
 	private long authorId;
 	private String authorName;
 
@@ -67,9 +68,15 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 		date = new Date(cursor.getLong(ArticleDao.Properties.Date.ordinal));
 		title = cursor.getString(ArticleDao.Properties.Title.ordinal);
 		image = cursor.getString(ArticleDao.Properties.Image.ordinal);
-		commentsCount = cursor.getInt(ArticleDao.Properties.CommentsCount.ordinal);
 		authorId = cursor.getLong(ArticleDao.Properties.AuthorId.ordinal);
 		authorName = cursor.getString(ArticleDao.Properties.AuthorName.ordinal);
+
+		String labelName = cursor.getString(ArticleDao.Properties.LabelName.ordinal);
+		String labelColor = cursor.getString(ArticleDao.Properties.LabelColor.ordinal);
+		labelView.setLabel(labelName, labelColor);
+
+		int commentsCount = cursor.getInt(ArticleDao.Properties.CommentsCount.ordinal);
+		commentsCountView.setText(String.valueOf(commentsCount));
 
 		titleView.setText(title);
 
@@ -79,9 +86,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 		dateView.setText(verboseDate);
 
 		authorView.setText(authorName);
-
-		commentsCountView.setText(String.valueOf(commentsCount));
-
 	}
 
 }

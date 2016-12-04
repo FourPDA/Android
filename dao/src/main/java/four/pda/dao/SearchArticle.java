@@ -14,6 +14,8 @@ public class SearchArticle {
     private Double position;
     private Long authorId;
     private String authorName;
+    private String labelName;
+    private String labelColor;
 
     public SearchArticle() {
     }
@@ -22,7 +24,7 @@ public class SearchArticle {
         this.id = id;
     }
 
-    public SearchArticle(Long id, java.util.Date date, String title, String description, String image, Double position, Long authorId, String authorName) {
+    public SearchArticle(Long id, java.util.Date date, String title, String description, String image, Double position, Long authorId, String authorName, String labelName, String labelColor) {
         this.id = id;
         this.date = date;
         this.title = title;
@@ -31,6 +33,8 @@ public class SearchArticle {
         this.position = position;
         this.authorId = authorId;
         this.authorName = authorName;
+        this.labelName = labelName;
+        this.labelColor = labelColor;
     }
 
     public Long getId() {
@@ -95,6 +99,22 @@ public class SearchArticle {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public String getLabelColor() {
+        return labelColor;
+    }
+
+    public void setLabelColor(String labelColor) {
+        this.labelColor = labelColor;
     }
 
 }

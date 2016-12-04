@@ -16,6 +16,8 @@ public class Article {
     private Integer commentsCount;
     private Long authorId;
     private String authorName;
+    private String labelName;
+    private String labelColor;
 
     public Article() {
     }
@@ -24,7 +26,7 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate, Integer commentsCount, Long authorId, String authorName) {
+    public Article(Long id, java.util.Date date, String title, String description, String category, String image, java.util.Date publishedDate, Integer commentsCount, Long authorId, String authorName, String labelName, String labelColor) {
         this.id = id;
         this.date = date;
         this.title = title;
@@ -35,6 +37,8 @@ public class Article {
         this.commentsCount = commentsCount;
         this.authorId = authorId;
         this.authorName = authorName;
+        this.labelName = labelName;
+        this.labelColor = labelColor;
     }
 
     public Long getId() {
@@ -115,6 +119,22 @@ public class Article {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public String getLabelColor() {
+        return labelColor;
+    }
+
+    public void setLabelColor(String labelColor) {
+        this.labelColor = labelColor;
     }
 
 }

@@ -72,6 +72,11 @@ public class Dao {
 				daoArticle.setPublishedDate(article.getPublishedDate());
 				daoArticle.setCommentsCount(article.getCommentsCount());
 
+				if (article.getLabel() != null) {
+					daoArticle.setLabelName(article.getLabel().getName());
+					daoArticle.setLabelColor(article.getLabel().getColor());
+				}
+
 				User author = article.getAuthor();
 				// В списке обзоров автор равен null
 				if (author != null) {
@@ -117,6 +122,11 @@ public class Dao {
 				article.setPosition(listArticle.getPosition());
 				article.setAuthorId(listArticle.getAuthor().getId());
 				article.setAuthorName(listArticle.getAuthor().getNickname());
+
+				if (listArticle.getLabel() != null) {
+					article.setLabelName(listArticle.getLabel().getName());
+					article.setLabelColor(listArticle.getLabel().getColor());
+				}
 
 				dao.insertOrReplace(article);
 			}
