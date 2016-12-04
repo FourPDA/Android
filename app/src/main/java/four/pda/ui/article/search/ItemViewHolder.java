@@ -20,6 +20,7 @@ import four.pda.EventBus_;
 import four.pda.R;
 import four.pda.dao.SearchArticleDao;
 import four.pda.ui.Images;
+import four.pda.ui.article.LabelView;
 import four.pda.ui.article.ShowArticleEvent;
 import four.pda.ui.profile.ProfileActivity_;
 
@@ -34,6 +35,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	@BindView(R.id.title_view) TextView titleView;
 	@BindView(R.id.date_view) TextView dateView;
 	@BindView(R.id.author_view) TextView authorView;
+	@BindView(R.id.label_view) LabelView labelView;
 
 	private final TextView descriptionView;
 
@@ -43,6 +45,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	private String image;
 	private long authorId;
 	private String authorName;
+	private String labelName;
+	private String labelColor;
 
 	private final EventBus eventBus;
 
@@ -52,8 +56,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 		eventBus = EventBus_.getInstance_(view.getContext());
 
-		itemView.setOnClickListener(v ->
-				eventBus.post(new ShowArticleEvent(id, date, title, image, authorId, authorName)));
+		itemView.setOnClickListener(v -> {
+			ShowArticleEvent event = new ShowArticleEvent(
+					id, date, title, image,
+					authorId, authorName,
+					labelName, labelColor
+			);
+			eventBus.post(event);
+		});
 
 		descriptionView = (TextView) itemView.findViewById(R.id.description_view);
 
@@ -89,6 +99,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 		authorName = cursor.getString(SearchArticleDao.Properties.AuthorName.ordinal);
 		authorView.setText(authorName);
 
+		labelName = cursor.getString(SearchArticleDao.Properties.LabelName.ordinal);
+		labelColor = cursor.getString(SearchArticleDao.Properties.LabelColor.ordinal);
+		labelView.setLabel(labelName, labelColor);
+
 		if (descriptionView != null) {
 			String description = cursor.getString(SearchArticleDao.Properties.Description.ordinal);
 			descriptionView.setText(Html.fromHtml(description));
@@ -99,7 +113,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 	private static class MaxLinesListener implements View.OnLayoutChangeListener {
 
 		@Override
-        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        public void onLayoutChange(View v, int left, int top, int right, int bottom,
+								   int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
             final TextView view = ((TextView) v);
 
