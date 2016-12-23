@@ -230,6 +230,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 			}
 		});
 		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
+		webView.requestFocus();
 	}
 
 	private boolean isGalleryImage(List<String> images, String url) {
