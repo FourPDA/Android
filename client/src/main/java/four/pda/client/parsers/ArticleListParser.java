@@ -94,6 +94,9 @@ public class ArticleListParser extends AbstractParser {
 		article.setDescription(element.select("div[itemprop=description] > p").html());
 
 		String imageSrc = element.select("img[itemprop=image]").first().attr("src");
+		if (imageSrc.startsWith("//")) {
+			imageSrc = "http:" + imageSrc;
+		}
 		article.setImage(imageSrc);
 
 		int commentsCount = Integer.parseInt(element.select("a.v-count").text());
