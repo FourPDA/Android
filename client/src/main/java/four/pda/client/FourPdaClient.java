@@ -43,7 +43,7 @@ public class FourPdaClient {
 	public static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	private static final String HOST = "4pda.ru";
-	private static final String BASE_URL = "http://" + HOST + "/";
+	private static final String BASE_URL = "https://" + HOST + "/";
 
 	private OkHttpClient client;
 
@@ -276,7 +276,7 @@ public class FourPdaClient {
 		}
 
 		HttpUrl url = new HttpUrl.Builder()
-				.scheme("http")
+				.scheme("https")
 				.host(HOST)
 				.addPathSegment("page")
 				.addPathSegment(String.valueOf(page))
