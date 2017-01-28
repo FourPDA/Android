@@ -107,7 +107,7 @@ public class SearchArticlesParser extends AbstractParser {
 
 		String imageSrc = element.select(".photo > a > img").first().attr("src");
 		if (imageSrc.startsWith("//")) {
-			imageSrc = "http:" + imageSrc;
+			imageSrc = "https:" + imageSrc;
 		}
 		article.setImage(imageSrc);
 

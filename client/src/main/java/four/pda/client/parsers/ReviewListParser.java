@@ -75,7 +75,7 @@ public class ReviewListParser extends AbstractParser {
 
 		String imageSrc = element.select("img[itemprop=image]").attr("src");
 		if (imageSrc.startsWith("//")) {
-			imageSrc = "http:" + imageSrc;
+			imageSrc = "https:" + imageSrc;
 		}
 		article.setImage(imageSrc);
 
