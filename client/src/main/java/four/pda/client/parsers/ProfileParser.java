@@ -25,7 +25,12 @@ public class ProfileParser {
 
 		try {
 			Element imgElement = document.select("div.photo > img").first();
-			profile.setPhoto(imgElement.attr("src"));
+			String src = imgElement.attr("src");
+			if (src.startsWith("https")) {
+				src = src.replaceFirst("https", "http");
+				imgElement.attr("src", src);
+			}
+			profile.setPhoto(src);
 
 			Element loginElement = document.select("div.user-box > h1").first();
 			profile.setLogin(loginElement.text());

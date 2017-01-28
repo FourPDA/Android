@@ -80,7 +80,7 @@ public class ArticlePageParser {
 		for (Element img : images) {
 			String src = img.attr("src");
 			if (src.startsWith("//")) {
-				src = "https:" + src;
+				src = "http:" + src;
 				img.attr("src", src);
 
 				Element link = img.parent();
@@ -94,7 +94,7 @@ public class ArticlePageParser {
 		for (Element link : links) {
 			String src = link.attr("href");
 			if (src.startsWith("//")) {
-				src = "https:" + src;
+				src = "http:" + src;
 				link.attr("href", src);
 			}
 		}
