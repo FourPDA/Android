@@ -106,6 +106,9 @@ public class SearchArticlesParser extends AbstractParser {
 		article.setDescription(element.select(".content > p > a").first().text());
 
 		String imageSrc = element.select(".photo > a > img").first().attr("src");
+		if (imageSrc.startsWith("//")) {
+			imageSrc = "https:" + imageSrc;
+		}
 		article.setImage(imageSrc);
 
 		article.setAuthor(getUserFromLinkElement(element.select(".author > a").first()));

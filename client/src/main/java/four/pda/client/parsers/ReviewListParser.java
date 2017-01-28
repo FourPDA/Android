@@ -73,8 +73,11 @@ public class ReviewListParser extends AbstractParser {
 		String description = content.html();
 		article.setDescription(description);
 
-		String image = element.select("img[itemprop=image]").attr("src");
-		article.setImage(image);
+		String imageSrc = element.select("img[itemprop=image]").attr("src");
+		if (imageSrc.startsWith("//")) {
+			imageSrc = "https:" + imageSrc;
+		}
+		article.setImage(imageSrc);
 
 		int commentsCount = Integer.parseInt(element.select("a.v-count").text());
 		article.setCommentsCount(commentsCount);

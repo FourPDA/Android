@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public abstract class AbstractTest {
 
-	protected static final String BASE_URL = "http://4pda.ru";
+	protected static final String BASE_URL = "https://4pda.ru";
 	private static final SimpleDateFormat ARTICLE_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
 	protected String getHtmlSource(String urlPath) throws IOException {

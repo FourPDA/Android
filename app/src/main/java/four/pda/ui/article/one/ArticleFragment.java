@@ -2,6 +2,7 @@ package four.pda.ui.article.one;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -11,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -219,6 +221,7 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 
 		webView.setWebChromeClient(new WebChromeClient());
 		webView.setWebViewClient(new WebViewClient() {
+
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (isGalleryImage(article.getImages(), url)) {
@@ -228,6 +231,12 @@ public class ArticleFragment extends BaseFragment implements SwipeRefreshLayout.
 				}
 				return true;
 			}
+
+			@Override
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				handler.proceed(); // Ignore SSL certificate errors
+			}
+
 		});
 		webView.loadData(getFormattedText(article.getContent()), "text/html; charset=utf-8", null);
 	}

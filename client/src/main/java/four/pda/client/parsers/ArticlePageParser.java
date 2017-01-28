@@ -21,7 +21,7 @@ public class ArticlePageParser {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticlePageParser.class);
 
-	private static final String PREVIEW_URL_STRING = "http://i.ytimg.com/vi/%s/hqdefault.jpg";
+	private static final String PREVIEW_URL_STRING = "https://i.ytimg.com/vi/%s/hqdefault.jpg";
 
 	public ArticleContent parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
@@ -34,7 +34,8 @@ public class ArticlePageParser {
 		}
 
 		addLinkToBigImages(content);
-		replaceScreenshotsSrc(content);
+		replaceImageAndLinkSrc(content);
+		replaceLinkSrc(content);
 
 		Element labelEl = document.select(".container .product-detail .label").first();
 		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
@@ -74,15 +75,26 @@ public class ArticlePageParser {
 		}
 	}
 
-	private void replaceScreenshotsSrc(Element content) {
-		Elements screenshots = content.select("div.sc-content > a > img");
-		for (Element img : screenshots) {
+	private void replaceImageAndLinkSrc(Element content) {
+		Elements images = content.select("a > img");
+		for (Element img : images) {
 			String src = img.attr("src");
 			if (src.startsWith("//")) {
-				src = "http:" + src;
+				src = "https:" + src;
 				img.attr("src", src);
 
 				Element link = img.parent();
+				link.attr("href", src);
+			}
+		}
+	}
+
+	private void replaceLinkSrc(Element content) {
+		Elements links = content.select("a");
+		for (Element link : links) {
+			String src = link.attr("href");
+			if (src.startsWith("//")) {
+				src = "https:" + src;
 				link.attr("href", src);
 			}
 		}
@@ -108,6 +120,10 @@ public class ArticlePageParser {
 
 			if (!src.contains("www.youtube.com")) {
 				continue;
+			}
+
+			if (src.startsWith("//")) {
+				src = "https:" + src;
 			}
 
 			String hash = src.substring(src.lastIndexOf("/") + 1, src.lastIndexOf("?"));
