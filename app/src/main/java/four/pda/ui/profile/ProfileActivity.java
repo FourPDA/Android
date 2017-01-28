@@ -1,8 +1,11 @@
 package four.pda.ui.profile;
 
+import android.net.http.SslError;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -47,6 +50,13 @@ public class ProfileActivity extends AppCompatActivity {
 		toolbar.setTitle(R.string.profile_title);
 		toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 		toolbar.setNavigationOnClickListener(v -> finish());
+
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				handler.proceed(); // Ignore SSL certificate errors
+			}
+		});
 
 		loadProfile();
 	}
