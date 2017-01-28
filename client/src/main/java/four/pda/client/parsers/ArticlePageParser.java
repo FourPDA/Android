@@ -21,7 +21,7 @@ public class ArticlePageParser {
 
 	private static final Logger L = LoggerFactory.getLogger(ArticlePageParser.class);
 
-	private static final String PREVIEW_URL_STRING = "http://i.ytimg.com/vi/%s/hqdefault.jpg";
+	private static final String PREVIEW_URL_STRING = "https://i.ytimg.com/vi/%s/hqdefault.jpg";
 
 	public ArticleContent parse(String pageSource) {
 		Document document = Jsoup.parse(pageSource);
@@ -108,6 +108,10 @@ public class ArticlePageParser {
 
 			if (!src.contains("www.youtube.com")) {
 				continue;
+			}
+
+			if (src.startsWith("//")) {
+				src = "https:" + src;
 			}
 
 			String hash = src.substring(src.lastIndexOf("/") + 1, src.lastIndexOf("?"));
