@@ -34,7 +34,7 @@ public class ArticlePageParser {
 		}
 
 		addLinkToBigImages(content);
-		replaceScreenshotsSrc(content);
+		replaceImageAndLinkSrc(content);
 
 		Element labelEl = document.select(".container .product-detail .label").first();
 		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
@@ -74,12 +74,12 @@ public class ArticlePageParser {
 		}
 	}
 
-	private void replaceScreenshotsSrc(Element content) {
-		Elements screenshots = content.select("div.sc-content > a > img");
-		for (Element img : screenshots) {
+	private void replaceImageAndLinkSrc(Element content) {
+		Elements images = content.select("a > img");
+		for (Element img : images) {
 			String src = img.attr("src");
 			if (src.startsWith("//")) {
-				src = "http:" + src;
+				src = "https:" + src;
 				img.attr("src", src);
 
 				Element link = img.parent();
