@@ -35,6 +35,7 @@ public class ArticlePageParser {
 
 		addLinkToBigImages(content);
 		replaceImageAndLinkSrc(content);
+		replaceLinkSrc(content);
 
 		Element labelEl = document.select(".container .product-detail .label").first();
 		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
@@ -83,6 +84,17 @@ public class ArticlePageParser {
 				img.attr("src", src);
 
 				Element link = img.parent();
+				link.attr("href", src);
+			}
+		}
+	}
+
+	private void replaceLinkSrc(Element content) {
+		Elements links = content.select("a");
+		for (Element link : links) {
+			String src = link.attr("href");
+			if (src.startsWith("//")) {
+				src = "https:" + src;
 				link.attr("href", src);
 			}
 		}
