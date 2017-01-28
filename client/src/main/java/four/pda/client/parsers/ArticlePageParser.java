@@ -79,7 +79,7 @@ public class ArticlePageParser {
 		for (Element img : images) {
 			String src = img.attr("src");
 			if (src.startsWith("//")) {
-				src = "http:" + src;
+				src = "https:" + src;
 				img.attr("src", src);
 
 				Element link = img.parent();
