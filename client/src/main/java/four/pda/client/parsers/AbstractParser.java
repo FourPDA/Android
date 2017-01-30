@@ -14,7 +14,9 @@ public class AbstractParser {
 
 	protected IdAndDate getIdAndDateFromUrl(String url) {
 
-		url = url.replace("https://4pda.ru", "");
+		if (url.contains("//")) {
+			url = url.split("//")[1];
+		}
 
 		String[] urlParts = url.split("/");
 
