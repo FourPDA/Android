@@ -31,7 +31,11 @@ public class CaptchaParser {
 			captcha.setSig(sig.attr("value"));
 
 			Element img = divElement.select("img").first();
-			captcha.setUrl(img.attr("src"));
+			String src = img.attr("src");
+			if (src.startsWith("//")) {
+				src = "https:" + src;
+			}
+			captcha.setUrl(src);
 		} catch (Exception e) {
 			String message = "Can't parse captcha";
 			L.error(message, e);
