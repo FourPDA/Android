@@ -26,10 +26,10 @@ public class ProfileParser {
 		try {
 			Element imgElement = document.select("div.photo > img").first();
 			String src = imgElement.attr("src");
-			if (src.startsWith("https")) {
-				src = src.replaceFirst("https", "http");
-				imgElement.attr("src", src);
+			if (src.startsWith("//")) {
+				src = "http:" + src;
 			}
+			imgElement.attr("src", src);
 			profile.setPhoto(src);
 
 			Element loginElement = document.select("div.user-box > h1").first();
