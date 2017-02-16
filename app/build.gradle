@@ -112,6 +112,13 @@ dependencies {
 	compile 'com.google.dagger:dagger:2.7'
 	compile 'javax.annotation:javax.annotation-api:1.2'
 
+	/**
+	 * Support v4 library need for Glide
+	 * https://github.com/bumptech/glide#download
+	 *
+	 * TODO Проверить дерево зависимостей, есть ли там уже support-v4
+	 */
+	compile "com.android.support:support-v4:$supportVersion"
 	compile "com.android.support:appcompat-v7:$supportVersion"
 	compile "com.android.support:recyclerview-v7:$supportVersion"
 	compile "com.android.support:design:$supportVersion"
@@ -121,7 +128,6 @@ dependencies {
 	compile 'com.squareup.picasso:picasso:2.5.2'
 
 	compile 'com.github.bumptech.glide:glide:3.7.0'
-	compile "com.android.support:support-v4:$supportVersion"
 
 	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
