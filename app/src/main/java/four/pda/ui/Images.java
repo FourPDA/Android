@@ -2,6 +2,10 @@ package four.pda.ui;
 
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -19,24 +23,26 @@ public class Images {
 	private static final Logger L = LoggerFactory.getLogger(Images.class);
 
 	public static void load(ImageView view, String url) {
-		load(view, url, null);
+		Glide.with(view.getContext())
+				.load(url)
+				.fitCenter()
+				.listener(new RequestListener<String, GlideDrawable>() {
+					@Override
+					public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+						L.error("Can't load image with url {}", url);
+						Crashlytics.logException(new RuntimeException("Can't load image by Glide"));
+						return false;
+					}
+
+					@Override
+					public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+						return false;
+					}
+				})
+				.into(view);
 	}
 
-	public static void loadWithZoom(final ImageView view, String url, final PhotoViewAttacher attacher) {
-		Callback callback = new Callback() {
-			@Override
-			public void onSuccess() {
-				attacher.update();
-			}
-
-			@Override
-			public void onError() {
-			}
-		};
-		load(view, url, callback);
-	}
-
-	private static void load(final ImageView view, String url, Callback callback) {
+	public static void loadWithZoom(ImageView view, String url, final PhotoViewAttacher attacher) {
 		Picasso.with(view.getContext())
 				.load(url)
 				.fit()
@@ -44,19 +50,13 @@ public class Images {
 				.into(view, new Callback() {
 					@Override
 					public void onSuccess() {
-						if (callback != null) {
-							callback.onSuccess();
-						}
+						attacher.update();
 					}
 
 					@Override
 					public void onError() {
 						L.error("Can't load image with url {}", url);
-						Crashlytics.logException(new RuntimeException("Can't load image"));
-
-						if (callback != null) {
-							callback.onError();
-						}
+						Crashlytics.logException(new RuntimeException("Can't load image by Picasso"));
 					}
 				});
 	}
