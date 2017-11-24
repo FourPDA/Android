@@ -3,11 +3,13 @@ package four.pda.client.parsers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +65,7 @@ public class CommentTreeParser extends AbstractParser {
 
 	private Map<Long, Comment.Karma> parseKarma(Document document) {
 
-		Element karmaScript = document.getElementsByTag("script").last();
-
-		String karmaText = karmaScript.html();
-
-		if (!karmaText.contains("function(){ModKarma(")) {
-			throw new ParseException("Can't find karma script tag");
-		}
+		String karmaText = getKarmaScriptText(document);
 
 		Matcher matcher = KARMA_PATTERN.matcher(karmaText);
 
@@ -87,6 +83,23 @@ public class CommentTreeParser extends AbstractParser {
 		}
 
 		return map;
+	}
+
+	private String getKarmaScriptText(Document document) {
+
+		Elements scriptElements = document.getElementsByTag("script");
+
+		// Reverse scripts list because karma script somewhere in the end of page
+		Collections.reverse(scriptElements);
+
+		for (Element scriptElement : scriptElements) {
+			String scriptText = scriptElement.html();
+			if (scriptText.contains("function(){ModKarma(")) {
+				return scriptText;
+			}
+		}
+
+		throw new ParseException("Can't find karma script tag");
 	}
 
 	private List<AbstractComment> parseList(Element rootElement, int level) {
