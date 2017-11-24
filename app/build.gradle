@@ -13,7 +13,7 @@ android {
 	defaultConfig {
 		applicationId 'four.pda'
 		versionCode Integer.parseInt(project.versionCode)
-		versionName '1.7.4'
+		versionName '1.7.5'
 		minSdkVersion 16
 		targetSdkVersion 25
 		buildConfigField 'String', 'VCS_BRANCH', "\"${project.vcsBranch}\""
