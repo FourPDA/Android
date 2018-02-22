@@ -50,9 +50,8 @@ public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<ArticleContent
 		try {
 			return new LoadResult<>(client.getArticleContent(date, id));
 		} catch (Exception e) {
-			String message = String.format("Can't load article [%d]", id);
-			L.error(message, e);
-			Crashlytics.logException(new RuntimeException(message, e));
+			L.error(String.format("Can't load article [%d]", id), e);
+			Crashlytics.logException(new RuntimeException("Can't load article", e));
 			return new LoadResult<>(e);
 		}
 	}

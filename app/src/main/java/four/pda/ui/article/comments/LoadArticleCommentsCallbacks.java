@@ -38,7 +38,7 @@ class LoadArticleCommentsCallbacks implements LoaderManager.LoaderCallbacks<Load
 					String format = "Can't load comments for article [%d]";
 					String message = String.format(format, fragment.articleId);
 					L.error(message, e);
-					Crashlytics.logException(new RuntimeException(message, e));
+					Crashlytics.logException(new RuntimeException("Can't load comments for article", e));
 					return new LoadResult<>(e);
 				}
 			}

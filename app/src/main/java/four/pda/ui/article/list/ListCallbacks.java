@@ -44,7 +44,7 @@ public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<L
 					String format = "Can't load articles list for category [%s] and page [%d]";
 					String message = String.format(format, fragment.category.name(), fragment.page);
 					L.error(message, e);
-					Crashlytics.logException(new RuntimeException(message, e));
+					Crashlytics.logException(new RuntimeException("Can't load articles list", e));
 					return new LoadResult<>(e);
 				}
 			}

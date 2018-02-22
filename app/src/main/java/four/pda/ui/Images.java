@@ -30,7 +30,7 @@ public class Images {
 					@Override
 					public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
 						L.error(String.format("Can't load image with url [%s]", url), e);
-						Crashlytics.logException(new RuntimeException("Can't load image by Glide", e));
+						Crashlytics.logException(new RuntimeException("Can't load image", e));
 						return false;
 					}
 
@@ -56,7 +56,7 @@ public class Images {
 					@Override
 					public void onError() {
 						L.error("Can't load image with url {}", url);
-						Crashlytics.logException(new RuntimeException("Can't load image by Picasso"));
+						Crashlytics.logException(new RuntimeException("Can't load image"));
 					}
 				});
 	}
