@@ -5,6 +5,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,10 @@ class LoadArticleCommentsCallbacks implements LoaderManager.LoaderCallbacks<Load
 				try {
 					return new LoadResult<>(fragment.client.getArticleComments(fragment.articleDate, fragment.articleId));
 				} catch (Exception e) {
-					L.error("Article comments request error", e);
+					String format = "Can't load comments for article [%d]";
+					String message = String.format(format, fragment.articleId);
+					L.error(message, e);
+					Crashlytics.logException(new RuntimeException("Can't load comments for article", e));
 					return new LoadResult<>(e);
 				}
 			}

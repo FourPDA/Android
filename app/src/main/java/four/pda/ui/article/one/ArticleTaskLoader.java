@@ -3,6 +3,8 @@ package four.pda.ui.article.one;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,8 @@ public class ArticleTaskLoader extends AsyncTaskLoader<LoadResult<ArticleContent
 		try {
 			return new LoadResult<>(client.getArticleContent(date, id));
 		} catch (Exception e) {
-			L.error("Article request error", e);
+			L.error(String.format("Can't load article [%d]", id), e);
+			Crashlytics.logException(new RuntimeException("Can't load article", e));
 			return new LoadResult<>(e);
 		}
 	}

@@ -8,6 +8,8 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,15 +36,18 @@ public class ListCallbacks implements LoaderManager.LoaderCallbacks<LoadResult<L
 	public AsyncTaskLoader<LoadResult<List<ListArticle>>> onCreateLoader(int id, final Bundle args) {
 		return new AsyncTaskLoader<LoadResult<List<ListArticle>>>(ListCallbacks.this.fragment.getActivity()) {
 			@Override
-            public LoadResult<List<ListArticle>> loadInBackground() {
-                try {
-                    List<ListArticle> articles = fragment.client.getArticles(fragment.category, fragment.page);
-                    return new LoadResult<>(articles);
-                } catch (Exception e) {
-                    L.error("Articles page request error", e);
-                    return new LoadResult<>(e);
-                }
-            }
+			public LoadResult<List<ListArticle>> loadInBackground() {
+				try {
+					List<ListArticle> articles = fragment.client.getArticles(fragment.category, fragment.page);
+					return new LoadResult<>(articles);
+				} catch (Exception e) {
+					String format = "Can't load articles list for category [%s] and page [%d]";
+					String message = String.format(format, fragment.category.name(), fragment.page);
+					L.error(message, e);
+					Crashlytics.logException(new RuntimeException("Can't load articles list", e));
+					return new LoadResult<>(e);
+				}
+			}
 		};
 	}
 
