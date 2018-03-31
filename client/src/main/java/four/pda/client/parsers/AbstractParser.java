@@ -2,6 +2,7 @@ package four.pda.client.parsers;
 
 import org.jsoup.nodes.Element;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,11 +15,9 @@ public class AbstractParser {
 
 	protected IdAndDate getIdAndDateFromUrl(String url) {
 
-		if (url.contains("//")) {
-			url = url.split("//")[1];
-		}
+		URI uri = URI.create(url);
 
-		String[] urlParts = url.split("/");
+		String[] urlParts = uri.getPath().split("/");
 
 		IdAndDate idAndDate = new IdAndDate();
 
