@@ -107,12 +107,18 @@ public class CommentTreeParser extends AbstractParser {
 		List<AbstractComment> comments = new ArrayList<>();
 		for (Element commentEl : commentListEl.children()) {
 			AbstractComment comment = parseComment(commentEl, level);
+			if (comment == null) {
+				continue;
+			}
 			comments.add(comment);
 		}
 		return comments;
 	}
 
 	private AbstractComment parseComment(Element element, int level) {
+		if (element.children().isEmpty()) {
+			return null;
+		}
 		if (element.child(0).hasClass("deleted")) {
 			return parseDeletedComment(element, level);
 		} else {
