@@ -26,7 +26,7 @@ public class ArticleListParser extends AbstractParser {
 	public List<ListArticle> parse(String pageSource) {
 
 		Document document = Jsoup.parse(pageSource);
-		Elements elements = document.select("article [itemtype=http://schema.org/Article]");
+		Elements elements = document.select("article[itemtype=http://schema.org/Article]");
 
 		List<ListArticle> articles = new ArrayList<>();
 		for (Element element : elements) {
