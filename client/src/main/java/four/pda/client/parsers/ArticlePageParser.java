@@ -24,8 +24,33 @@ public class ArticlePageParser {
 	private static final String PREVIEW_URL_STRING = "https://i.ytimg.com/vi/%s/hqdefault.jpg";
 
 	public ArticleContent parse(String pageSource) {
+
+		ArticleContent articleContent = new ArticleContent();
+
 		Document document = Jsoup.parse(pageSource);
-		Element content = document.select("div.content").first();
+
+		articleContent.setCommentsCount(getCommentsCount(document));
+
+		Element articleEl = document.select("div.article").first();
+
+		Element content;
+
+		if (articleEl != null) {
+
+			Element articleHeaderEl = articleEl.select("div.article-header").first();
+
+			Elements anonsParagraphsEl = articleHeaderEl.select(".article-anons > p");
+			articleEl.insertChildren(0, anonsParagraphsEl);
+
+			articleHeaderEl.remove();
+
+			articleEl.select("figure.article-figure-big").remove();
+
+			content = articleEl;
+
+		} else {
+			content = document.select("div.content").first();
+		}
 
 		if (content == null) {
 			String message = "Article content not found";
@@ -40,9 +65,7 @@ public class ArticlePageParser {
 		Element labelEl = document.select(".container .product-detail .label").first();
 		AbstractArticle.Label label = new ArticleLabelParser().parse(labelEl);
 
-		ArticleContent articleContent = new ArticleContent();
 		articleContent.setImages(getImages(content));
-		articleContent.setCommentsCount(getCommentsCount(document));
 		articleContent.setLabel(label);
 
 		try {
@@ -60,10 +83,17 @@ public class ArticlePageParser {
 	}
 
 	private int getCommentsCount(Element content) {
+
 		Element commentsCountEl = content.select(".product-detail .more-box .number").first();
+
+		if (commentsCountEl == null) {
+			commentsCountEl = content.select("div.article-meta div.article-meta-comment a").first();
+		}
+
 		if (commentsCountEl == null) {
 			throw new RuntimeException("Can't find comments count element");
 		}
+
 		return Integer.parseInt(commentsCountEl.text());
 	}
 
