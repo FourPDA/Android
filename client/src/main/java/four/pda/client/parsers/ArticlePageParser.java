@@ -108,6 +108,7 @@ public class ArticlePageParser {
 	private void replaceImageAndLinkSrc(Element content) {
 		Elements images = content.select("a > img");
 		for (Element img : images) {
+
 			String src = img.attr("src");
 			if (src.startsWith("//")) {
 				src = "http:" + src;
@@ -116,6 +117,11 @@ public class ArticlePageParser {
 				Element link = img.parent();
 				link.attr("href", src);
 			}
+
+			String srcset = img.attr("srcset");
+			srcset = srcset.replaceAll("//s.4pda.to/", "http://s.4pda.to/");
+			img.attr("srcset", srcset);
+
 		}
 	}
 
