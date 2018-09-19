@@ -1,25 +1,30 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.github.triplet.play'
 
 android {
 
 	compileSdkVersion 25
-	buildToolsVersion '25.0.0'
 
 	defaultConfig {
 		applicationId 'four.pda'
 		versionCode Integer.parseInt(project.versionCode)
-		versionName '1.7.8'
+		versionName '1.7.9'
 		minSdkVersion 16
 		targetSdkVersion 25
 		buildConfigField 'String', 'VCS_BRANCH', "\"${project.vcsBranch}\""
 		buildConfigField 'String', 'VCS_COMMIT', "\"${project.vcsCommit}\""
 		multiDexEnabled true
 		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+		javaCompileOptions {
+			annotationProcessorOptions {
+				arguments = ["resourcePackageName": android.defaultConfig.applicationId]
+			}
+		}
+
+		setProperty('archivesBaseName', "FourPDA-$versionName.$versionCode")
+
 	}
 
 	compileOptions {
@@ -53,13 +58,17 @@ android {
 
 	}
 
+	flavorDimensions 'type'
+
 	productFlavors {
 
 		dummy {
+			dimension 'type'
 			applicationIdSuffix '.dummy'
 		}
 
 		production {
+			dimension 'type'
 		}
 
 	}
@@ -69,48 +78,28 @@ android {
 		warning 'InvalidPackage'
 	}
 
-	applicationVariants.all { variant ->
-		variant.outputs.each { output ->
-			def name = output.outputFile.name
-					.replace('app-', 'FourPDA-')
-					.replace('.apk', "-${variant.versionName}-b${variant.versionCode}.apk")
-					.replace('-release', '')
-			output.outputFile = new File(output.outputFile.parent, name)
-		}
-	}
-
 }
 
 play {
 	jsonFile = file(project.fourpda_playPublisher_jsonFile)
 }
 
-configurations {
-	apt
-}
-
-apt {
-	arguments {
-		logLevel 'warn'
-		logAppenderConsole true
-		androidManifestFile 'app/src/main/AndroidManifest.xml'
-	}
-}
-
 def supportVersion = '25.0.1'
 
 dependencies {
 
-	compile project(':dao')
-	compile project(':client')
-	compile project(':html_templates')
+	implementation project(':dao')
+	implementation project(':client')
+	implementation project(':html_templates')
 
-	apt 'org.androidannotations:androidannotations:4.1.0'
-	compile 'org.androidannotations:androidannotations-api:4.1.0'
+	annotationProcessor 'org.androidannotations:androidannotations:4.4.0'
+	implementation 'org.androidannotations:androidannotations-api:4.4.0'
 
-	apt 'com.google.dagger:dagger-compiler:2.7'
-	compile 'com.google.dagger:dagger:2.7'
-	compile 'javax.annotation:javax.annotation-api:1.2'
+	annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
+	implementation 'com.google.dagger:dagger:2.7'
+	implementation 'javax.annotation:javax.annotation-api:1.2'
+
+	implementation 'org.apache.commons:commons-lang3:3.5'
 
 	/**
 	 * Support v4 library need for Glide
@@ -118,48 +107,46 @@ dependencies {
 	 *
 	 * TODO Проверить дерево зависимостей, есть ли там уже support-v4
 	 */
-	compile "com.android.support:support-v4:$supportVersion"
-	compile "com.android.support:appcompat-v7:$supportVersion"
-	compile "com.android.support:recyclerview-v7:$supportVersion"
-	compile "com.android.support:design:$supportVersion"
-	compile "com.android.support:support-annotations:$supportVersion"
+	implementation "com.android.support:support-v4:$supportVersion"
+	implementation "com.android.support:appcompat-v7:$supportVersion"
+	implementation "com.android.support:recyclerview-v7:$supportVersion"
+	implementation "com.android.support:design:$supportVersion"
+	implementation "com.android.support:support-annotations:$supportVersion"
 
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-	compile 'com.squareup.picasso:picasso:2.5.2'
+	implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+	implementation 'com.squareup.picasso:picasso:2.5.2'
 
-	compile 'com.github.bumptech.glide:glide:3.7.0'
+	implementation 'com.github.bumptech.glide:glide:3.7.0'
 
-	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
+	implementation 'com.github.swapii:PersistentCookieJar:1.0.0'
 
-	compile 'com.jakewharton:butterknife:8.4.0'
-	apt 'com.jakewharton:butterknife-compiler:8.4.0'
+	implementation 'com.jakewharton:butterknife:8.4.0'
+	annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
-	compile 'de.greenrobot:eventbus:2.4.0'
+	implementation 'de.greenrobot:eventbus:2.4.0'
 
-	provided 'frankiesardo:auto-parcel:1.0.3'
-	apt 'frankiesardo:auto-parcel:1.0.3'
+	compileOnly 'frankiesardo:auto-parcel:1.0.3'
+	annotationProcessor 'frankiesardo:auto-parcel:1.0.3'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
-    }
+	implementation('com.crashlytics.sdk.android:crashlytics:2.6.5')
 
-	compile 'org.slf4j:slf4j-api:1.7.25'
+	implementation 'org.slf4j:slf4j-api:1.7.25'
 
-	compile 'com.github.rey5137:material:1.2.4'
-	compile 'net.opacapp:multiline-collapsingtoolbar:1.3.1'
+	implementation 'com.github.rey5137:material:1.2.4'
+	implementation 'net.opacapp:multiline-collapsingtoolbar:1.3.1'
 
-	compile 'com.github.chrisbanes:PhotoView:1.3.1'
+	implementation 'com.github.chrisbanes:PhotoView:1.3.1'
 
-	androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
-	androidTestCompile 'com.android.support.test:runner:0.5'
-	androidTestCompile 'com.android.support.test:rules:0.5'
-	androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-	androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1') {
+	androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+	androidTestImplementation 'com.android.support.test:runner:0.5'
+	androidTestImplementation 'com.android.support.test:rules:0.5'
+	androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+	androidTestImplementation ('com.android.support.test.espresso:espresso-core:2.2.1') {
 		exclude group: 'com.squareup.dagger'
 	}
-	androidTestCompile 'junit:junit:4.12'
+	androidTestImplementation 'junit:junit:4.12'
 
-	testCompile 'junit:junit:4.12'
+	testImplementation 'junit:junit:4.12'
 
 }
 

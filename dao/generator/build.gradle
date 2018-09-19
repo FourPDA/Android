@@ -5,6 +5,6 @@ mainClassName = 'four.pda.dao.generator.FourPdaDaoGenerator'
 
 dependencies {
 
-	compile 'de.greenrobot:greendao-generator:2.1.0'
+	implementation 'de.greenrobot:greendao-generator:2.1.0'
 
 }
