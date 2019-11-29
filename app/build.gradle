@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.jakewharton.butterknife'
@@ -20,6 +19,16 @@ android {
 		buildConfigField 'String', 'VCS_COMMIT', "\"${project.vcsCommit}\""
 		multiDexEnabled true
 		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+		javaCompileOptions {
+			annotationProcessorOptions {
+				//className 'com.example.MyProcessor'
+
+				// Arguments are optional.
+				arguments = [ androidManifestFile : 'app/src/main/AndroidManifest.xml' ]
+			}
+		}
+
 	}
 
 	compileOptions {
@@ -53,13 +62,17 @@ android {
 
 	}
 
+	flavorDimensions 'impl'
+
 	productFlavors {
 
 		dummy {
 			applicationIdSuffix '.dummy'
+			dimension 'impl'
 		}
 
 		production {
+			dimension 'impl'
 		}
 
 	}
@@ -70,12 +83,12 @@ android {
 	}
 
 	applicationVariants.all { variant ->
-		variant.outputs.each { output ->
-			def name = output.outputFile.name
+		variant.outputs.all {
+			def name = outputFileName
 					.replace('app-', 'FourPDA-')
 					.replace('.apk', "-${variant.versionName}-b${variant.versionCode}.apk")
 					.replace('-release', '')
-			output.outputFile = new File(output.outputFile.parent, name)
+			outputFileName = new File(name)
 		}
 	}
 
@@ -83,18 +96,6 @@ android {
 
 play {
 	jsonFile = file(project.fourpda_playPublisher_jsonFile)
-}
-
-configurations {
-	apt
-}
-
-apt {
-	arguments {
-		logLevel 'warn'
-		logAppenderConsole true
-		androidManifestFile 'app/src/main/AndroidManifest.xml'
-	}
 }
 
 def supportVersion = '25.0.1'
@@ -105,10 +106,10 @@ dependencies {
 	compile project(':client')
 	compile project(':html_templates')
 
-	apt 'org.androidannotations:androidannotations:4.1.0'
+	annotationProcessor 'org.androidannotations:androidannotations:4.1.0'
 	compile 'org.androidannotations:androidannotations-api:4.1.0'
 
-	apt 'com.google.dagger:dagger-compiler:2.7'
+	annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
 	compile 'com.google.dagger:dagger:2.7'
 	compile 'javax.annotation:javax.annotation-api:1.2'
 
@@ -123,15 +124,15 @@ dependencies {
 	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
 	compile 'com.jakewharton:butterknife:8.4.0'
-	apt 'com.jakewharton:butterknife-compiler:8.4.0'
+	annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
 	compile 'de.greenrobot:eventbus:2.4.0'
 
 	provided 'frankiesardo:auto-parcel:1.0.3'
-	apt 'frankiesardo:auto-parcel:1.0.3'
+	annotationProcessor 'frankiesardo:auto-parcel:1.0.3'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
+        transitive = true
     }
 
 	compile 'org.slf4j:slf4j-api:1.7.21'
