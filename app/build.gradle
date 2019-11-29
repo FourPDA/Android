@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.github.triplet.play'
 
 android {
@@ -123,8 +122,8 @@ dependencies {
 
 	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
-	compile 'com.jakewharton:butterknife:8.4.0'
-	annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+	compile 'com.jakewharton:butterknife:8.8.1'
+	annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 	compile 'de.greenrobot:eventbus:2.4.0'
 
