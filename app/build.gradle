@@ -120,8 +120,8 @@ dependencies {
 
 	compile 'com.github.swapii:PersistentCookieJar:1.0.0'
 
-	compile 'com.jakewharton:butterknife:8.8.1'
-	annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+	compile 'com.jakewharton:butterknife:9.0.0'
+	annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0'
 
 	compile 'de.greenrobot:eventbus:2.4.0'
 
