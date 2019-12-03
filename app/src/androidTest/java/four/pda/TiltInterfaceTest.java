@@ -1,14 +1,14 @@
 package four.pda;
 
 import android.os.RemoteException;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
-import android.test.suitebuilder.annotation.SmallTest;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.filters.SmallTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,9 +17,6 @@ import org.junit.runner.RunWith;
 
 import four.pda.ui.article.NewsActivity;
 import four.pda.ui.article.NewsActivity_;
-
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by Klishin Pavel on 06.04.2016.

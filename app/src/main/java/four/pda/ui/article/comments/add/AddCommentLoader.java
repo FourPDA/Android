@@ -1,6 +1,6 @@
 package four.pda.ui.article.comments.add;
 
-import android.support.v4.content.AsyncTaskLoader;
+import androidx.loader.content.AsyncTaskLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

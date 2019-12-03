@@ -1,10 +1,11 @@
 package four.pda.ui.article.gallery;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;

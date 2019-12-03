@@ -1,9 +1,10 @@
 package four.pda.ui.article.comments;
 
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 

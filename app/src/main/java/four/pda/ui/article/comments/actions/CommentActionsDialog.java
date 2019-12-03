@@ -2,14 +2,15 @@ package four.pda.ui.article.comments.actions;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.ShareCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ShareCompat;
+import androidx.fragment.app.DialogFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;

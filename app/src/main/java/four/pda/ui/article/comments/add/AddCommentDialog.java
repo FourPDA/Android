@@ -1,11 +1,12 @@
 package four.pda.ui.article.comments.add;
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -38,7 +39,8 @@ public class AddCommentDialog extends DialogFragment {
 	@FragmentArg Long replyId;
 	@FragmentArg String replyAuthor;
 
-	@ViewById Toolbar toolbar;
+	@ViewById
+	Toolbar toolbar;
 	@ViewById EditText messageEditText;
 	@ViewById SupportView supportView;
 
