@@ -1,0 +1,9 @@
+include(
+        ":app",
+        ":dao",
+        ":dao:generator",
+        ":client",
+        ":client:testapp",
+        ":html_templates",
+        ":html_templates:demo_exporter"
+)
