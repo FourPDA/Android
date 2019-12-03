@@ -150,6 +150,21 @@ dependencies {
 
 	testCompile 'junit:junit:4.12'
 
+	components.all {
+		allVariants {
+			withDependencies { deps ->
+				deps.each { dep ->
+					if (dep.group == 'com.google.guava' && dep.name =='guava') {
+						dep.version {
+							require "18.0"
+						}
+						dep.because 'We only work with 18.0'
+					}
+				}
+			}
+		}
+	}
+
 }
 
 configurations.all {
