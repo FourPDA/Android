@@ -1,0 +1,20 @@
+name: CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: setup-android
+      uses: msfjarvis/setup-android@0.2
+      with:
+        gradleTasks: assembleProductionDebug
+
