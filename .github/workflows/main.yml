@@ -1,4 +1,4 @@
-name: CI
+name: Build
 
 on: [push]
 
@@ -9,12 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
-    - name: checkout
-      uses: actions/checkout@v1
 
-    - name: setup-android
-      uses: msfjarvis/setup-android@0.2
-      with:
-        gradleTasks: assembleProductionDebug
+      - name: Checkout sources
+        uses: actions/checkout@v1
 
+      - name: Build production debug APK
+        uses: msfjarvis/setup-android@0.2
+        with:
+          gradleTasks: assembleProductionDebug
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          prerelease: true
